@@ -1,4 +1,4 @@
-NAME = Termial3d
+NAME = Terminal3d
 
 SRC =	main.c
 
@@ -15,7 +15,7 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(SRC) -o $@
+	$(CC) $(SRC) -o $@  -lm
 
 %.o: %.c $(HEADER_FILES)
 	$(CC) -c -Wall -Werror -Wextra -o $@ $<

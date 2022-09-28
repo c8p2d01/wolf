@@ -28,9 +28,10 @@
 # define PI 3.14159265359
 
 
-# define WIDTH 80
-# define HEIGHT 30
+# define WIDTH 220
+# define HEIGHT 60
 # define FOV 90
+# define RENDER 10
 
 # define SKY 'o'
 # define FLOOR '@'
