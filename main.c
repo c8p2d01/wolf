@@ -74,8 +74,8 @@ void	init(t_var *var, char *path)
 							"OP     O",
 							"O      O",
 							"O      O",
-							"O 0    O",
-							"O  0   O",
+							"O      O",
+							"O      O",
 							"O      O",
 							"OOOOOOOO", NULL);
 	// player
@@ -142,6 +142,45 @@ void	rem(t_var *var)
 	check intersection only at raylengths where a wall could be
 	-> find a vectorlength for the neares horizontal and neares vertical and from there on iterate in steps
 */
+
+void	putPixel(char c)
+{
+	switch (c) {
+		case 'N' :	write(1, "\e[48;5;21m ", 12);	break;	// BLUE
+		// case -1 :	write(1, "\e[48;5;57m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;93m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;129m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;165m ", 12);	break;	//
+		// case 'W' :	write(1, "\e[48;5;201m ", 12);	break;	// MAGENTA
+		// case -1 :	write(1, "\e[48;5;200m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;199m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;198m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;197m ", 12);	break;	//
+		case 'S' :	write(1, "\e[48;5;196m ", 13);	break;	// RED 
+		// case -1 :	write(1, "\e[48;5;202m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;208m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;214m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;220m ", 12);	break;	//
+		case '@' :	write(1, "\e[48;5;226m ", 13);	break;	// YELLOW
+		// case -1 :	write(1, "\e[48;5;190m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;154m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;118m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;82m ", 12);	break;	//
+		case 'E' :	write(1, "\e[48;5;46m ", 12);	break;	// GREEN
+		// case -1 :	write(1, "\e[48;5;47m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;48m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;49m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;50m ", 12);	break;	//
+		case 'o' :	write(1, "\e[48;5;51m ", 12);	break;	// CYAN
+		// case -1 :	write(1, "\e[48;5;45m ", 12);	break;	//
+		case ' ' :	write(1, "\e[48;5;39m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;33m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;27m ", 12);	break;	//
+		// case -1 :	write(1, "\e[48;5;235m ", 12);	break;	// GREY
+		default : write(1, "\e[48;5;0m ", 11);
+	}
+	write(1, "\e[0m", 1);
+}
 
 void	render(t_var *var)
 {
@@ -286,18 +325,28 @@ void	render(t_var *var)
 		// RD - dst -> wall height
 		if (RENDER - dst < 0)
 			continue ;
-		int renhgt = ((RENDER - dst) / RENDER) * HEIGHT;
-		int draws = (HEIGHT - renhgt) / 2;
-		for (int i = draws; i < draws + renhgt; i++)
+		int renhgt = ((RENDER -  dst) / RENDER) * HEIGHT;
+		int draws = (HEIGHT / 2) - (renhgt / 2);
+		for (int i = draws; i <= draws + renhgt; i++)
 		{
 			//printf("dst %lf  renhght %i start %i \n", dst, renhgt, draws);
-			var->cvs[i][r - 1] = t;
+			var->cvs[i][r] = t;
 		}
 	}
-
-	for (int i = 0; i < HEIGHT; i++)
+	for (int i = 0; i < (int)strlen(var->cvs[0]); i++)
 	{
-		printf("	%s\n", var->cvs[i]);
+		printf("\e[38;5;%im%i", (((i - (i % 10)) * 2) % 256), i % 10);
+	}
+
+	printf("\e[0m\n");
+	for (int y = 0; y < HEIGHT; y++)
+	{
+		printf("\t");
+		for (int x = 0; x < (int)strlen(var->cvs[0]); x++)
+		{
+			putPixel(var->cvs[y][x]);
+		}
+		printf("\e[0m\e[38;5;%im%i\e[0m\n", (((y - (y % 10)) + 200) % 256), y % 10);
 	}
 }
 
