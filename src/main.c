@@ -1,4 +1,4 @@
-#include "cub.h"
+#include "../inc/cub.h"
 
 char	**init_texture(char *first, ...)
 {
@@ -70,14 +70,17 @@ void	init(t_var *var, char *path)
 							 "W----------------W",
 							 "NNNNNNNNNNNNNNNNNN", NULL);
 	// map
-	var->map = init_texture("OOOOOOOO",
-							"OP     O",
-							"O      O",
-							"O      O",
-							"O      O",
-							"O      O",
-							"O      O",
-							"OOOOOOOO", NULL);
+	var->map = init_texture("OOOOOOOOOOOOOOOOO",
+							"O               O",
+							"O               O",
+							"O               O",
+							"O               O",
+							"O         P     O",
+							"O               O",
+							"O               O",
+							"O               O",
+							"O               O",
+							"OOOOOOOOOOOOOOOOO", NULL);
 	// player
 	for (int x = 0; var->map[x]; x++)
 	{
@@ -85,11 +88,12 @@ void	init(t_var *var, char *path)
 		{
 			if (var->map[x][y] == 'P')
 			{
-				var->plx = y;
-				var->ply = x;
-				var->orx = -1;
-				var->ory = -1;
-				//printf("player at %i %i\n", y, x);
+				var->positionX = y;
+				var->positionY = x;
+				var->orientationX = -1;
+				var->orientationY = 0;
+				var->map[x + (int)var->orientationY][y + (int)var->orientationX] = 'D';
+				printf("player at %i %i\n", y, x);
 			}
 		}
 	}
@@ -98,10 +102,10 @@ void	init(t_var *var, char *path)
 		for (int i = 0; path[i]; i++)
 		{
 			switch (path[i]) {
-				case 'n' : var->ply--; break;//n
-				case 's' : var->ply++; break;//s
-				case 'w' : var->plx--; break;//w
-				case 'e' : var->plx++; break;//e
+				case 'n' : var->positionY--; break;//n
+				case 's' : var->positionY++; break;//s
+				case 'w' : var->positionX--; break;//w
+				case 'e' : var->positionX++; break;//e
 			}
 		}
 	}
@@ -143,43 +147,19 @@ void	rem(t_var *var)
 	-> find a vectorlength for the neares horizontal and neares vertical and from there on iterate in steps
 */
 
-void	putPixel(char c)
+int	createRGB(int r, int g, int b)
 {
-	switch (c) {
-		case 'N' :	write(1, "\e[48;5;21m ", 12);	break;	// BLUE
-		// case -1 :	write(1, "\e[48;5;57m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;93m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;129m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;165m ", 12);	break;	//
-		// case 'W' :	write(1, "\e[48;5;201m ", 12);	break;	// MAGENTA
-		// case -1 :	write(1, "\e[48;5;200m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;199m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;198m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;197m ", 12);	break;	//
-		case 'S' :	write(1, "\e[48;5;196m ", 13);	break;	// RED 
-		// case -1 :	write(1, "\e[48;5;202m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;208m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;214m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;220m ", 12);	break;	//
-		case '@' :	write(1, "\e[48;5;226m ", 13);	break;	// YELLOW
-		// case -1 :	write(1, "\e[48;5;190m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;154m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;118m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;82m ", 12);	break;	//
-		case 'E' :	write(1, "\e[48;5;46m ", 12);	break;	// GREEN
-		// case -1 :	write(1, "\e[48;5;47m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;48m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;49m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;50m ", 12);	break;	//
-		case 'o' :	write(1, "\e[48;5;51m ", 12);	break;	// CYAN
-		// case -1 :	write(1, "\e[48;5;45m ", 12);	break;	//
-		case ' ' :	write(1, "\e[48;5;39m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;33m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;27m ", 12);	break;	//
-		// case -1 :	write(1, "\e[48;5;235m ", 12);	break;	// GREY
-		default : write(1, "\e[48;5;0m ", 11);
-	}
-	write(1, "\e[0m", 1);
+	return (0 << 24 | r << 16 | g << 8 | b);
+}
+
+void	putPixel(int color)
+{
+	unsigned char r = color >> 16;
+	unsigned char g = color >> 8;
+	unsigned char b = color;
+	r /= 43; g /= 43; b /= 43;
+	char col = 16 + r*36 + g*6 + b;
+	printf("\e[48;5;%im  ", col);
 }
 
 void	render(t_var *var)
@@ -187,20 +167,20 @@ void	render(t_var *var)
 	// Sky and Floor coloring
 	for (int i = 0; i < HEIGHT / 2; i++)
 	{
-		memset(var->cvs[i], SKY, WIDTH);
-		var->cvs[i][WIDTH] = 0;		
+		memset(var->canvas[i], SKY, WIDTH);
+		var->canvas[i][WIDTH] = 0;
 	}
 	for (int i = 0; i < HEIGHT / 2; i++)
 	{
-		memset(var->cvs[i + (HEIGHT / 2)], FLOOR, WIDTH);
-		var->cvs[i + (HEIGHT / 2)][WIDTH] = 0;
+		memset(var->canvas[i + (HEIGHT / 2)], FLOOR, WIDTH);
+		var->canvas[i + (HEIGHT / 2)][WIDTH] = 0;
 	}
 	// rays
 
 	// projection plane on which to cast rays to avoid fishEye view
-	double rotx = var->ory;
-	double roty = -var->orx;
-	double planelen = pow(pow(var->orx, 2) + pow(var->ory, 2), 0.5) * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
+	double rotx = var->orientationY;
+	double roty = -var->orientationX;
+	double planelen = pow(pow(var->orientationX, 2) + pow(var->orientationY, 2), 0.5) * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
 	double tmp = pow(pow(rotx, 2) + pow(roty, 2), 0.5);
 	rotx /= tmp;
 	roty /= tmp;
@@ -216,24 +196,24 @@ void	render(t_var *var)
 
 	for (int r = 1; r <= WIDTH; r++)
 	{
-		rx = var->orx + rotx - ((rotx * 2) / WIDTH) * r;
-		ry = var->ory + roty - ((roty * 2) / WIDTH) * r;
+		rx = var->orientationX + rotx - ((rotx * 2) / WIDTH) * r;
+		ry = var->orientationY + roty - ((roty * 2) / WIDTH) * r;
 		double temp = pow(pow(rx, 2) + pow(ry, 2), 0.5);
 		rx /= temp;
 		ry /= temp;
 
-		h = (1 - (fabs(var->plx) - abs((int)var->plx))) / fabs(rx);
-		v = (1 - (fabs(var->ply) - abs((int)var->ply))) / fabs(ry);
-		//printf("pV %lf %lf    pH %lf %lf\t", var->plx + rx * v, var->ply + ry * v, var->plx + rx * h, var->ply + ry * h);
+		h = (1 - (fabs(var->positionX) - abs((int)var->positionX))) / fabs(rx);
+		v = (1 - (fabs(var->positionY) - abs((int)var->positionY))) / fabs(ry);
+		//printf("pV %lf %lf    pH %lf %lf\t", var->positionX + rx * v, var->positionY + ry * v, var->positionX + rx * h, var->positionY + ry * h);
 		delta_h = 1 / fabs(rx);
 		delta_v = 1 / fabs(ry);
-		//printf("S %lf    pos %lf    V0 %lf %lf    V1 %lf %lf    V2 %lf %lf\t", rx * v, var->plx, var->plx + rx * v, var->ply + ry * v, var->plx + rx * (v + delta_v), var->ply + ry * (v + delta_v), var->plx + rx * (v + 2 * delta_v), var->ply + ry * (v + 2 * delta_v));
+		//printf("S %lf    pos %lf    V0 %lf %lf    V1 %lf %lf    V2 %lf %lf\t", rx * v, var->positionX, var->positionX + rx * v, var->positionY + ry * v, var->positionX + rx * (v + delta_v), var->positionY + ry * (v + delta_v), var->positionX + rx * (v + 2 * delta_v), var->positionY + ry * (v + 2 * delta_v));
 		if (h == delta_h)
 			h = 0;
 		if (v == delta_v)
 			v = 0;
 
-		char	t = 'T';
+		int	t = 0;
 		int		tx, ty;
 		double dst = 0;
 		while (1)
@@ -242,36 +222,36 @@ void	render(t_var *var)
 				dst = v;
 			else
 				dst = h;
-			//dst == v ? printf("	V %lf %lf\t", (var->plx + rx * dst), (var->ply + ry * dst)) : printf("	H %lf %lf\t", (var->plx + rx * dst), (var->ply + ry * dst));
+			//dst == v ? printf("	V %lf %lf\t", (var->positionX + rx * dst), (var->positionY + ry * dst)) : printf("	H %lf %lf\t", (var->positionX + rx * dst), (var->positionY + ry * dst));
 
 			if (ry > 0)	// N
 			{
 				if (rx > -0.f)	// NE
 				{
-					tx = (int)(var->plx + rx * dst);
-					ty = (int)(var->ply + ry * dst);
-					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == 'O')
+					tx = (int)(var->positionX + rx * dst);
+					ty = (int)(var->positionY + ry * dst);
+					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == WALL)
 					{
 						//printf("WALL NE	%lf %lf dst %lf\t", rx, ry, pow(pow(rx * dst, 2) + pow(ry * dst, 2), 0.5));
-						// printf("    seen pos %i %i ", (int)(var->plx + rx * dst), (int)(var->ply + ry * dst));
-						t = 'W';
+						// printf("    seen pos %i %i ", (int)(var->positionX + rx * dst), (int)(var->positionY + ry * dst));
+						t = createRGB(255,255,0);
 						if (dst == v)
-							t = 'N';
+							t = createRGB(255,255,0);;
 						// write(1, "\n", 1);
 						break;
 					}
 				}
 				else		// NW
 				{
-					tx = (int)(var->plx + rx * dst) - 1;
-					ty = (int)(var->ply + ry * dst);
-					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == 'O')
+					tx = (int)(var->positionX + rx * dst) - 1;
+					ty = (int)(var->positionY + ry * dst);
+					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == WALL)
 					{
 						//printf("WALL NW %lf %lf dst %lf\t", rx, ry, pow(pow(rx * dst, 2) + pow(ry * dst, 2), 0.5));
-						// printf("    seen pos %i %i ", -1 + (int)(var->plx + rx * dst), (int)(var->ply + ry * dst));
-						t = 'E';
+						// printf("    seen pos %i %i ", -1 + (int)(var->positionX + rx * dst), (int)(var->positionY + ry * dst));
+						t = createRGB(0,255,0);
 						if (dst == v)
-							t = 'N';
+							t = createRGB(0,0,255);
 						// write(1, "\n", 1);
 						break;
 					}
@@ -281,30 +261,30 @@ void	render(t_var *var)
 			{
 				if (rx > 0)	// SE
 				{
-					tx = (int)(var->plx + rx * dst);
-					ty = (int)(var->ply + ry * dst) - 1;
-					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == 'O')
+					tx = (int)(var->positionX + rx * dst);
+					ty = (int)(var->positionY + ry * dst) - 1;
+					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == WALL)
 					{
 						 //printf("WALL SE	%lf %lf dst %lf\t", rx, ry, pow(pow(rx * dst, 2) + pow(ry * dst, 2), 0.5));
-						// printf("    seen pos %i %i ", (int)(var->plx + rx * dst), -1 + (int)(var->ply + ry * dst));
-						t = 'W';
+						// printf("    seen pos %i %i ", (int)(var->positionX + rx * dst), -1 + (int)(var->positionY + ry * dst));
+						t = createRGB(255,255,0);
 						if (dst == v)
-							t = 'S';
+							t = createRGB(255,0,0);
 						// write(1, "\n", 1);
 						break;
 					}
 				}
 				else		// SW
 				{
-					tx = (int)(var->plx + rx * dst) - 1;
-					ty = (int)(var->ply + ry * dst) - 1;
-					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == 'O')
+					tx = (int)(var->positionX + rx * dst) - 1;
+					ty = (int)(var->positionY + ry * dst) - 1;
+					if (tx >= 0 && tx < WIDTH && ty >= 0 && ty < HEIGHT && var->map[ty][tx] == WALL)
 					{
 						//printf("WALL SW	%lf %lf dst %lf\t", rx, ry, pow(pow(rx * dst, 2) + pow(ry * dst, 2), 0.5));
-						// printf("    seen pos %i %i ", -1 + (int)(var->plx + rx * dst), -1 + (int)(var->ply + ry * dst));
-						t = 'E';
+						// printf("    seen pos %i %i ", -1 + (int)(var->positionX + rx * dst), -1 + (int)(var->positionY + ry * dst));
+						t = createRGB(0,255,0);
 						if (dst == v)
-							t = 'S';
+							t = createRGB(255,0,0);
 						// write(1, "\n", 1);
 						break;
 					}
@@ -330,21 +310,21 @@ void	render(t_var *var)
 		for (int i = draws; i <= draws + renhgt; i++)
 		{
 			//printf("dst %lf  renhght %i start %i \n", dst, renhgt, draws);
-			var->cvs[i][r] = t;
+			var->canvas[i][r] = t;
 		}
 	}
-	for (int i = 0; i < (int)strlen(var->cvs[0]); i++)
-	{
-		printf("\e[38;5;%im%i", (((i - (i % 10)) * 2) % 256), i % 10);
-	}
+	// for (int i = 0; i < (int)strlen(var->canvas[0]); i++)
+	// {
+	// 	printf("\e[38;5;%im%i", (((i - (i % 10)) * 2) % 256), i % 10);
+	// }
 
 	printf("\e[0m\n");
 	for (int y = 0; y < HEIGHT; y++)
 	{
 		printf("\t");
-		for (int x = 0; x < (int)strlen(var->cvs[0]); x++)
+		for (int x = 0; x < (int)strlen((char *)var->canvas[0]) / 4; x++)
 		{
-			putPixel(var->cvs[y][x]);
+			putPixel(var->canvas[y][x]);
 		}
 		printf("\e[0m\e[38;5;%im%i\e[0m\n", (((y - (y % 10)) + 200) % 256), y % 10);
 	}
@@ -352,6 +332,7 @@ void	render(t_var *var)
 
 int main(int argc, char **argv)
 {
+	// printf("%i\n",createRGB(44,44,44));
 	t_var var;
 
 	if (argc == 2)
@@ -361,7 +342,9 @@ int main(int argc, char **argv)
 	}
 	else
 		init(&var, NULL);
-	render(&var);
+	renderer(&var);
+	printMap(&var);
+	printFrame(&var);
 	/* plans:
 		raycasting;
 		-> make a ray (one pwe width)
@@ -370,6 +353,6 @@ int main(int argc, char **argv)
 		figure out the position on the texture and the height to be displayed
 		display each texture line
 	 */
-	rem(&var);
+	// rem(&var);
 	return (0);
 }

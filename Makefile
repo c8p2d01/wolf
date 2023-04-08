@@ -1,34 +1,38 @@
-NAME = Terminal3d
+NAME = Termi_3D
 
-SRC =	main.c
+CC = cc
 
-OBJ	=	${SRC:.c=.o}
+CFLAGS = #-Wall -Werror -Wextra -g -Wno-unused-variable
 
-CC = gcc
+DEFINES = -D DEBUG=1
 
-HEADERS = cub.h
+SD = ./src/
+SRC =	main.c \
+		raycaster.c
 
-CFLAGS = -Wall -Wextra -Werror
+SRF = $(addprefix $(SD),$(SRC))
 
-#.SILENT:
+OD = ./obj/
+OBJ = $(SRC:.c=.o)
+OBF = $(SRF:$(SD)%.c=$(OD)%.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(SRC) -o $@  -lm
+$(OD)%.o: $(SD)%.c
+	@mkdir -p $(OD)
+	$(CC) $(CFLAGS) $(DEFINES) -c -o $@ $<
 
-%.o: %.c $(HEADER_FILES)
-	$(CC) -c -Wall -Werror -Wextra -o $@ $<
-
-e: all
-	./$(NAME)
-
+$(NAME): $(OBF)
+	$(CC) $(OBF) $(DEFINES) -o $(NAME)
 clean:
-	rm -f $(OBJ)
+	rm -rdf $(OD)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -rdf $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re e
+e: re
+	./$(NAME)
+
+phony: all clean fclean re e
