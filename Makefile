@@ -4,7 +4,7 @@ CC = cc
 
 CFLAGS = #-Wall -Werror -Wextra -g -Wno-unused-variable
 
-DEFINES = -D DEBUG=1
+DEFINES = -D DEBUG=100
 
 SD = ./src/
 SRC =	main.c \

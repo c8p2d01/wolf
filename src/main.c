@@ -147,7 +147,7 @@ void	rem(t_var *var)
 	-> find a vectorlength for the neares horizontal and neares vertical and from there on iterate in steps
 */
 
-int	createRGB(int r, int g, int b)
+int	createRGB(unsigned int r, unsigned int g, unsigned int b)
 {
 	return (0 << 24 | r << 16 | g << 8 | b);
 }
@@ -158,7 +158,7 @@ void	putPixel(int color)
 	unsigned char g = color >> 8;
 	unsigned char b = color;
 	r /= 43; g /= 43; b /= 43;
-	char col = 16 + r*36 + g*6 + b;
+	unsigned char col = 16 + r*36 + g*6 + b;
 	printf("\e[48;5;%im  ", col);
 }
 
@@ -332,7 +332,10 @@ void	render(t_var *var)
 
 int main(int argc, char **argv)
 {
-	// printf("%i\n",createRGB(44,44,44));
+	// int col = createRGB(0,0,255);
+	// printf("%i, %i\n",col, terminalColor(0,0,255));
+	// putPixel(col);
+	// printf("\e[0m\n");
 	t_var var;
 
 	if (argc == 2)

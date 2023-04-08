@@ -101,8 +101,8 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 		{
 			if (rayX > 0)	// North-East Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst)) - 0.5;
-				traceWallY = (int)(data->positionY + rayY * (*dst)) - 0.5;
+				traceWallX = (int)(data->positionX + rayX * (*dst));
+				traceWallY = (int)(data->positionY + rayY * (*dst));
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
 					data->map[traceWallY][traceWallX] == 'O')
@@ -115,7 +115,7 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 						if ((*dst) == minY)
 							{data->map[traceWallY][traceWallX] = 'N'; printf("N horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'E'; printf("N vertical wall\n");}
+							{data->map[traceWallY][traceWallX] = 'E'; printf("N E vertical wall\n");}
 						printMap(data);
 						data->map[traceWallY][traceWallX] = 'O';
 					}
@@ -124,8 +124,8 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 			}
 			else				// North-West Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst));
-				traceWallY = (int)(data->positionY + rayY * (*dst)) - 0.5;
+				traceWallX = (int)(data->positionX + rayX * (*dst)) - 1;
+				traceWallY = (int)(data->positionY + rayY * (*dst));
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
 					data->map[traceWallY][traceWallX] == 'O')
@@ -138,7 +138,7 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 						if ((*dst) == minY)
 							{data->map[traceWallY][traceWallX] = 'N'; printf("N horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'W'; printf("N vertical wall\n");}
+							{data->map[traceWallY][traceWallX] = 'W'; printf("N W vertical wall\n");}
 						printMap(data);
 						data->map[traceWallY][traceWallX] = 'O';
 					}
@@ -150,8 +150,8 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 		{
 			if (rayX > 0)	// South-East Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst)) - 0.5;
-				traceWallY = (int)(data->positionY + rayY * (*dst));
+				traceWallX = (int)(data->positionX + rayX * (*dst));
+				traceWallY = (int)(data->positionY + rayY * (*dst)) - 1;
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
 					data->map[traceWallY][traceWallX] == 'O')
@@ -164,7 +164,7 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 						if ((*dst) == minY)
 							{data->map[traceWallY][traceWallX] = 'S'; printf("S horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'E'; printf("S vertical wall\n");}
+							{data->map[traceWallY][traceWallX] = 'E'; printf("S E vertical wall\n");}
 						printMap(data);
 						data->map[traceWallY][traceWallX] = 'O';
 					}
@@ -173,8 +173,8 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 			}
 			else				// South-West Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst));
-				traceWallY = (int)(data->positionY + rayY * (*dst));
+				traceWallX = (int)(data->positionX + rayX * (*dst)) - 1;
+				traceWallY = (int)(data->positionY + rayY * (*dst)) - 1;
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
 					data->map[traceWallY][traceWallX] == 'O')
@@ -187,7 +187,7 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 						if ((*dst) == minY)
 							{data->map[traceWallY][traceWallX] = 'S'; printf("S horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'W'; printf("S vertical wall\n");}
+							{data->map[traceWallY][traceWallX] = 'W'; printf("S W vertical wall\n");}
 						printMap(data);
 						data->map[traceWallY][traceWallX] = 'O';
 					}
@@ -257,10 +257,10 @@ void	printMap(t_var *data)
 									c == ' ' ? terminalColor(100,100,100) :
 									c == 'P' ? terminalColor(255,100,100) :
 									c == 'D' ? terminalColor(100,255,100) :
-									c == 'N' ? terminalColor((unsigned char)NORTH >> 16,(unsigned char)NORTH >> 8,(unsigned char)NORTH) :
-									c == 'S' ? terminalColor((unsigned char)SOUTH >> 16,(unsigned char)SOUTH >> 8,(unsigned char)SOUTH) :
-									c == 'W' ? terminalColor((unsigned char)WEST >> 16,(unsigned char)WEST >> 8,(unsigned char)WEST) :
-									c == 'E' ? terminalColor((unsigned char)EAST >> 16,(unsigned char)EAST >> 8,(unsigned char)EAST) : 16);
+									c == 'N' ? 21 :
+									c == 'S' ? 196 :
+									c == 'W' ? 226 :
+									c == 'E' ? 46 : 16);
 		}
 		printf("\e[0m\n");
 	}

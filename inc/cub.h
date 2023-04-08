@@ -26,10 +26,10 @@
 
 # define SKY 8421631
 # define FLOOR 2894892
-# define WEST 1677696
-# define EAST 65280
-# define SOUTH 1671168
-# define NORTH 255
+# define WEST 16776960	// yellow
+# define EAST 65280		// green
+# define SOUTH 16711680	// red
+# define NORTH 255		// blue
 
 typedef struct s_var
 {
@@ -62,7 +62,8 @@ void	renderer(t_var *data);
 void	printMap(t_var *data);
 void	printFrame(t_var *data);
 void	putPixel(int color);
-int		createRGB(int r, int g, int b);
+int		terminalColor(int r, int g, int b);
+int		createRGB(unsigned int r, unsigned int g, unsigned int b);
 
 void	rem(t_var *var);
 void	init(t_var *var, char *path);
