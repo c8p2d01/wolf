@@ -1,4 +1,5 @@
 #include "../inc/cub.h"
+# include <math.h>
 
 char	**init_texture(char *first, ...)
 {
@@ -24,51 +25,6 @@ char	**init_texture(char *first, ...)
 
 void	init(t_var *var, char *path)
 {
-	// textures raw
-	var->east = init_texture("EEEEEEEEEEEEEEEEEE",
-							 "E----------------E",
-							 "E---EEEEEEEEEE---E",
-							 "E---E------------E",
-							 "E---E------------E",
-							 "E---EEEEEEE------E",
-							 "E---E------------E",
-							 "E---E------------E",
-							 "E---EEEEEEEEEE---E",
-							 "E----------------E",
-							 "EEEEEEEEEEEEEEEEEE", NULL);
-	var->west = init_texture("WWWWWWWWWWWWWWWWWW",
-							 "W-----------------W",
-							 "W--WW---------WW--W",
-							 "W---WW---W---WW---W",
-							 "W---WW--WWW--WW---W",
-							 "W----W--W-W--W----W",
-							 "W----WWWW-WWWW----W",
-							 "W-----WW---WW-----W",
-							 "W-----------------W",
-							 "W-----------------W",
-							 "WWWWWWWWWWWWWWWWWW", NULL);
-	var->south = init_texture("SSSSSSSSSSSSSSSSSS",
-							 "S----------------S",
-							 "S------SSSS------S",
-							 "S---SSS----SSS---S",
-							 "S--SS------------S",
-							 "S----SSS--SSS----S",
-							 "S------------SS--S",
-							 "S---SSS----SSS---S",
-							 "S------SSSS------S",
-							 "S----------------S",
-							 "SSSSSSSSSSSSSSSSSS", NULL);
-	var->north = init_texture("NNNNNNNNNNNNNNNNNN",
-							 "W----------------W",
-							 "W--N----------N--W",
-							 "W--NN---------N--W",
-							 "W--N-NN-------N--W",
-							 "W--N---NN-----N--W",
-							 "W--N-----NN---N--W",
-							 "W--N-------NN-N--W",
-							 "W--N---------NN--W",
-							 "W----------------W",
-							 "NNNNNNNNNNNNNNNNNN", NULL);
 	// map
 	var->map = init_texture("OOOOOOOOOOOOOOOOO",
 							"O               O",
@@ -344,9 +300,8 @@ int main(int argc, char **argv)
 		init(&var, argv[1]);
 	}
 	else
-		init(&var, NULL);
+	init(&var, NULL);
 	renderer(&var);
-	printMap(&var);
 	printFrame(&var);
 	/* plans:
 		raycasting;

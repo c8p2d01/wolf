@@ -62,6 +62,10 @@ void	rayCreation(t_var	*data, double *rayX, double *rayY, int rayNumber)
 	*rayY = data->orientationY + projectionY - ((projectionY * 2) / WIDTH) * rayNumber;
 
 	normalize(2, rayX, rayY);
+	if (DEBUG == rayNumber)
+	{
+		printf("Created Ray	x %lf 	y %lf \n", *rayX, *rayY);
+	}
 }
 
 void	firstStep(t_var *data, double *rayR, double *dst, bool isX)
@@ -81,66 +85,79 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 
 	rayCreation(data, &rayX, &rayY, rayNumber);
 
-	double	minX, minY;
-	firstStep(data, &rayX, &minX, true);
-	firstStep(data, &rayY, &minY, false);
+	double	X_Wall_Distance, Y_Wall_Distance;
+	firstStep(data, &rayX, &X_Wall_Distance, true);
+	firstStep(data, &rayY, &Y_Wall_Distance, false);
 
 	double	stepX, stepY;
 	stepX = 1 / fabs(rayX);
 	stepY = 1 / fabs(rayY);
 
+	if (rayNumber == DEBUG)
+	{
+		printf("minV %lf	minH %lf	stepX %lf	stepY %lf\n", X_Wall_Distance, Y_Wall_Distance, stepX, stepY);
+	}
+
 	int		color = 0;
 	// Coordinates to check incoming angle
-	int		traceWallX, traceWallY;
+	double	traceWallX, traceWallY;
 	(*dst) = 0;
 
 	while(true)
 	{
-		(*dst) = minX < minY ? minX : minY;
-		if (rayY >= 0)			// North
+		(*dst) = X_Wall_Distance <= Y_Wall_Distance ? X_Wall_Distance : Y_Wall_Distance;
+		if (rayY <= 0)			// North
 		{
 			if (rayX > 0)	// North-East Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst));
-				traceWallY = (int)(data->positionY + rayY * (*dst));
+				traceWallX = /* floor */(data->positionX + (rayX * (*dst)));
+				traceWallY = /* floor */(data->positionY + (rayY * (*dst)));
+				if (rayNumber == DEBUG)
+				{
+					printf("NE dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
+				}
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
-					data->map[traceWallY][traceWallX] == 'O')
+					data->map[(int)traceWallY][(int)traceWallX] == WALL)
 				{
 					color = EAST;
-					if ((*dst) == minY)
+					if ((*dst) == Y_Wall_Distance)
 						color = NORTH;
 					if (rayNumber == DEBUG)
 					{
-						if ((*dst) == minY)
-							{data->map[traceWallY][traceWallX] = 'N'; printf("N horizontal wall\n");}
+						if ((*dst) == Y_Wall_Distance)
+							{data->map[(int)traceWallY][(int)traceWallX] = 'N'; printf("N horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'E'; printf("N E vertical wall\n");}
+							{data->map[(int)traceWallY][(int)traceWallX] = 'E'; printf("N E vertical wall\n");}
 						printMap(data);
-						data->map[traceWallY][traceWallX] = 'O';
+						data->map[(int)traceWallY][(int)traceWallX] = WALL;
 					}
 					break ;
 				}
 			}
 			else				// North-West Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst)) - 1;
-				traceWallY = (int)(data->positionY + rayY * (*dst));
+				traceWallX = /* floor */(data->positionX + (rayX * (*dst))) - 1;
+				traceWallY = /* floor */(data->positionY + (rayY * (*dst)));
+				if (rayNumber == DEBUG)
+				{
+					printf("NW dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
+				}
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
-					data->map[traceWallY][traceWallX] == 'O')
+					data->map[(int)traceWallY][(int)traceWallX] == WALL)
 				{
 					color = WEST;
-					if ((*dst) == minY)
+					if ((*dst) == Y_Wall_Distance)
 						color = NORTH;
 					if (rayNumber == DEBUG)
 					{
-						if ((*dst) == minY)
-							{data->map[traceWallY][traceWallX] = 'N'; printf("N horizontal wall\n");}
+						if ((*dst) == Y_Wall_Distance)
+							{data->map[(int)traceWallY][(int)traceWallX] = 'N'; printf("N horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'W'; printf("N W vertical wall\n");}
+							{data->map[(int)traceWallY][(int)traceWallX] = 'W'; printf("N W vertical wall\n");}
 						printMap(data);
-						data->map[traceWallY][traceWallX] = 'O';
+						data->map[(int)traceWallY][(int)traceWallX] = WALL;
 					}
 					break ;
 				}
@@ -150,66 +167,66 @@ int		rayMarcher(t_var *data, double *dst, int rayNumber)
 		{
 			if (rayX > 0)	// South-East Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst));
-				traceWallY = (int)(data->positionY + rayY * (*dst)) - 1;
+				traceWallX = /* floor */(data->positionX + (rayX * (*dst)));
+				traceWallY = /* floor */(data->positionY + (rayY * (*dst))) - 1;
+				if (rayNumber == DEBUG)
+				{
+					printf("SE dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
+				}
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
-					data->map[traceWallY][traceWallX] == 'O')
+					data->map[(int)traceWallY][(int)traceWallX] == WALL)
 				{
 					color = EAST;
-					if ((*dst) == minY)
+					if ((*dst) == Y_Wall_Distance)
 						color = SOUTH;
 					if (rayNumber == DEBUG)
 					{
-						if ((*dst) == minY)
-							{data->map[traceWallY][traceWallX] = 'S'; printf("S horizontal wall\n");}
+						if ((*dst) == Y_Wall_Distance)
+							{data->map[(int)traceWallY][(int)traceWallX] = 'S'; printf("S horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'E'; printf("S E vertical wall\n");}
+							{data->map[(int)traceWallY][(int)traceWallX] = 'E'; printf("S E vertical wall\n");}
 						printMap(data);
-						data->map[traceWallY][traceWallX] = 'O';
+						data->map[(int)traceWallY][(int)traceWallX] = WALL;
 					}
 					break ;
 				}
 			}
 			else				// South-West Wall ?
 			{
-				traceWallX = (int)(data->positionX + rayX * (*dst)) - 1;
-				traceWallY = (int)(data->positionY + rayY * (*dst)) - 1;
+				traceWallX = /* floor */(data->positionX + (rayX * (*dst))) - 1;
+				traceWallY = /* floor */(data->positionY + (rayY * (*dst))) - 1;
+				if (rayNumber == DEBUG)
+				{
+					printf("SW dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
+				}
 				if (traceWallX >= 0 && traceWallX < WIDTH && 
 					traceWallY >= 0 && traceWallY < HEIGHT &&
-					data->map[traceWallY][traceWallX] == 'O')
+					data->map[(int)traceWallY][(int)traceWallX] == WALL)
 				{
 					color = WEST;
-					if ((*dst) == minY)
+					if ((*dst) == Y_Wall_Distance)
 						color = SOUTH;
 					if (rayNumber == DEBUG)
 					{
-						if ((*dst) == minY)
-							{data->map[traceWallY][traceWallX] = 'S'; printf("S horizontal wall\n");}
+						if ((*dst) == Y_Wall_Distance)
+							{data->map[(int)traceWallY][(int)traceWallX] = 'S'; printf("S horizontal wall\n");}
 						else
-							{data->map[traceWallY][traceWallX] = 'W'; printf("S W vertical wall\n");}
+							{data->map[(int)traceWallY][(int)traceWallX] = 'W'; printf("S W vertical wall\n");}
 						printMap(data);
-						data->map[traceWallY][traceWallX] = 'O';
+						data->map[(int)traceWallY][(int)traceWallX] = WALL;
 					}
 					break ;
 				}
 			}
 		}
-		if ((*dst) == minY)
+		if ((*dst) == Y_Wall_Distance)
 		{
-			if (rayNumber == DEBUG)
-			{
-				printf("adding hori\n");
-			}
-			minY += stepY;
+			Y_Wall_Distance += stepY;
 		}
 		else
 		{
-			if (rayNumber == DEBUG)
-			{
-				printf("adding verti\n");
-			}
-			minX += stepX;
+			X_Wall_Distance += stepX;
 		}
 		if ((*dst) > RENDER)
 		{
@@ -242,18 +259,19 @@ void	printFrame(t_var *data)
 
 void	printMap(t_var *data)
 {
-	printf("\e[0m\n");
+	printf("\e[48;5;21m                                                  \e[0m\n\n");
 	int		len = 0;
 	char	c;
 	while (data->map[len])
 		len++;
 	for (int y = 0; y < len; y++)
 	{
+		putPixel(WEST);
 		printf("\t");
 		for (int x = 0; x < strlen(data->map[0]); x++)
 		{
 			c = data->map[y][x];
-			printf("\e[48;5;%im  ", c == 'O' ? terminalColor(200,200,200) :
+			printf("\e[48;5;%im  ", c == WALL ? terminalColor(200,200,200) :
 									c == ' ' ? terminalColor(100,100,100) :
 									c == 'P' ? terminalColor(255,100,100) :
 									c == 'D' ? terminalColor(100,255,100) :
@@ -262,8 +280,11 @@ void	printMap(t_var *data)
 									c == 'W' ? 226 :
 									c == 'E' ? 46 : 16);
 		}
+		printf("\t");
+		putPixel(EAST);
 		printf("\e[0m\n");
 	}
+	printf("\n\n\e[48;5;196m                                                  \e[0m\n");
 }
 
 void	stretcher(t_var *data, int rayNumber, double dst, int color)
@@ -300,6 +321,7 @@ void	renderer(t_var *data)
 		color = rayMarcher(data, &dst, r);
 		if (RENDER - dst < 0)
 		{
+			stretcher(data, r, RENDER, createRGB(128,128,128));
 			continue ;
 		}
 		stretcher(data, r, RENDER, color);

@@ -18,8 +18,8 @@
 # define PI 3.14159265359
 
 
-# define WIDTH 120
-# define HEIGHT 40
+# define WIDTH 121
+# define HEIGHT 10
 # define FOV 90
 # define RENDER 30
 # define WALL 'O'
