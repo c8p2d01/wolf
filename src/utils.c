@@ -1,23 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@students.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/10 17:41:53 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/05/10 17:41:55 by cdahlhof         ###   ########.fr       */
+/*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
+/*   Updated: 2024/03/10 22:09:04 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../inc/cub.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
-{
-	if (*lst)
-	{
-		ft_lstclear(&(*lst)->next, del);
-		ft_lstdelone(*lst, del);
-		*lst = NULL;
-	}
-}
