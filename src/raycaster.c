@@ -3,43 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@students.42wolfsburg    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/03/11 01:47:30 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/03/27 08:46:51 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub.h"
 
-void create_projection_reference(t_var	*data, double **plane)
-{
-	*plane = ft_calloc(sizeof(double *), 2);
-	if (!*plane)
-		return;
-	normalize_2d(&data->orientationX, &data->orientationY);
-	double	rotator = veclen_2d(data->orientationX, data->orientationY) * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
-	*plane[0] = data->orientationY;
-	*plane[1] = data->orientationX * -1;
-	normalize_2d(&(*plane[0]), &(*plane[1]));
+// void	create_projection_reference(t_var	*data, double **plane)
+// {
+// 	double	rotator;
 
-	*plane[0] *= rotator;
-	*plane[1] *= rotator;
-	normalize_2d(&(*plane[0]), &(*plane[1]));
-}
+// 	*plane = ft_calloc(sizeof(double *), 2);
+// 	if (!*plane)
+// 		return ;
+// 	normalize_2d(&data->orientationX, &data->orientationY);
+// 	rotator = veclen_2d(data->orientationX, data->orientationY) * \
+// 	sin((FOV * PI / 180) / 2) / cos((FOV * PI / 180) / 2);
+// 	*plane[0] = data->orientationY;
+// 	*plane[1] = data->orientationX * -1;
+// 	normalize_2d(&(*plane[0]), &(*plane[1]));
+// 	*plane[0] *= rotator;
+// 	*plane[1] *= rotator;
+// 	normalize_2d(&(*plane[0]), &(*plane[1]));
+// }
 
-t_ray	*rayCreator(t_var	*data, short num)
-{
-	t_ray			*ray;
-	static double	*plane;
-	
-	ray = ft_calloc(sizeof(t_ray), 1);
-	if (!ray)
-		return (NULL);
-	ray->number = num;
-	if (!plane)
-		create_projection_reference(data, &plane);
-}
+// //still need to add num amount of xy offset to ray
+// //accouting that mid ray shall be POV ray and norm the result
+// t_ray	*ray_creator(t_var	*data, short num)
+// {
+// 	t_ray			*ray;
+// 	static double	*plane;
+
+// 	ray = ft_calloc(sizeof(t_ray), 1);
+// 	if (!ray)
+// 		return (NULL);
+// 	ray->number = num;
+// 	if (!plane)
+// 		create_projection_reference(data, &plane);
+// 	return (ray);
+// }
 
 //void	rayCreation(t_var	*data, double *rayX, double *rayY, int rayNumber)
 //{

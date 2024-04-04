@@ -20,8 +20,7 @@
 # if defined(__APPLE__)
 #  define GL_SILENCE_DEPRECATION
 # endif
-// # include <GLFW/glfw3.h>
-# include "/home/clems/Downloads/glfw-3.4/glfw-3.4/include/GLFW/glfw3.h"
+# include <GLFW/glfw3.h>
 # include <stdlib.h>
 # include <memory.h>
 # include <stdio.h>

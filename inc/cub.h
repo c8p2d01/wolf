@@ -8,6 +8,9 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdarg.h>
+# include <fcntl.h>
+
+#include "../MLX42/include/MLX42/MLX42.h"
 
 # include "../ft_libft/inc/libft.h"
 
@@ -15,41 +18,39 @@
 #  define DEBBUG 0
 # endif
 
-# define GONE "\033[8m"
-# define CLEAR_TERM "\e[1;1H\e[2J"
 # define PI 3.14159265359
 
-
-# define WIDTH 121
-# define HEIGHT 10
 # define FOV 90
 # define RENDER 30
-# define WALL 'O'
-
-# define SKY 8421631
-# define FLOOR 2894892
 
 typedef struct s_ray
 {
 	int		number;
 	double	x;
 	double	y;
-	double	wallDst;
-	short	wallKind;
+	double	length;
+	short	wall;
 }	t_ray;
 
 typedef struct s_var
 {
-	char **map;
-	// canvas replace with mlx image
-	int canvas[HEIGHT + 1][WIDTH + 1];
+	mlx_t	*mlx;
 
-	// Player
-	double	positionX;
-	double	positionY;
-	double	orientationX;
-	double	orientationY;
-	
+	char	*texture_north;
+	char	*texture_south;
+	char	*texture_westh;
+	char	*texture_easth;
+
+	int32_t	floor;
+	int32_t	ceiling;
+
+	char	**map;
+
+	double	ply_x;
+	double	ply_y;
+	double	dir_x;
+	double	dir_y;
+
 }	t_var;
 
 // void	rayCreation(t_var	*data, double *rayX, double *rayY, int rayNumber);
@@ -62,5 +63,6 @@ int		createRGB(unsigned int r, unsigned int g, unsigned int b);
 
 void	rem(t_var *var);
 void	init(t_var *var);
+int32_t	parse_input(int argc, char **argv, t_var *data);
 
 #endif

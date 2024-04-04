@@ -1,59 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
+/*   Updated: 2024/04/04 16:43:10 by cdahlhof         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/cub.h"
-# include <math.h>
-
-char	**init_texture(char *first, ...)
-{
-	va_list	var;
-	int i = 0;
-	int l = 0;
-
-	va_start(var, first);
-	for (char* lal = first; lal != NULL; lal = va_arg(var, char *))
-	{
-		i++;
-	}
-	va_end(var);
-	char **res = calloc(i + 1, sizeof(char*));
-	va_start(var, first);
-	for (char* lal = first; l < i; lal = va_arg(var, char *))
-	{
-		res[l] = strdup(lal);
-		l++;
-	}
-	return (res);
-}
-
-void	init(t_var *var)
-{
-	// map
-	var->map = init_texture("OOOOOOOOOOOOOOOOO",
-							"O               O",
-							"O               O",
-							"O               O",
-							"O               O",
-							"O         P     O",
-							"O               O",
-							"O               O",
-							"O               O",
-							"O               O",
-							"OOOOOOOOOOOOOOOOO", NULL);
-	// player
-	for (int x = 0; var->map[x]; x++)
-	{
-		for (int y = 0; var->map[x][y]; y++)
-		{
-			if (var->map[x][y] == 'P')
-			{
-				var->positionX = y;
-				var->positionY = x;
-				var->orientationX = -1;
-				var->orientationY = 0;
-				var->map[x + (int)var->orientationY][y + (int)var->orientationX] = 'D';
-				printf("player at %i %i\n", y, x);
-			}
-		}
-	}
-}
 
 /*
 	\    \   /     /	
@@ -230,35 +187,46 @@ void	init(t_var *var)
 // 	// }
 // }
 
-int main(int argc, char **argv)
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <memory.h>
+#define WIDTH 256
+#define HEIGHT 256
+
+mlx_image_t	*g_img;
+
+void	hook(void *param)
 {
-	// t_imgdata		data;
+	mlx_t	*mlx;
 
+	mlx = param;
+	if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
+		mlx_close_window(param);
+	if (mlx_is_key_down(param, MLX_KEY_UP))
+		g_img->instances[0].y -= 5;
+	if (mlx_is_key_down(param, MLX_KEY_DOWN))
+		g_img->instances[0].y += 5;
+	if (mlx_is_key_down(param, MLX_KEY_LEFT))
+		g_img->instances[0].x -= 5;
+	if (mlx_is_key_down(param, MLX_KEY_RIGHT))
+		g_img->instances[0].x += 5;
+}
 
+int32_t	main(int argc, char **argv)
+{
+	t_var	data;
 
-	//			 // int col = createRGB(0,0,255);
-	//			 // printf("%i, %i\n",col, terminalColor(0,0,255));
-	//			 // putPixel(col);
-	//			 // printf("\e[0m\n");
-	//			 t_var var;
-
-	//			 if (argc == 2)
-	//			 {
-	//			 	printf("%s\n", argv[1]);
-	//			 	init(&var, argv[1]);
-	//			 }
-	//			 else
-	//			 init(&var, NULL);
-	//			 renderer(&var);
-	//			 printFrame(&var);
-	//			 /* plans:
-	//			 	raycasting;
-	//			 	-> make a ray (one pwe width)
-	//			 	-> repeatedly check the next possible wall intersection until a wall is hit
-	//			 		pythagoras and map comparison
-	//			 	figure out the position on the texture and the height to be displayed
-	//			 	display each texture line
-	//			  */
-	//			 // rem(&var);
-	return (0);
+	if (parse_input(argc, argv, &data))
+		return (EXIT_FAILURE);
+	data.mlx = mlx_init(WIDTH, HEIGHT, "MLX42", true);
+	if (!data.mlx)
+		exit(EXIT_FAILURE);
+	g_img = mlx_new_image(data.mlx, 128, 128);
+	memset(g_img->pixels, 255, g_img->width * g_img->height * sizeof(int));
+	mlx_image_to_window(data.mlx, g_img, 0, 0);
+	mlx_loop_hook(data.mlx, &hook, data.mlx);
+	mlx_loop(data.mlx);
+	mlx_terminate(data.mlx);
+	return (EXIT_SUCCESS);
 }

@@ -1,4 +1,4 @@
-NAME = Termi_3D
+NAME = cub3d
 
 CC = cc
 
@@ -8,7 +8,10 @@ DEFINES = -D DEBUG=1
 
 SD = ./src/
 SRC =	main.c \
-		raycaster.c
+		input_check.c \
+		input_parse.c \
+		raycaster.c \
+		utils.c
 
 #SRC = $(cd src ; find . -name "*.c"; cd -)
 
@@ -21,7 +24,7 @@ OBF = $(SRF:$(SD)%.c=$(OD)%.o)
 LFT = ./ft_libft
 MLX = ./MLX42
 
-LIBRARYS = $(LFT)/libft.a $(MLX)/libmlx42.a
+LIBRARYS = -lm -I include -lglfw -L "/Users/$$USER/.brew/opt/glfw/lib/" $(LFT)/libft.a $(MLX)/libmlx42.a
 
 RED = "\033[38;2;255;51;51m"
 GRN = "\033[38;2;170;255;170m"
@@ -34,9 +37,9 @@ SUBM_FLAG	=
 endif
 
 all: $(SUBM_FLAG) lib
-	make green
+	make -s green
 	make $(NAME)
-	make clear
+	make -s clear
 
 submodule: 
 	git submodule init 
@@ -48,24 +51,24 @@ lib:
 
 $(OD)%.o: $(SD)%.c
 	@mkdir -p $(OD)
-	$(CC) $(DEFINES) $(CFLAGS) -c -o $@ -lm $<
+	$(CC) $(DEFINES) $(CFLAGS) -c -o $@ $<
 
 $(NAME): $(OBF)
-	$(CC) $(DEFINES) $(OBF) -o $(NAME) -lm $(LIBRARYS)
+	$(CC) $(DEFINES) $(OBF) -o $(NAME) $(LIBRARYS)
 
 clean:
-	make red
+	make -s red
 	rm -rdf $(OD)
 	make clean -C $(LFT)
 	make clean -C $(MLX)
-	make clear
+	make -s clear
 
 fclean: clean
-	make red
+	make -s red
 	make fclean -C $(LFT)
 	make fclean -C $(MLX)
 	rm -rdf $(NAME)
-	make clear
+	make -s clear
 
 re: fclean all
 
