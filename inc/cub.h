@@ -15,12 +15,14 @@
 # include "../ft_libft/inc/libft.h"
 
 # ifndef DEBUG
-#  define DEBBUG 0
+#  define DEBBUG 1
 # endif
 
 # define PI 3.14159265359
 
 # define FOV 90
+# define RENDER 30
+# define WIDTH 200
 # define RENDER 30
 
 typedef struct s_ray
@@ -28,8 +30,8 @@ typedef struct s_ray
 	int		number;
 	double	x;
 	double	y;
-	double	length;
-	short	wall;
+	double	wallDst;
+	char	*wall;
 }	t_ray;
 
 typedef struct s_var
@@ -45,6 +47,8 @@ typedef struct s_var
 	int32_t	ceiling;
 
 	char	**map;
+	int		map_width;
+	int		map_height;
 
 	double	ply_x;
 	double	ply_y;

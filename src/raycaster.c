@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@students.42wolfsburg    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/03/11 01:47:30 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:54:30 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ void create_projection_reference(t_var	*data, double **plane)
 	*plane = ft_calloc(sizeof(double *), 2);
 	if (!*plane)
 		return;
-	normalize_2d(&data->orientationX, &data->orientationY);
-	double	rotator = veclen_2d(data->orientationX, data->orientationY)
+	normalize_2d(&data->dir_x, &data->dir_y);
+	double	rotator = veclen_2d(data->dir_x, data->dir_y)
 				 * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
-	*plane[0] = data->orientationX;
-	*plane[1] = data->orientationY * -1;
+	*plane[0] = data->dir_x;
+	*plane[1] = data->dir_y * -1;
 	normalize_2d(&(*plane[0]), &(*plane[1]));
 
 	*plane[0] *= rotator;
@@ -52,24 +52,21 @@ void create_projection_reference(t_var	*data, double **plane)
  * @param num 
  * @return t_ray* 
  */
-t_ray	*rayCreator(t_var *data, short num)
+t_ray	rayCreator(t_var *data, short num)
 {
-	t_ray			*ray;
+	t_ray			ray;
 	static double	*ortho;
 	
-	ray = ft_calloc(sizeof(t_ray), 1);
-	if (!ray)
-		return (NULL);
-	ray->number = num;
+	ray.number = num;
 	if (!ortho)
 		create_projection_reference(data, &ortho);
-	ray->x = data->orientationX + (num - WIDTH / 2) * (2 * ortho[0] / FOV);
-	ray->y = data->orientationY + (num - WIDTH / 2) * (2 * ortho[1] / FOV);
-	normalize_2d(&ray->x, &ray->y);
-	if (data->debug)
+	ray.x = data->dir_x + (num - WIDTH / 2) * (2 * ortho[0] / FOV);
+	ray.y = data->dir_y + (num - WIDTH / 2) * (2 * ortho[1] / FOV);
+	normalize_2d(&ray.x, &ray.y);
+	if (DEBUG == 1)
 	{
-		ft_printf("casting ray from %lf\n\t\t%lf\n", data->positionX, data->positionY);
-		ft_printf("casting ray towards %lf\n\t\t%lf\n", ray->x, ray->y);
+		ft_printf("casting ray from %lf\n\t\t%lf\n", data->ply_x, data->ply_y);
+		ft_printf("casting ray towards %lf\n\t\t%lf\n", ray.x, ray.y);
 	}
 	return (ray);
 }
@@ -84,52 +81,59 @@ bool	close_enough(double a, double b, double closeness)
 	return (false);
 }
 
-int	wall_info(t_var *data,t_ray *ray, double *hit, double *steps)
-{
-	if (ray->y <= 0)	// North
-	{
-		if (ray->x > 0)	// East
-		{
-			ray->wallKind = data->textureEasth;
-			if (ray->wallDst == steps[1])
-				ray->wallKind = data->textureNorth;
-		}
-		else			// West
-		{
-			ray->wallKind = data->textureWesth;
-			if (ray->wallDst == steps[1])
-				ray->wallKind = data->textureNorth;
-		}
-	}
-	else				// South
-		wall_info_extension(data, ray, hit, steps);
-}
-
 int	wall_info_extension(t_var *data,t_ray *ray, double *hit, double *steps)
 {
 	if (ray->y > 0)				// South
 	{
 		if (ray->x > 0)	// East
 		{
-			ray->wallKind = data->textureEasth;
+			ray->wall = data->texture_easth;
 			if (ray->wallDst == steps[1])
-				ray->wallKind = data->textureSouth;
+				ray->wall = data->texture_south;
 		}
 		else			// West
 		{
-			ray->wallKind = data->textureWesth;
+			ray->wall = data->texture_westh;
 			if (ray->wallDst == steps[1])
-				ray->wallKind = data->textureSouth;
+				ray->wall = data->texture_south;
 		}
 	}
+	else
+		return (1);
+	return (0);
+}
+
+int	wall_info(t_var *data,t_ray *ray, double *hit, double *steps)
+{
+	int	res;
+
+	res = 0;
+	if (ray->y <= 0)	// North
+	{
+		if (ray->x > 0)	// East
+		{
+			ray->wall = data->texture_easth;
+			if (ray->wallDst == steps[1])
+				ray->wall = data->texture_north;
+		}
+		else			// West
+		{
+			ray->wall = data->texture_westh;
+			if (ray->wallDst == steps[1])
+				ray->wall = data->texture_north;
+		}
+	}
+	else				// South
+		res = wall_info_extension(data, ray, hit, steps);
+	return (res);
 }
 
 void	wall_walker(t_var *data, t_ray *ray, double *hit)
 {
 	double	steps[2];
 
-	steps[0] = (1 - (fabs(pos) - abs((int)pos))) / fabs(ray->x);
-	steps[1] = (1 - (fabs(pos) - abs((int)pos))) / fabs(ray->y);
+	steps[0] = (1 - (fabs(data->ply_x) - abs((int)data->ply_x))) / fabs(ray->x);
+	steps[1] = (1 - (fabs(data->ply_y) - abs((int)data->ply_y))) / fabs(ray->y);
 	while (true)
 	{
 		ray->wallDst = steps[0];
@@ -137,12 +141,12 @@ void	wall_walker(t_var *data, t_ray *ray, double *hit)
 			ray->wallDst = steps[1];
 		hit[0] = ray->wallDst * ray->x;
 		hit[1] = ray->wallDst * ray->y;
-		if (hit[0] < 0 || hit[0] >= WIDTH || hit[1] < 0 || hit[1] >= HEIGHT)
+		if (hit[0] < 0 || hit[0] >= data->map_width || hit[1] < 0 || hit[1] >= data->map_height)
 		{
-			if (data->debug)
+			if (DEBUG == 1)
 				ft_printf("trace out of bounds\n");
-			ray->wallKind = NULL;
-			return (NaN);
+			ray->wall = NULL;
+			return ;
 		}
 		if (data->map[(int)hit[0]][(int)hit[1]] == '1')
 			return (wall_info(data, ray, hit));
@@ -160,10 +164,10 @@ void rayMarcher(t_var *data)
 	int32_t	i;
 
 	i = 0;
-	while (rays[i])
+	while (i < WIDTH)
 	{
-		ray = rayCreator(data, i);
-		wall_walker(data, ray, intersection);
+		rays[i] = rayCreator(data, i);
+		wall_walker(data, rays + i, intersection);
 		// texture render
 
 	}
@@ -174,7 +178,7 @@ void rayMarcher(t_var *data)
 //{
 //	double	delta = 1 / fabs(*rayR);
 //
-//	double	pos = isX ? data->positionX : data->positionY;
+//	double	pos = isX ? data->ply_x : data->ply_y;
 //	*dst = (1 - (fabs(pos) - abs((int)pos))) / fabs(*rayR);
 //
 //	if (*dst == delta)
@@ -212,8 +216,8 @@ void rayMarcher(t_var *data)
 //		{
 //			if (rayX > 0)	// North-East Wall ?
 //			{
-//				traceWallX = /* floor */(data->positionX + (rayX * (*dst)));
-//				traceWallY = /* floor */(data->positionY + (rayY * (*dst)));
+//				traceWallX = /* floor */(data->ply_x + (rayX * (*dst)));
+//				traceWallY = /* floor */(data->ply_y + (rayY * (*dst)));
 //				if (rayNumber == DEBUG)
 //				{
 //					printf("NE dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
@@ -239,8 +243,8 @@ void rayMarcher(t_var *data)
 //			}
 //			else				// North-West Wall ?
 //			{
-//				traceWallX = /* floor */(data->positionX + (rayX * (*dst))) - 1;
-//				traceWallY = /* floor */(data->positionY + (rayY * (*dst)));
+//				traceWallX = /* floor */(data->ply_x + (rayX * (*dst))) - 1;
+//				traceWallY = /* floor */(data->ply_y + (rayY * (*dst)));
 //				if (rayNumber == DEBUG)
 //				{
 //					printf("NW dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
@@ -269,8 +273,8 @@ void rayMarcher(t_var *data)
 //		{
 //			if (rayX > 0)	// South-East Wall ?
 //			{
-//				traceWallX = /* floor */(data->positionX + (rayX * (*dst)));
-//				traceWallY = /* floor */(data->positionY + (rayY * (*dst))) - 1;
+//				traceWallX = /* floor */(data->ply_x + (rayX * (*dst)));
+//				traceWallY = /* floor */(data->ply_y + (rayY * (*dst))) - 1;
 //				if (rayNumber == DEBUG)
 //				{
 //					printf("SE dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
@@ -296,8 +300,8 @@ void rayMarcher(t_var *data)
 //			}
 //			else				// South-West Wall ?
 //			{
-//				traceWallX = /* floor */(data->positionX + (rayX * (*dst))) - 1;
-//				traceWallY = /* floor */(data->positionY + (rayY * (*dst))) - 1;
+//				traceWallX = /* floor */(data->ply_x + (rayX * (*dst))) - 1;
+//				traceWallY = /* floor */(data->ply_y + (rayY * (*dst))) - 1;
 //				if (rayNumber == DEBUG)
 //				{
 //					printf("SW dst %lf, xtrace %lf	ytrace %lf \n", *dst, traceWallX, traceWallY);
@@ -428,8 +432,8 @@ void rayMarcher(t_var *data)
 // {
 // 	t_var	data;
 // 	double	rayX, rayY;
-// 	data.orientationX = -1;
-// 	data.orientationY = -1;
+// 	data.dir_x = -1;
+// 	data.dir_y = -1;
 // 	for(int i = 0; i < WIDTH; i++)
 // 	{
 // 		rayCreation(&data, &rayX, &rayY, i);

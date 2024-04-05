@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/04/04 22:52:04 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/04/05 16:57:55 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,25 +157,21 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 {
 	char	*line;
 
-	printf("LAL\n");
 	while (text)
 	{
 		line = ft_strtrim((char *)text->content, "\t\n\v\f\r ");
 		if (!line)
 			return (1);
-		printf(">%s\n<", line);
 		if (ft_strlen(line) == 0)
 		{
 			text = text->next;
+			*map_start = *map_start + 1;
 			continue ;
 		}
 		if (ft_strchr("01", line[0]))
 			break ;
 		if (check_variable(data, line))
-		{
-			free(line);
-			return (1);
-		}
+			return (free(line), 1);
 		text = text->next;
 		*map_start = *map_start + 1;
 		free(line);
@@ -199,7 +195,6 @@ int32_t	construct_map(t_var *data, t_list *text, int map_width, int map_start)
 	while (i < map_height && text)
 	{
 		line = (char *)text->content;
-		printf("%d\t%s", i, line);
 		data->map[i] = malloc((map_width + 1) * sizeof(char));
 		if (!data->map[i])
 		{
@@ -252,9 +247,8 @@ int32_t	find_player(t_var *data, int *x, int *y)
 
 	if (!data || !data->map)
 		return (1);
-	height = ft_2d_array_size((void **)data->map);
 	*y = 0;
-	while (*y < height)
+	while (*y < data->map_height)
 	{
 		line = ft_strtrim(data->map[*y], "10 \n");
 		if (ft_strlen(line))
@@ -298,6 +292,7 @@ char	**rotate_table(char **base)
 	int		l;
 
 	i = 0;
+	l = 0;
 	while (base[i])
 	{
 		if (l < ft_strlen(base[i]))
@@ -306,7 +301,7 @@ char	**rotate_table(char **base)
 	}
 	res = ft_calloc(l + 1, sizeof(char *));
 	i = 0;
-	while (i < l)
+	while (res[i])
 	{
 		res[i] = column_to_line(base, i);
 		i++;
@@ -338,9 +333,9 @@ int	map_checking_x(char **map)
 		free_2dstr(subs);
 		i[0]++;
 	}
-	if (i[0] > 0)
-		i[0] = 0;
-	return (i[0]);
+	if (i[0] >= 0)
+		return (0);
+	return (1);
 }
 
 int	check_map(t_var *data)
@@ -348,9 +343,13 @@ int	check_map(t_var *data)
 	char	**rotated;
 	int		res;
 
-	rotated = rotate_table(date->map);
+	rotated = rotate_table(data->map);
+	data->map_height = ft_2d_array_size(rotated);
+	data->map_width = ft_2d_array_size(data->map);
 	res = map_checking_x(data->map) + map_checking_x(rotated);
 	free_2dstr(rotated);
+	if (res)
+		ft_printf_fd(2, "Invalid Map, only walled-in tiles are accepted, %d\n", res);
 	return (res);
 }
 
