@@ -273,35 +273,69 @@ int32_t	find_player(t_var *data, int *x, int *y)
 	return (extract_player(data, x, *y));
 }
 
-char	**rotate_table(char **base)
+char	*column_to_line(char **table, int index)
 {
-	
+	int		l;
+	char	*res;
+
+	res = ft_calloc(ft_2d_array_size(table) + 1, sizeof(char));
+	l = 0;
+	while (table[l])
+	{
+		if (ft_strlen(table[l]) < index)
+			res[l] = ' ';
+		else
+			res[l] = table[l][index];
+		l++;
+	}
+	return (res);
 }
 
-int	map_checking_x(t_var *data)
+char	**rotate_table(char **base)
+{
+	char	**res;
+	int		i;
+	int		l;
+
+	i = 0;
+	while (base[i])
+	{
+		if (l < ft_strlen(base[i]))
+			l = ft_strlen(base[i]);
+		i++;
+	}
+	res = ft_calloc(l + 1, sizeof(char *));
+	i = 0;
+	while (i < l)
+	{
+		res[i] = column_to_line(base, i);
+		i++;
+	}
+	return (res);
+}
+
+int	map_checking_x(char **map)
 {
 	int		i[2];
 	char	**subs;
 	char	*trimm;
 
 	i[0] = 0;
-	while (i[0] >= 0 && data->map[i[0]])
+	while (i[0] >= 0 && map[i[0]])
 	{
-		subs = ft_split(data->map[i[0]], ' ');
+		subs = ft_split(map[i[0]], ' ');
 		if (!subs)
 			break ;
 		i[1] = 0;
-		while (subs[i[1]])
+		while (i[0] >= 0 && subs[i[1]])
 		{
 			trimm = ft_strtrim(subs[i[1]], "0234");
-			if (ft_strlen(subs[i[1]]) != ft_strlen(subs[i[1]]))
-				i[0] = -1;
+			if (ft_strlen(subs[i[1]]) != ft_strlen(trimm))
+				i[0] = -42;
 			free(trimm);
 			i[1]++;
 		}
 		free_2dstr(subs);
-		if (i[0] < 0)
-			break ;
 		i[0]++;
 	}
 	if (i[0] > 0)
@@ -309,11 +343,15 @@ int	map_checking_x(t_var *data)
 	return (i[0]);
 }
 
-int32_t	check_map(t_var *data)
+int	check_map(t_var *data)
 {
-	if (map_checking_x(data) != 0);
-		return (1);
-	return (0);
+	char	**rotated;
+	int		res;
+
+	rotated = rotate_table(date->map);
+	res = map_checking_x(data->map) + map_checking_x(rotated);
+	free_2dstr(rotated);
+	return (res);
 }
 
 int32_t	free_data(t_var *data)
@@ -323,7 +361,7 @@ int32_t	free_data(t_var *data)
 	free(data->texture_south);
 	free(data->texture_easth);
 	free(data->texture_westh);
-	return (0);
+	return (1);
 }
 
 int32_t	parse_input(int argc, char **argv, t_var *data)
@@ -342,17 +380,11 @@ int32_t	parse_input(int argc, char **argv, t_var *data)
 	if (file_read(argv[1], &text, &map_width))
 		return (1);
 	if (parse_values(text, data, &map_start))
-	{
-		ft_lstclear(&text, free);
-		return (1);
-	}
+		return (ft_lstclear(&text, free), 1);
 	if (construct_map(data, text, map_width, map_start))
-	{
-		ft_lstclear(&text, free);
-		return (1);
-	}
+		return (ft_lstclear(&text, free), 1);
 	ft_lstclear(&text, free);
 	if (check_map(data))
-		free_data(data);
+		return(free_data(data));
 	return (0);
 }
