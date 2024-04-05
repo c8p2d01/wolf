@@ -3,77 +3,172 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@students.42wolfsburg    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/03/27 08:46:51 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/03/11 01:47:30 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub.h"
+/**
+ * @brief Create a projection reference object
+ * 
+ * in rendering from a perspective it is important to spread out rendered pixels
+ * over the FOv evenly - that is not achieved through having them be at the same
+ * angle to each other (that would focus pixels in the center)
+ * this is also whz for each frame we will make these calcualtions, with fixed
+ * angle offset one could easily reuse ray vectors...
+ * 
+ * therefore we need a reference through which we can construct rays per pixel
+ * 
+ * here in 2d this is simpy a vector the is perbendicular to the POV
+ * in 3d one would construct a projection plane through which one casts the ray
+ * 
+ * @param data 
+ * @param plane 
+ */
+void create_projection_reference(t_var	*data, double **plane)
+{
+	*plane = ft_calloc(sizeof(double *), 2);
+	if (!*plane)
+		return;
+	normalize_2d(&data->orientationX, &data->orientationY);
+	double	rotator = veclen_2d(data->orientationX, data->orientationY)
+				 * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
+	*plane[0] = data->orientationX;
+	*plane[1] = data->orientationY * -1;
+	normalize_2d(&(*plane[0]), &(*plane[1]));
 
-// void	create_projection_reference(t_var	*data, double **plane)
-// {
-// 	double	rotator;
+	*plane[0] *= rotator;
+	*plane[1] *= rotator;
+	normalize_2d(&(*plane[0]), &(*plane[1]));
+}
 
-// 	*plane = ft_calloc(sizeof(double *), 2);
-// 	if (!*plane)
-// 		return ;
-// 	normalize_2d(&data->orientationX, &data->orientationY);
-// 	rotator = veclen_2d(data->orientationX, data->orientationY) * \
-// 	sin((FOV * PI / 180) / 2) / cos((FOV * PI / 180) / 2);
-// 	*plane[0] = data->orientationY;
-// 	*plane[1] = data->orientationX * -1;
-// 	normalize_2d(&(*plane[0]), &(*plane[1]));
-// 	*plane[0] *= rotator;
-// 	*plane[1] *= rotator;
-// 	normalize_2d(&(*plane[0]), &(*plane[1]));
-// }
+/**
+ * @brief create a ray in relation to POV and window width
+ * 
+ * @param data 
+ * @param num 
+ * @return t_ray* 
+ */
+t_ray	*rayCreator(t_var *data, short num)
+{
+	t_ray			*ray;
+	static double	*ortho;
+	
+	ray = ft_calloc(sizeof(t_ray), 1);
+	if (!ray)
+		return (NULL);
+	ray->number = num;
+	if (!ortho)
+		create_projection_reference(data, &ortho);
+	ray->x = data->orientationX + (num - WIDTH / 2) * (2 * ortho[0] / FOV);
+	ray->y = data->orientationY + (num - WIDTH / 2) * (2 * ortho[1] / FOV);
+	normalize_2d(&ray->x, &ray->y);
+	if (data->debug)
+	{
+		ft_printf("casting ray from %lf\n\t\t%lf\n", data->positionX, data->positionY);
+		ft_printf("casting ray towards %lf\n\t\t%lf\n", ray->x, ray->y);
+	}
+	return (ray);
+}
 
-// //still need to add num amount of xy offset to ray
-// //accouting that mid ray shall be POV ray and norm the result
-// t_ray	*ray_creator(t_var	*data, short num)
-// {
-// 	t_ray			*ray;
-// 	static double	*plane;
+bool	close_enough(double a, double b, double closeness)
+{
+	double	c;
 
-// 	ray = ft_calloc(sizeof(t_ray), 1);
-// 	if (!ray)
-// 		return (NULL);
-// 	ray->number = num;
-// 	if (!plane)
-// 		create_projection_reference(data, &plane);
-// 	return (ray);
-// }
+	c = a - b;
+	if (fabs(c) - (1 / closeness) < 0)
+		return (true);
+	return (false);
+}
 
-//void	rayCreation(t_var	*data, double *rayX, double *rayY, int rayNumber)
-//{
-//	static double projectionX,projectionY;
-//	static bool projectionCalc;
-//
-//	if (!projectionCalc)
-//	{
-//		normalize(2, &data->orientationX, &data->orientationY);
-//		double	rotator = veclen(2, data->orientationX, data->orientationY) * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
-//		projectionX = data->orientationY;
-//		projectionY = data->orientationX * -1;
-//		normalize(2, &projectionX, &projectionY);
-//
-//		projectionX *= rotator;
-//		projectionY *= rotator;
-//		normalize(2, &projectionX, &projectionY);
-//		projectionCalc = true;
-//	}
-//
-//	*rayX = data->orientationX + projectionX - ((projectionX * 2) / WIDTH) * rayNumber;
-//	*rayY = data->orientationY + projectionY - ((projectionY * 2) / WIDTH) * rayNumber;
-//
-//	normalize(2, rayX, rayY);
-//	if (DEBUG == rayNumber)
-//	{
-//		printf("Created Ray	x %lf 	y %lf \n", *rayX, *rayY);
-//	}
-//}
+int	wall_info(t_var *data,t_ray *ray, double *hit, double *steps)
+{
+	if (ray->y <= 0)	// North
+	{
+		if (ray->x > 0)	// East
+		{
+			ray->wallKind = data->textureEasth;
+			if (ray->wallDst == steps[1])
+				ray->wallKind = data->textureNorth;
+		}
+		else			// West
+		{
+			ray->wallKind = data->textureWesth;
+			if (ray->wallDst == steps[1])
+				ray->wallKind = data->textureNorth;
+		}
+	}
+	else				// South
+		wall_info_extension(data, ray, hit, steps);
+}
+
+int	wall_info_extension(t_var *data,t_ray *ray, double *hit, double *steps)
+{
+	if (ray->y > 0)				// South
+	{
+		if (ray->x > 0)	// East
+		{
+			ray->wallKind = data->textureEasth;
+			if (ray->wallDst == steps[1])
+				ray->wallKind = data->textureSouth;
+		}
+		else			// West
+		{
+			ray->wallKind = data->textureWesth;
+			if (ray->wallDst == steps[1])
+				ray->wallKind = data->textureSouth;
+		}
+	}
+}
+
+void	wall_walker(t_var *data, t_ray *ray, double *hit)
+{
+	double	steps[2];
+
+	steps[0] = (1 - (fabs(pos) - abs((int)pos))) / fabs(ray->x);
+	steps[1] = (1 - (fabs(pos) - abs((int)pos))) / fabs(ray->y);
+	while (true)
+	{
+		ray->wallDst = steps[0];
+		if (steps[1] < steps[0])
+			ray->wallDst = steps[1];
+		hit[0] = ray->wallDst * ray->x;
+		hit[1] = ray->wallDst * ray->y;
+		if (hit[0] < 0 || hit[0] >= WIDTH || hit[1] < 0 || hit[1] >= HEIGHT)
+		{
+			if (data->debug)
+				ft_printf("trace out of bounds\n");
+			ray->wallKind = NULL;
+			return (NaN);
+		}
+		if (data->map[(int)hit[0]][(int)hit[1]] == '1')
+			return (wall_info(data, ray, hit));
+		if (ray->wallDst == steps[0])
+			ray->wallDst += ray->x / fabs(ray->x);
+		else
+			ray->wallDst += ray->y / fabs(ray->x);
+	}
+}
+
+void rayMarcher(t_var *data)
+{
+	t_ray	rays[WIDTH];
+	double	intersection[2];
+	int32_t	i;
+
+	i = 0;
+	while (rays[i])
+	{
+		ray = rayCreator(data, i);
+		wall_walker(data, ray, intersection);
+		// texture render
+
+	}
+}
+
 //
 //void	firstStep(t_var *data, double *rayR, double *dst, bool isX)
 //{
