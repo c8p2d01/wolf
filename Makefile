@@ -2,7 +2,7 @@ NAME = cub3d
 
 CC = cc
 
-CFLAGS = #-Wall -Werror -Wextra -g -Wno-unused-variable
+CFLAGS = #-Wall -Werror -Wextra -g -Wno-unused-variable 
 
 DEFINES = -D DEBUG=1
 
@@ -37,13 +37,13 @@ SUBM_FLAG	=
 endif
 
 all: $(SUBM_FLAG) lib
-	make -s green
+	@make -s green
 	make $(NAME)
-	make -s clear
+	@make -s clear
 
 submodule: 
-	git submodule init 
-	git submodule update --remote
+	@git submodule init 
+	@git submodule update --remote
 
 lib:
 	make bonus -C $(LFT)
@@ -57,23 +57,23 @@ $(NAME): $(OBF)
 	$(CC) $(DEFINES) $(OBF) -o $(NAME) $(LIBRARYS)
 
 clean:
-	make -s red
+	@make -s red
 	rm -rdf $(OD)
 	make clean -C $(LFT)
 	make clean -C $(MLX)
-	make -s clear
+	@make -s clear
 
 fclean: clean
-	make -s red
+	@make -s red
 	make fclean -C $(LFT)
 	make fclean -C $(MLX)
 	rm -rdf $(NAME)
-	make -s clear
+	@make -s clear
 
 re: fclean all
 
 e: re
-	./$(NAME)
+	./$(NAME) maps/smol/map.cub
 
 red:
 	echo $(RED)

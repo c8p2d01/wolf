@@ -15,7 +15,7 @@
 # include "../ft_libft/inc/libft.h"
 
 # ifndef DEBUG
-#  define DEBBUG 1
+#  define DEBUG 1
 # endif
 
 # define PI 3.14159265359
@@ -24,6 +24,7 @@
 # define RENDER 30
 # define WIDTH 200
 # define RENDER 30
+# define ZOOM 20
 
 typedef struct s_ray
 {
@@ -37,6 +38,8 @@ typedef struct s_ray
 typedef struct s_var
 {
 	mlx_t	*mlx;
+
+	mlx_image_t	*map_img;
 
 	char	*texture_north;
 	char	*texture_south;
@@ -55,6 +58,8 @@ typedef struct s_var
 	double	dir_x;
 	double	dir_y;
 
+	t_ray	rays[WIDTH];
+
 }	t_var;
 
 // void	rayCreation(t_var	*data, double *rayX, double *rayY, int rayNumber);
@@ -63,10 +68,13 @@ typedef struct s_var
 // void	renderer(t_var *data);
 
 void	putPixel(int color);
-int		createRGB(unsigned int r, unsigned int g, unsigned int b);
+int		create_rgba(int r, int g, int b, int a);
 
 void	rem(t_var *var);
 void	init(t_var *var);
 int32_t	parse_input(int argc, char **argv, t_var *data);
+void	rayMarcher(t_var *data);
+void	map_player(t_var *data);
+
 
 #endif

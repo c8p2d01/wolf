@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/04/05 16:57:55 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:11:29 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,12 @@ int32_t	file_read(char *file, t_list **text, int *map_width)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (*map_width < ft_strlen(line))
+		if (*map_width < (int)ft_strlen(line))
 			*map_width = ft_strlen(line);
 		ft_lstadd_back(text, ft_lstnew(line));
 		line = get_next_line(fd);
 	}
+	close(fd);
 	return (0);
 }
 
@@ -88,9 +89,8 @@ int32_t	calculate_color(char *rgb)
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-		{
 			ft_printf("Color Format Error\n");
-		}
+		return (-1);
 	}
 	else
 	{
@@ -120,7 +120,7 @@ int32_t	set_variable(t_var *data, char **elmnts)
 		if (elmnts[0][0] == 'F')
 			data->floor = calculate_color(elmnts[1]);
 		if (elmnts[0][0] == 'C')
-			data->floor = calculate_color(elmnts[1]);
+			data->ceiling = calculate_color(elmnts[1]);
 	}
 	return (0);
 }
@@ -133,18 +133,18 @@ int32_t	check_variable(t_var *data, char *line)
 	elmnts = ft_split(line, ' ');
 	if (!elmnts)
 		return (1);
-	if (ft_2d_array_size((void **)elmnts) != 2 || \
+	if (ft_2d_array_size((void**)(void **)elmnts) != 2 || \
 		ft_strlen(elmnts[0]) > 2 || \
-		!(ft_strlen(elmnts[0]) == 2 && ft_strchr("OOEA", elmnts[0][1]) || \
-			ft_strlen(elmnts[0]) == 1 && ft_strchr("NSWEFC", elmnts[0][0])))
+		!((ft_strlen(elmnts[0]) == 2 && ft_strchr("OOEA", elmnts[0][1])) || \
+			(ft_strlen(elmnts[0]) == 1 && ft_strchr("NSWEFC", elmnts[0][0]))))
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
 		{
 			ft_printf("Variable not identifyable\n");
-			i = 0;
-			while (elmnts[i])
-				ft_printf("Variable component NR %d: %s\n", i + 1, elmnts[i++]);
+			i = -1;
+			while (elmnts[++i])
+				ft_printf("Variable component NR %d: %s\n", i + 1, elmnts[i]);
 			ft_printf("%s\n", ft_strchr("NSWEFC", elmnts[0][0]));
 		}
 		free_2dstr(elmnts);
@@ -179,55 +179,56 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 	return (0);
 }
 
-int32_t	construct_map(t_var *data, t_list *text, int map_width, int map_start)
+int32_t	construct_map(t_var *data, t_list *text, int map_start)
 {
 	int32_t	i;
-	int32_t	map_height;
-	char	*line;
 
 	i = 0;
 	while (i++ < map_start)
 		text = text->next;
-	map_height = ft_lstsize(text);
-	data->map = ft_calloc(map_height + 1, sizeof(char *));
+	data->map_height = ft_lstsize(text) - map_start;
+	data->map = ft_calloc(data->map_height + 1, sizeof(char *));
 	if (!data->map)
 		return (1);
-	while (i < map_height && text)
+	i = 0;
+	while (text)
 	{
-		line = (char *)text->content;
-		data->map[i] = malloc((map_width + 1) * sizeof(char));
-		if (!data->map[i])
-		{
-			free_2dstr(data->map);
-			return (1);
-		}
-		ft_strlcpy(data->map[i], line, ft_strlen(line));
+		data->map[i] = (char *)text->content;
 		text = text->next;
+		i++;
 	}
 	return (0);
 }
 
-int32_t	init_player(t_var *data, int x, int y, char pov)
+int32_t	init_player(t_var *data, char pov)
 {
-	data->ply_x = x;
-	data->ply_y = y;
 	if (pov == 'N')
-		data->dir_y = 1;
-	if (pov == 'S')
-		data->dir_y = -1;
-	if (pov == 'W')
-		data->dir_x = -1;
-	if (pov == 'E')
 		data->dir_x = 1;
+	else if (pov == 'S')
+		data->dir_x = -1;
+	else if (pov == 'W')
+		data->dir_y = -1;
+	else if (pov == 'E')
+		data->dir_y = 1;
+	else
+	{
+		if (DEBUG == 1)
+		{
+			ft_printf("Player not found\n");
+		}
+		ft_printf("Error\n");
+		return (1);
+	}
 	return (0);
 }
 
-int32_t	extract_player(t_var *data, int *x, int y)
+int32_t	extract_player(t_var *data)
 {
 	char	*line;
 	char	c;
 
-	line = data->map[y];
+	line = data->map[(int)data->ply_y];
+	c = '0';
 	if (ft_strchr(line, 'N'))
 		c = 'N';
 	if (ft_strchr(line, 'S'))
@@ -236,35 +237,40 @@ int32_t	extract_player(t_var *data, int *x, int y)
 		c = 'W';
 	if (ft_strchr(line, 'E'))
 		c = 'E';
-	*x = ft_strchr(line, c) - line;
-	return (init_player(data, *x, y, c));
+	data->ply_x = ft_strchr(line, c) - line;
+	// data->ply_x *= ZOOM;
+	// data->ply_y *= ZOOM;
+	// data->ply_x += ZOOM / 2;
+	// data->ply_y += ZOOM / 2;
+	return (init_player(data, c));
 }
 
-int32_t	find_player(t_var *data, int *x, int *y)
+int32_t	find_player(t_var *data)
 {
 	int		height;
 	char	*line;
 
 	if (!data || !data->map)
 		return (1);
-	*y = 0;
-	while (*y < data->map_height)
+	data->ply_y = 0;
+	while (data->ply_y < data->map_height)
 	{
-		line = ft_strtrim(data->map[*y], "10 \n");
+		line = ft_strtrim(data->map[(int)data->ply_y], " 01234\n");
 		if (ft_strlen(line))
 			break ;
 		free(line);
-		*y = *y + 1;
+		data->ply_y += 1;
 	}
 	if (!ft_strchr("WSNE", line[0]))
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-			ft_printf("Erroneus char in map\n");
+			ft_printf("Erroneus char in map, map-line %d\n", (int)data->ply_y + 1);
+		return (1);
 	}
 	if (line)
 		free(line);
-	return (extract_player(data, x, *y));
+	return (extract_player(data));
 }
 
 char	*column_to_line(char **table, int index)
@@ -272,11 +278,11 @@ char	*column_to_line(char **table, int index)
 	int		l;
 	char	*res;
 
-	res = ft_calloc(ft_2d_array_size(table) + 1, sizeof(char));
+	res = ft_calloc(ft_2d_array_size((void**)table) + 1, sizeof(char));
 	l = 0;
 	while (table[l])
 	{
-		if (ft_strlen(table[l]) < index)
+		if ((int)ft_strlen(table[l]) <= index || table[l][index] == '\n')
 			res[l] = ' ';
 		else
 			res[l] = table[l][index];
@@ -290,21 +296,22 @@ char	**rotate_table(char **base)
 	char	**res;
 	int		i;
 	int		l;
+	int		ii;
 
 	i = 0;
 	l = 0;
 	while (base[i])
 	{
-		if (l < ft_strlen(base[i]))
+		if (l < (int)ft_strlen(base[i]))
 			l = ft_strlen(base[i]);
 		i++;
 	}
 	res = ft_calloc(l + 1, sizeof(char *));
-	i = 0;
-	while (res[i])
+	ii = 0;
+	while (ii < l)
 	{
-		res[i] = column_to_line(base, i);
-		i++;
+		res[ii] = column_to_line(base, ii);
+		ii++;
 	}
 	return (res);
 }
@@ -344,12 +351,15 @@ int	check_map(t_var *data)
 	int		res;
 
 	rotated = rotate_table(data->map);
-	data->map_height = ft_2d_array_size(rotated);
-	data->map_width = ft_2d_array_size(data->map);
+	data->map_width = ft_2d_array_size((void **)rotated);
 	res = map_checking_x(data->map) + map_checking_x(rotated);
 	free_2dstr(rotated);
 	if (res)
-		ft_printf_fd(2, "Invalid Map, only walled-in tiles are accepted, %d\n", res);
+	{
+		if (DEBUG == 1)
+			ft_printf_fd(2, "Invalid Map, only walled-in tiles are accepted\n");
+		ft_printf_fd(2, "Error\n");
+	}
 	return (res);
 }
 
@@ -361,6 +371,73 @@ int32_t	free_data(t_var *data)
 	free(data->texture_easth);
 	free(data->texture_westh);
 	return (1);
+}
+
+int32_t	texture_exist(char *file)
+{
+	int		fd;
+
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+	{
+		ft_printf("Error\n");
+		if (DEBUG == 1)
+		{
+			ft_printf("File not found\n");
+		}
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+void	print_data(t_var *data)
+{
+	int	i;
+
+	ft_printf("NO %s\n", data->texture_north);
+	ft_printf("SO %s\n", data->texture_south);
+	ft_printf("WE %s\n", data->texture_westh);
+	ft_printf("EA %s\n", data->texture_easth);
+	ft_printf("Floor %d\n", data->floor);
+	ft_printf("Ceiling %d\n", data->ceiling);
+	i = -1;
+	ft_printf("%p\n", data->map);
+	ft_printf("%d\n", data->map_width);
+	ft_printf("%d\n", data->map_height);
+	while(data->map && data->map[++i])
+		ft_printf("%s", data->map[i]);
+	printf("\nPlayer Position %lf, %lf\n", data->ply_x, data->ply_y);
+	printf("Player View %lf, %lf\n", data->dir_x, data->dir_y);
+}
+
+int32_t	incomplete(t_var *data)
+{
+	if (!data)
+		return 1;
+	if (data->texture_north == NULL || \
+		texture_exist(data->texture_north) || \
+		data->texture_south == NULL || \
+		texture_exist(data->texture_south) || \
+		data->texture_westh == NULL || \
+		texture_exist(data->texture_westh) || \
+		data->texture_easth == NULL || \
+		texture_exist(data->texture_easth) || \
+		data->ply_x == 0 || \
+		data->ply_y == 0 || \
+		(data->dir_x == 0 && \
+		data->dir_y == 0) || \
+		data->map_width == -1 || \
+		data->map_height == -1 || \
+		data->map == NULL || \
+		data->ceiling < 0 || \
+		data->floor < 0)
+	{
+		if (DEBUG == 1)
+			ft_printf("One or more rendering components are missing or faulty\n");
+		return (1);
+	}
+	return (0);
 }
 
 int32_t	parse_input(int argc, char **argv, t_var *data)
@@ -380,10 +457,15 @@ int32_t	parse_input(int argc, char **argv, t_var *data)
 		return (1);
 	if (parse_values(text, data, &map_start))
 		return (ft_lstclear(&text, free), 1);
-	if (construct_map(data, text, map_width, map_start))
+	if (construct_map(data, text, map_start))
 		return (ft_lstclear(&text, free), 1);
-	ft_lstclear(&text, free);
+	ft_lstclear(&text, NULL);
 	if (check_map(data))
 		return(free_data(data));
+	if (find_player(data))
+		return(free_data(data));
+	if (incomplete(data))
+		return(free_data(data));
+	print_data(data);
 	return (0);
 }

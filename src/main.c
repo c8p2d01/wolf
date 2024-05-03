@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/04/04 16:43:10 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:32:45 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,41 +191,74 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <memory.h>
-#define WIDTH 256
 #define HEIGHT 256
-
-mlx_image_t	*g_img;
 
 void	hook(void *param)
 {
-	mlx_t	*mlx;
+	t_var	*data;
 
-	mlx = param;
-	if (mlx_is_key_down(param, MLX_KEY_ESCAPE))
-		mlx_close_window(param);
-	if (mlx_is_key_down(param, MLX_KEY_UP))
-		g_img->instances[0].y -= 5;
-	if (mlx_is_key_down(param, MLX_KEY_DOWN))
-		g_img->instances[0].y += 5;
-	if (mlx_is_key_down(param, MLX_KEY_LEFT))
-		g_img->instances[0].x -= 5;
-	if (mlx_is_key_down(param, MLX_KEY_RIGHT))
-		g_img->instances[0].x += 5;
+	data = param;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
+	{
+		mlx_close_window(data->mlx);
+		return ;
+	}
+	if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
+		data->ply_y -= (1 / ZOOM);
+	else if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
+		data->ply_y += (1 / ZOOM);
+	else if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
+		data->ply_x -= (1 / ZOOM);
+	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
+		data->ply_x += (1 / ZOOM);
+	else
+		return;
+	memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
+	// mlx_image_to_window(data->mlx, data->map_img, 0, 0);
+
+	rayMarcher(data);
+	map_player(data);
+}
+
+void	init(t_var *data)
+{
+	if (!data)
+		return ;
+	data->texture_north = NULL;
+	data->texture_south = NULL;
+	data->texture_westh = NULL;
+	data->texture_easth = NULL;
+	data->ply_x = 0;
+	data->ply_y = 0;
+	data->dir_x = 0;
+	data->dir_y = 0;
+	data->map_width = -1;
+	data->map_height = -1;
+	data->map = NULL;
+	data->ceiling = -1;
+	data->floor = -1;
 }
 
 int32_t	main(int argc, char **argv)
 {
 	t_var	data;
 
+	init(&data);
 	if (parse_input(argc, argv, &data))
 		return (EXIT_FAILURE);
-	data.mlx = mlx_init(WIDTH, HEIGHT, "MLX42", true);
+
+	data.mlx = mlx_init((int)(data.map_width * 20), (int)(data.map_height * 20), "MLX42", true);
 	if (!data.mlx)
 		exit(EXIT_FAILURE);
-	g_img = mlx_new_image(data.mlx, 128, 128);
-	memset(g_img->pixels, 255, g_img->width * g_img->height * sizeof(int));
-	mlx_image_to_window(data.mlx, g_img, 0, 0);
-	mlx_loop_hook(data.mlx, &hook, data.mlx);
+	data.map_img = mlx_new_image(data.mlx, (int)(data.map_width * 20), (int)(data.map_height * 20));
+	memset(data.map_img->pixels, 128, data.map_img->width * data.map_img->height * sizeof(int));
+	mlx_image_to_window(data.mlx, data.map_img, 0, 0);
+
+	rayMarcher(&data);
+
+	printf("%d %d\n", data.map_width, data.map_height);
+	mlx_loop_hook(data.mlx, &hook, &data);
+	printf("%d %d\n", data.map_width, data.map_height);
 	mlx_loop(data.mlx);
 	mlx_terminate(data.mlx);
 	return (EXIT_SUCCESS);

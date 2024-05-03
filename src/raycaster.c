@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/04/05 16:54:30 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/04/24 00:31:49 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,18 @@
  * @param data 
  * @param plane 
  */
-void create_projection_reference(t_var	*data, double **plane)
+void create_projection_reference(t_var	*data, double *plane)
 {
-	*plane = ft_calloc(sizeof(double *), 2);
-	if (!*plane)
-		return;
 	normalize_2d(&data->dir_x, &data->dir_y);
 	double	rotator = veclen_2d(data->dir_x, data->dir_y)
 				 * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
-	*plane[0] = data->dir_x;
-	*plane[1] = data->dir_y * -1;
-	normalize_2d(&(*plane[0]), &(*plane[1]));
+	(plane)[0] = data->dir_x;
+	plane[1] = data->dir_y * -1;
+	normalize_2d(&(plane[0]), &(plane[1]));
 
-	*plane[0] *= rotator;
-	*plane[1] *= rotator;
-	normalize_2d(&(*plane[0]), &(*plane[1]));
+	plane[0] *= rotator;
+	plane[1] *= rotator;
+	normalize_2d(&(plane[0]), &(plane[1]));
 }
 
 /**
@@ -55,18 +52,17 @@ void create_projection_reference(t_var	*data, double **plane)
 t_ray	rayCreator(t_var *data, short num)
 {
 	t_ray			ray;
-	static double	*ortho;
-	
+	static double	ortho[2];
+
 	ray.number = num;
-	if (!ortho)
-		create_projection_reference(data, &ortho);
+	create_projection_reference(data, ortho);
 	ray.x = data->dir_x + (num - WIDTH / 2) * (2 * ortho[0] / FOV);
 	ray.y = data->dir_y + (num - WIDTH / 2) * (2 * ortho[1] / FOV);
 	normalize_2d(&ray.x, &ray.y);
-	if (DEBUG == 1)
+	if (DEBUG == 1 && num == WIDTH / 2)
 	{
-		ft_printf("casting ray from %lf\n\t\t%lf\n", data->ply_x, data->ply_y);
-		ft_printf("casting ray towards %lf\n\t\t%lf\n", ray.x, ray.y);
+		printf("casting ray from %lf\n\t\t%lf\n", data->ply_x, data->ply_y);
+		printf("casting ray towards \t%lf\n\t\t\t%lf\n", ray.x, ray.y);
 	}
 	return (ray);
 }
@@ -81,7 +77,7 @@ bool	close_enough(double a, double b, double closeness)
 	return (false);
 }
 
-int	wall_info_extension(t_var *data,t_ray *ray, double *hit, double *steps)
+int	wall_info_extension(t_var *data,t_ray *ray, double *steps)
 {
 	if (ray->y > 0)				// South
 	{
@@ -103,7 +99,7 @@ int	wall_info_extension(t_var *data,t_ray *ray, double *hit, double *steps)
 	return (0);
 }
 
-int	wall_info(t_var *data,t_ray *ray, double *hit, double *steps)
+int	wall_info(t_var *data,t_ray *ray, double *steps)
 {
 	int	res;
 
@@ -124,23 +120,40 @@ int	wall_info(t_var *data,t_ray *ray, double *hit, double *steps)
 		}
 	}
 	else				// South
-		res = wall_info_extension(data, ray, hit, steps);
+		res = wall_info_extension(data, ray, steps);
 	return (res);
 }
 
 void	wall_walker(t_var *data, t_ray *ray, double *hit)
 {
 	double	steps[2];
+	double	firststeps[2];
+	double	totals[2];
 
+	firststeps[0] = (1 - (fabs(data->ply_x) - abs((int)data->ply_x))) / fabs(ray->x);
+	firststeps[1] = (1 - (fabs(data->ply_y) - abs((int)data->ply_y))) / fabs(ray->y);
+	if (fabs(ray->x) == (double)1 / 0)
+		firststeps[0] = 0;
+	if (fabs(ray->y) == (double)1 / 0)
+		firststeps[1] = 0;
+	printf("first Step %lf : %lf\n", firststeps[0], firststeps[1]);
 	steps[0] = (1 - (fabs(data->ply_x) - abs((int)data->ply_x))) / fabs(ray->x);
 	steps[1] = (1 - (fabs(data->ply_y) - abs((int)data->ply_y))) / fabs(ray->y);
+	totals[0] = firststeps[0];
+	totals[1] = firststeps[1];
+
+	printf("first %lf\t%lf\n", steps[0], steps[1]);
+
 	while (true)
 	{
-		ray->wallDst = steps[0];
-		if (steps[1] < steps[0])
-			ray->wallDst = steps[1];
-		hit[0] = ray->wallDst * ray->x;
-		hit[1] = ray->wallDst * ray->y;
+		if (totals[0] < totals[1])
+			ray->wallDst = totals[0];
+		else
+			ray->wallDst = totals[1];
+		// if (ray->wallDst > RENDER)
+		// 	break;
+		hit[0] = (ray->wallDst * ray->x) + data->ply_x /* / ZOOM */;
+		hit[1] = (ray->wallDst * ray->y) + data->ply_y /* / ZOOM */;
 		if (hit[0] < 0 || hit[0] >= data->map_width || hit[1] < 0 || hit[1] >= data->map_height)
 		{
 			if (DEBUG == 1)
@@ -149,28 +162,91 @@ void	wall_walker(t_var *data, t_ray *ray, double *hit)
 			return ;
 		}
 		if (data->map[(int)hit[0]][(int)hit[1]] == '1')
-			return (wall_info(data, ray, hit));
-		if (ray->wallDst == steps[0])
-			ray->wallDst += ray->x / fabs(ray->x);
+			break ;
+		if (ray->wallDst == totals[0])
+			totals[0] += steps[0];
 		else
-			ray->wallDst += ray->y / fabs(ray->x);
+			totals[1] += steps[1];
+	}
+		printf("intersection %lf\t%lf\n", hit[0], hit[1]);
+	wall_info(data, ray, steps);
+}
+
+void	map_walls(t_var *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < WIDTH / 2)
+	{
+		if (!data->rays[i].wall)
+		mlx_put_pixel(data->map_img, (int)(data->ply_x * ZOOM + data->rays[i].wallDst), (int)(data->ply_y * ZOOM + data->rays[i].wallDst), create_rgb(128,128,128));
+		i++;
+	}
+	
+}
+
+void	map_ray(t_var *data, int ray_num)
+{
+	int start[2];
+	int end[2];
+	int diff[2];
+	int x;
+	int y;
+
+	start[0] = (int)data->ply_x * ZOOM;
+	start[1] = (int)data->ply_y * ZOOM;
+	end[0] = (int)(data->ply_x * ZOOM + (data->rays[ray_num].x * data->rays[ray_num].wallDst));
+	end[1] = (int)(data->ply_y * ZOOM + (data->rays[ray_num].y * data->rays[ray_num].wallDst));
+	if (start[0] < end[0])
+	{
+		x = start[0];
+		start[0] = end[0];
+		end[0] = start[1];
+		start[1] = end[1];
+		end[1] = end[0];
+		end[0] = x;
+	}
+	diff[0] = abs(start[0] - end[0]);
+	diff[1] = abs(start[1] - end[1]);
+	x = 0;
+	while (x < abs(start[0] - end[0]))
+	{
+		y = start[1] + (x * (1 / diff[1]));
+		mlx_put_pixel(data->map_img, start[0] + x, y, create_rgba(42, 255, 0, 255));
+		x++;
 	}
 }
 
-void rayMarcher(t_var *data)
+void	map_player(t_var *data)
 {
-	t_ray	rays[WIDTH];
+	if (DEBUG == 1)
+		printf("Player at %d, %d\n", (int)data->ply_x * ZOOM, (int)data->ply_y * ZOOM);
+	mlx_put_pixel(data->map_img, (int)data->ply_x * ZOOM, (int)data->ply_y * ZOOM, create_rgba(255, 42, 0, 255));
+	// map_walls(data);
+	map_ray(data, WIDTH/2);
+}
+
+void	rayMarcher(t_var *data)
+{
 	double	intersection[2];
-	int32_t	i;
+	int32_t	i = WIDTH / 2;
 
-	i = 0;
-	while (i < WIDTH)
-	{
-		rays[i] = rayCreator(data, i);
-		wall_walker(data, rays + i, intersection);
-		// texture render
+	data->rays[i] = rayCreator(data, i);
+	wall_walker(data, data->rays + i, intersection);
 
-	}
+	mlx_put_pixel(data->map_img, (int)data->rays[i].x, (int)data->rays[i].y, create_rgba(0, 255, 0, 255));
+	mlx_put_pixel(data->map_img, (int)data->ply_x, (int)data->ply_y, create_rgba(255, 42, 0, 255));
+
+	map_ray(data, i);
+
+	// i = 0;
+	// while (i < WIDTH)
+	// {
+	// 	//data->rays[i] = rayCreator(data, i);
+	// 	//
+	// 	i++;
+	// }
 }
 
 //
