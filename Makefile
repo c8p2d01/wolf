@@ -9,7 +9,6 @@ DEFINES = -D DEBUG=1
 SD = ./src/
 SRC =	main.c \
 		input_check.c \
-		input_parse.c \
 		raycaster.c \
 		utils.c
 
@@ -72,7 +71,10 @@ fclean: clean
 
 re: fclean all
 
-e: re
+ree: re
+	./$(NAME) maps/smol/map.cub
+
+e:
 	./$(NAME) maps/smol/map.cub
 
 red:

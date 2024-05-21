@@ -20,10 +20,9 @@
 
 # define PI 3.14159265359
 
-# define FOV 90
-# define RENDER 30
+# define FOV 20
+# define RENDER 3000
 # define WIDTH 200
-# define RENDER 30
 # define ZOOM 20
 
 typedef struct s_ray
@@ -38,13 +37,20 @@ typedef struct s_ray
 typedef struct s_var
 {
 	mlx_t	*mlx;
+	mlx_t	*main_mlx;
 
 	mlx_image_t	*map_img;
+	mlx_image_t	*main_img;
 
-	char	*texture_north;
-	char	*texture_south;
-	char	*texture_westh;
-	char	*texture_easth;
+	char			*path_north;
+	char			*path_south;
+	char			*path_westh;
+	char			*path_easth;
+
+	mlx_texture_t*	texture_north;
+	mlx_texture_t*	texture_south;
+	mlx_texture_t*	texture_westh;
+	mlx_texture_t*	texture_easth;
 
 	int32_t	floor;
 	int32_t	ceiling;
@@ -69,12 +75,15 @@ typedef struct s_var
 
 void	putPixel(int color);
 int		create_rgba(int r, int g, int b, int a);
+void	step(t_var *data, int stepsize);
+void	turn(t_var *data, float degree);
 
 void	rem(t_var *var);
 void	init(t_var *var);
 int32_t	parse_input(int argc, char **argv, t_var *data);
 void	rayMarcher(t_var *data);
-void	map_player(t_var *data);
+
+void	print_data(t_var *data);
 
 
 #endif

@@ -1,7 +1,7 @@
-NO maps/subject/textures/North.xpm
-SO maps/subject/textures/South.xpm
-WE maps/subject/textures/Westh.xpm
-EA maps/subject/textures/Easth.xpm
+NO maps/subject/textures/North.png
+SO maps/subject/textures/South.png
+WE maps/subject/textures/Westh.png
+EA maps/subject/textures/Easth.png
 F        220,100,0
 C                       225,30,0
 

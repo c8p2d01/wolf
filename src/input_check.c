@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/04/24 00:11:29 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/05/21 02:19:08 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,13 @@ int32_t	set_variable(t_var *data, char **elmnts)
 	if (ft_strlen(elmnts[0]) == 2)
 	{
 		if (ft_strncmp(elmnts[0], "NO", 3))
-			data->texture_north = ft_strdup(elmnts[1]);
+			data->path_north = ft_strdup(elmnts[1]);
 		if (ft_strncmp(elmnts[0], "SO", 3))
-			data->texture_south = ft_strdup(elmnts[1]);
+			data->path_south = ft_strdup(elmnts[1]);
 		if (ft_strncmp(elmnts[0], "EA", 3))
-			data->texture_easth = ft_strdup(elmnts[1]);
+			data->path_easth = ft_strdup(elmnts[1]);
 		if (ft_strncmp(elmnts[0], "WE", 3))
-			data->texture_westh = ft_strdup(elmnts[1]);
+			data->path_westh = ft_strdup(elmnts[1]);
 	}
 	else if (ft_strlen(elmnts[0]) == 1)
 	{
@@ -202,10 +202,11 @@ int32_t	construct_map(t_var *data, t_list *text, int map_start)
 
 int32_t	init_player(t_var *data, char pov)
 {
+	printf("facing %c \n", pov);
 	if (pov == 'N')
-		data->dir_x = 1;
-	else if (pov == 'S')
 		data->dir_x = -1;
+	else if (pov == 'S')
+		data->dir_x = 1;
 	else if (pov == 'W')
 		data->dir_y = -1;
 	else if (pov == 'E')
@@ -227,7 +228,7 @@ int32_t	extract_player(t_var *data)
 	char	*line;
 	char	c;
 
-	line = data->map[(int)data->ply_y];
+	line = data->map[(int)data->ply_x];
 	c = '0';
 	if (ft_strchr(line, 'N'))
 		c = 'N';
@@ -237,11 +238,11 @@ int32_t	extract_player(t_var *data)
 		c = 'W';
 	if (ft_strchr(line, 'E'))
 		c = 'E';
-	data->ply_x = ft_strchr(line, c) - line;
-	// data->ply_x *= ZOOM;
-	// data->ply_y *= ZOOM;
-	// data->ply_x += ZOOM / 2;
-	// data->ply_y += ZOOM / 2;
+	data->ply_y = ft_strchr(line, c) - line;
+	data->ply_x *= ZOOM;
+	data->ply_y *= ZOOM;
+	data->ply_x += ZOOM / 2;
+	data->ply_y += ZOOM / 2;
 	return (init_player(data, c));
 }
 
@@ -252,20 +253,20 @@ int32_t	find_player(t_var *data)
 
 	if (!data || !data->map)
 		return (1);
-	data->ply_y = 0;
-	while (data->ply_y < data->map_height)
+	data->ply_x = 0;
+	while (data->ply_x < data->map_height)
 	{
-		line = ft_strtrim(data->map[(int)data->ply_y], " 01234\n");
+		line = ft_strtrim(data->map[(int)data->ply_x], " 01234\n");
 		if (ft_strlen(line))
 			break ;
 		free(line);
-		data->ply_y += 1;
+		data->ply_x += 1;
 	}
 	if (!ft_strchr("WSNE", line[0]))
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-			ft_printf("Erroneus char in map, map-line %d\n", (int)data->ply_y + 1);
+			ft_printf("Erroneus char in map, map-line %d\n", (int)data->ply_x + 1);
 		return (1);
 	}
 	if (line)
@@ -351,7 +352,7 @@ int	check_map(t_var *data)
 	int		res;
 
 	rotated = rotate_table(data->map);
-	data->map_width = ft_2d_array_size((void **)rotated);
+	data->map_width = ft_2d_array_size((void **)rotated) - 1; // unchecked '-1' validation testing required
 	res = map_checking_x(data->map) + map_checking_x(rotated);
 	free_2dstr(rotated);
 	if (res)
@@ -366,16 +367,29 @@ int	check_map(t_var *data)
 int32_t	free_data(t_var *data)
 {
 	free_2dstr(data->map);
-	free(data->texture_north);
-	free(data->texture_south);
-	free(data->texture_easth);
-	free(data->texture_westh);
+	if (data->path_north)
+		free(data->path_north);
+	if (data->path_south)
+		free(data->path_south);
+	if (data->path_easth)
+		free(data->path_easth);
+	if (data->path_westh)
+		free(data->path_westh);
+	if (data->texture_north)
+		mlx_delete_texture(data->texture_north);
+	if (data->texture_south)
+		mlx_delete_texture(data->texture_south);
+	if (data->texture_easth)
+		mlx_delete_texture(data->texture_easth);
+	if (data->texture_westh)
+		mlx_delete_texture(data->texture_westh);
 	return (1);
 }
 
-int32_t	texture_exist(char *file)
+int32_t	texture_init(char *file, mlx_texture_t* dest)
 {
 	int		fd;
+	char	*end;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -388,6 +402,12 @@ int32_t	texture_exist(char *file)
 		return (1);
 	}
 	close(fd);
+	end = ft_strrchr(file, '.');
+
+	if (!ft_strncmp(end, ".png", 4))
+		dest = mlx_load_png(file);
+	else
+		return (1);
 	return (0);
 }
 
@@ -402,9 +422,9 @@ void	print_data(t_var *data)
 	ft_printf("Floor %d\n", data->floor);
 	ft_printf("Ceiling %d\n", data->ceiling);
 	i = -1;
-	ft_printf("%p\n", data->map);
-	ft_printf("%d\n", data->map_width);
-	ft_printf("%d\n", data->map_height);
+	// ft_printf("map location %p\n", data->map);
+	ft_printf("map width %d\n", data->map_width * ZOOM);
+	ft_printf("map height %d\n", data->map_height * ZOOM);
 	while(data->map && data->map[++i])
 		ft_printf("%s", data->map[i]);
 	printf("\nPlayer Position %lf, %lf\n", data->ply_x, data->ply_y);
@@ -415,14 +435,14 @@ int32_t	incomplete(t_var *data)
 {
 	if (!data)
 		return 1;
-	if (data->texture_north == NULL || \
-		texture_exist(data->texture_north) || \
-		data->texture_south == NULL || \
-		texture_exist(data->texture_south) || \
-		data->texture_westh == NULL || \
-		texture_exist(data->texture_westh) || \
-		data->texture_easth == NULL || \
-		texture_exist(data->texture_easth) || \
+	if (data->path_north == NULL || \
+		texture_init(data->path_north, data->texture_north) || \
+		data->path_south == NULL || \
+		texture_init(data->path_south, data->texture_south) || \
+		data->path_westh == NULL || \
+		texture_init(data->path_westh, data->texture_westh) || \
+		data->path_easth == NULL || \
+		texture_init(data->path_easth, data->texture_easth) || \
 		data->ply_x == 0 || \
 		data->ply_y == 0 || \
 		(data->dir_x == 0 && \
@@ -466,6 +486,5 @@ int32_t	parse_input(int argc, char **argv, t_var *data)
 		return(free_data(data));
 	if (incomplete(data))
 		return(free_data(data));
-	print_data(data);
 	return (0);
 }
