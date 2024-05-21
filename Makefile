@@ -75,6 +75,7 @@ ree: re
 	./$(NAME) maps/smol/map.cub
 
 e:
+	make
 	./$(NAME) maps/smol/map.cub
 
 red:
