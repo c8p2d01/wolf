@@ -21,7 +21,7 @@
 # define PI 3.14159265359
 
 # define FOV 20
-# define RENDER 3000
+# define RENDER 100
 # define WIDTH 200
 # define ZOOM 20
 

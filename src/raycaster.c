@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/05/21 18:02:22 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/05/21 20:21:33 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,25 +154,31 @@ double	check_intersection_x(t_var *data, t_ray *ray)
 	double	checked_distance;
 	double	hit[2];
 
-	wall_distance = ZOOM - (((data->ply_x - (int)(data->ply_x))) + (int)data->ply_x % ZOOM);
-	while (wall_distance > RENDER)
+	wall_distance = - (((data->ply_x - (int)(data->ply_x))) + (int)data->ply_x % ZOOM);
+	while (wall_distance < RENDER)
 	{
 		hit[0] = data->ply_x + wall_distance;
-		hit[1] = data->ply_y + wall_distance * (1 / ray->x);
-		printf("Px %lf\tWD %lf\t MD%i\n", data->ply_x, wall_distance, (int)(hit[0] / ZOOM));
-		if (hit[0] < 0 || hit[0] > data->map_height * ZOOM || hit[1] < 0 || hit[1] > data->map_width * ZOOM)
+		hit[1] = data->ply_y + (wall_distance / fabs(ray->x)) * ray->y;
+		mlx_put_pixel(data->map_img, 
+			(int)(hit[0]),
+			(int)(hit[1]), create_rgba(0, 0, 255, 255));
+		printf("Px %lf\trx %lf\tWD %lf\t MD%i\n", data->ply_x, ray->x, wall_distance, (int)(hit[0] / ZOOM));
+		if (hit[0] < 0 || hit[0] > data->map_width * ZOOM ||
+			hit[1] < 0 || hit[1] > data->map_height * ZOOM)
 		{
 			if (DEBUG == 1)
-				printf("OOB %lf %lf\n", hit[0], hit[1]); //wall collision should catch
-			return (RENDER);
+				printf("OOB %lf %lf\n", hit[0], hit[1]);
+			return (0);
 		}
 		if (data->map[(int)(hit[0] / ZOOM)][(int)(hit[1] / ZOOM)] == '1')
 		{
-			// ray->x = hit[0];
-			// ray->y = hit[1];
+			printf("wall hit %i %i\n", (int)(hit[0] / ZOOM), (int)(hit[1] / ZOOM));
+			mlx_put_pixel(data->map_img, 
+				(int)(hit[0]),
+				(int)(hit[1]), create_rgba(255, 0, 255, 255));
 			break ;
 		}
-		wall_distance += ZOOM * ray->x > 0 ? 1 : -1;
+		wall_distance += (ZOOM * (ray->x > 0 ? 1 : -1));
 	}
 	return (wall_distance);
 }
@@ -181,12 +187,15 @@ void	wall_walker(t_var *data, t_ray *ray, double *hit)
 {
 	double	wall_x;
 
-	if (ray->number == WIDTH / 2)
+	if (ray->number == 1/*  ||
+		ray->number == WIDTH / 2 ||
+		ray->number == WIDTH - 1 */)
 	{
 		printf("\e[1;1H\e[2J");
 		wall_x = check_intersection_x(data, ray);
+		hit[0] = data->ply_x + wall_x;
+		hit[1] = data->ply_y + wall_x * (1 / ray->x);
 		printf("wall x dst %lf\n", wall_x);
-		exit(1);
 	}
 
 	// while (true)
@@ -248,26 +257,47 @@ void	wall_walker(t_var *data, t_ray *ray, double *hit)
 // 	wall_info(data, ray, totals);
 // }
 
+void	grid(t_var *data)
+{
+	int	i;
+	int	ii;
+
+	i = 0;
+	while (i < data->map_width * ZOOM)
+	{
+		ii = 0;
+		while (!(i % ZOOM) && ii < data->map_height * ZOOM)
+		{
+			if (!(ii % ZOOM))
+				mlx_put_pixel(data->map_img, i, ii, create_rgba(42, 42, 42, 255));
+			ii++;
+		}
+		i++;
+	}
+}
+
 void	rayMarcher(t_var *data)
 {
 	double	intersection[2];
 	int32_t	i = 0;
 
+	grid(data);
 	// floor_ceiling();
 	//falsy_play(data);
 	while (i < WIDTH)
 	{
 		data->rays[i] = rayCreator(data, i);
 		wall_walker(data, data->rays + i, intersection);
-		// if (i == 42)
-		mlx_put_pixel(data->map_img, 
-			(int)(data->rays[i].y),
-			(int)(data->rays[i].x), create_rgba(0, 255, 0, 255));
-		// if (i == 42)
-		mlx_put_pixel(data->map_img, 
-			(int)(data->rays[i].y / ZOOM) * ZOOM + ZOOM / 2,
-			(int)(data->rays[i].x / ZOOM) * ZOOM + ZOOM / 2, create_rgba(0, 255, 255, 255));
-			i++;
+		// if (i == WIDTH / 2)
+		// mlx_put_pixel(data->map_img, 
+		// 	(int)(intersection[0] + ZOOM / 2),
+		// 	(int)(intersection[1] + ZOOM / 2), create_rgba(0, 255, 0, 255));
+		// // if (i == 42)
+		// mlx_put_pixel(data->map_img, 
+		// 	(int)(data->rays[i].y / ZOOM) * ZOOM + ZOOM / 2,
+		// 	(int)(data->rays[i].x / ZOOM) * ZOOM + ZOOM / 2, create_rgba(0, 255, 255, 255));
+		i++;
 	}
 	mlx_put_pixel(data->map_img, (int)data->ply_y, (int)data->ply_x, create_rgba(255, 42, 0, 255));
+	mlx_put_pixel(data->map_img, (int)(data->ply_y + data->rays[WIDTH / 2].y * 10), (int)(data->ply_x + data->rays[WIDTH / 2].x * 10), create_rgba(255, 42, 0, 255));
 }

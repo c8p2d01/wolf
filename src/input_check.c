@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/05/21 17:48:24 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/05/21 20:14:11 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ int32_t	init_player(t_var *data, char pov)
 {
 	printf("facing %c \n", pov);
 	if (pov == 'N')
-		{data->dir_x = -1;data->dir_y = -1;}
+		{data->dir_x = -1;}
 	else if (pov == 'S')
 		data->dir_x = 1;
 	else if (pov == 'W')
