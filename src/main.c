@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/06/06 17:21:19 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:01:07 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,8 @@ int	bonus(t_var *data)
 					(int)(data->map_height * ZOOM), "MAP", true); //bonus
 	if (!data->mlx)
 		exit (EXIT_FAILURE);
-	data->map_img = mlx_new_image(data->mlx, (int)(data->map_width * ZOOM), (int)(data->map_height * ZOOM));
-	memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
+	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
+	ft_memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
 	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
 	return (0);
 }
@@ -118,7 +118,7 @@ int32_t	main(int argc, char **argv)
 
 	bonus(&data);
 
-	rayMarcher(&data);
+	// rayMarch/er(&data);
 
 	mlx_loop_hook(data.mlx, &hook, &data);
 	mlx_loop(data.mlx);
