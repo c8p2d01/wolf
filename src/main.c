@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/06/06 17:21:19 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/22 17:09:36 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ void	debug_stick(t_var *data)
 		"map", pos[0], pos[1]);
 }
 
+
+void	step(t_var *data, int stepsize)
+{
+	data->ply_x += data->dir_x * stepsize;
+	data->ply_y += data->dir_y * stepsize;
+}
+
 void	hook(void *param)
 {
 	t_var	*data;
@@ -69,7 +76,6 @@ void	hook(void *param)
 		debug_stick(data);
 	else
 		return;
-	rayMarcher(data);
 }
 
 void	init(t_var *data)
@@ -117,8 +123,6 @@ int32_t	main(int argc, char **argv)
 	print_data(&data);
 
 	bonus(&data);
-
-	rayMarcher(&data);
 
 	mlx_loop_hook(data.mlx, &hook, &data);
 	mlx_loop(data.mlx);
