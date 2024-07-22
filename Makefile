@@ -22,8 +22,8 @@ OBF = $(SRF:$(SD)%.c=$(OD)%.o)
 
 LFT = ./ft_libft
 MLX = ./MLX42
-
-LIBRARYS = -lm -I include -lglfw -L "/Users/$$USER/.brew/opt/glfw/lib/" $(LFT)/libft.a $(MLX)/libmlx42.a
+#-L "/Users/$$USER/.brew/opt/glfw/lib/"
+LIBRARYS = -lm -I include -lglfw  $(LFT)/libft.a $(MLX)/libmlx42.a
 
 RED = "\033[38;2;255;51;51m"
 GRN = "\033[38;2;170;255;170m"
@@ -75,6 +75,7 @@ ree: re
 	./$(NAME) maps/smol/map.cub
 
 e:
+	make
 	./$(NAME) maps/smol/map.cub
 
 red:

@@ -20,7 +20,7 @@
 
 # define PI 3.14159265359
 
-# define FOV 20
+# define FOV 90
 # define RENDER 3000
 # define WIDTH 200
 # define ZOOM 20
@@ -74,7 +74,7 @@ typedef struct s_var
 // void	renderer(t_var *data);
 
 void	putPixel(int color);
-int		create_rgba(int r, int g, int b, int a);
+int	create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
 void	step(t_var *data, int stepsize);
 void	turn(t_var *data, float degree);
 

@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/05/21 02:00:39 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/05 07:20:10 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_ray	rayCreator(t_var *data, int num)
 	if (ray.y == 0)
 		ray.y += 0.0001;
 	normalize_2d(&ray.x, &ray.y);
-	if (DEBUG == 1 && num == WIDTH / 2)
+	if (DEBUG == 1 && num == WIDTH / 4)
 	{
 		// printf("casting ray from %lf\n\t\t%lf\n", data->ply_x, data->ply_y);
 		// printf("casting ray towards \t%lf\n\t\t\t%lf\n", ray.x, ray.y);
@@ -131,10 +131,10 @@ int	wall_info(t_var *data,t_ray *ray, double *steps)
 }
 void	falsy_ray(t_ray * ray)
 {
-	if (close_enough(ray->x, 0.0f, 10000))
-		ray->x = 0.000001;
-	if (close_enough(ray->y, 0.0f, 10000))
-		ray->y = 0.000001;
+	// if (close_enough(ray->x, 0.0f, 10000))
+	// 	ray->x = 0.000001;
+	// if (close_enough(ray->y, 0.0f, 10000))
+	// 	ray->y = 0.000001;
 }
 
 void	falsy_play(t_var * data)
@@ -151,48 +151,17 @@ void	falsy_play(t_var * data)
 
 void	wall_walker(t_var *data, t_ray *ray, double *hit)
 {
-	double	steps[2];
-	double	firststeps[2];
-	double	totals[2];
-
-	falsy_ray(ray);
-	firststeps[0] = ((1 - (fabs(data->ply_x) - abs((int)data->ply_x))) / fabs(ray->x)) * ZOOM;
-	firststeps[1] = ((1 - (fabs(data->ply_y) - abs((int)data->ply_y))) / fabs(ray->y)) * ZOOM;
-	steps[0] = ((1 - (fabs(data->ply_x) - abs((int)data->ply_x))) / fabs(ray->x)) * ZOOM;
-	steps[1] = ((1 - (fabs(data->ply_y) - abs((int)data->ply_y))) / fabs(ray->y)) * ZOOM;
-	totals[0] = firststeps[0];
-	totals[1] = firststeps[1];
-	while (true)
+	if (ray->number == WIDTH / 4)
 	{
-		if (totals[0] < totals[1] && totals[0] != 0)
-			ray->wallDst = totals[0];
-		else
-			ray->wallDst = totals[1];
-		hit[0] = (ray->wallDst * ray->x) + data->ply_x;
-		hit[1] = (ray->wallDst * ray->y) + data->ply_y;
-		if (hit[0] < 0 || hit[0] > data->map_height * ZOOM || hit[1] < 0 || hit[1] > data->map_width * ZOOM)
-		{
-			// if (DEBUG == 1 && ray->number == WIDTH / 2)
-			// 	printf("OOB %lf %lf\n", hit[0], hit[1]); //wall collision should catch
-			return ;
-		}
-		if (ray->wallDst > RENDER){
-			ray->wallDst = -1;
-			printf("far casting %i\n", RENDER);
-			return;
-		}
-		if (data->map[(int)hit[0] / ZOOM][(int)hit[1] / ZOOM] == '1')
-		{
-			ray->x = hit[0];
-			ray->y = hit[1];
-			break ;
-		}
-		if (ray->wallDst == totals[0])
-			totals[0] += steps[0];
-		else
-			totals[1] += steps[1];
+		printf("POS\tX\t%lf\tY\t%lf\n", data->ply_x, data->ply_y);
+		printf("RayDir\tX\t%lf\tY\t%lf\n", ray->x, ray->y);
+		mlx_put_pixel(data->map_img, (int)data->ply_y, (int)data->ply_x, create_rgba(255, 42, 0, 255));
+		mlx_put_pixel(data->map_img, (int)(data->ply_y + ray->y * 9), (int)(data->ply_x + ray->x * 9), create_rgba(255, 42, 0, 255));
+		mlx_put_pixel(data->map_img, (int)(data->ply_y + ray->y * 18), (int)(data->ply_x + ray->x * 18), create_rgba(255, 42, 0, 255));
+
+		
 	}
-	wall_info(data, ray, totals);
+	// wall_info(data, ray, totals);
 }
 
 void	rayMarcher(t_var *data)
@@ -201,15 +170,22 @@ void	rayMarcher(t_var *data)
 	int32_t	i = 0;
 
 	// floor_ceiling();
-	falsy_play(data);
+	// falsy_play(data);
 	while (i < WIDTH)
 	{
 		data->rays[i] = rayCreator(data, i);
 		wall_walker(data, data->rays + i, intersection);
-		mlx_put_pixel(data->map_img, 
-			(int)(data->rays[i].y),
-			(int)(data->rays[i].x), create_rgba(0, 255, 0, 255));
+		// mlx_put_pixel(data->map_img, 
+		// 	(int)(data->rays[i].y),
+		// 	(int)(data->rays[i].x), create_rgba(0, 255, 0, 255));
 			i++;
 	}
-	mlx_put_pixel(data->map_img, (int)data->ply_y, (int)data->ply_x, create_rgba(255, 42, 0, 255));
+
+	// t_ray test;
+	// test.number = WIDTH/2;
+	// test.x = 1;
+	// test.y = -1;
+	// normalize_2d(&test.x, &test.y);
+
+	// wall_walker(data, &test, intersection);
 }

@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/05/21 02:04:33 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/06/06 17:21:19 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	hook(void *param)
 		turn(data, 3);
 	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
 		turn(data, -3);
+	else if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
+		memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
 	else if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
 		debug_stick(data);
 	else

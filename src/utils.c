@@ -6,13 +6,13 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/05/20 03:42:37 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/06/28 08:27:32 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub.h"
 
-int	create_rgba(int r,int g,int b,int a)
+int	create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
