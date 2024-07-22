@@ -6,12 +6,14 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/22 13:29:02 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:24:53 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub.h"
-
+/**
+ * Check that the argument count is = 2
+ */
 int32_t	argument_count(int argc)
 {
 	if (argc != 2)
@@ -26,6 +28,9 @@ int32_t	argument_count(int argc)
 	return (0);
 }
 
+/**
+ * Check that the file, given as the argument, follow the naming convention
+ */
 int32_t	file_name(char **file)
 {
 	if (!file || !(*file))
@@ -50,7 +55,10 @@ int32_t	file_name(char **file)
 	return (0);
 }
 
-int32_t	file_read(char *file, t_list **text, int *map_width)
+/**
+ * Read the contents of the file into a list of lines
+ */
+int32_t	file_read(char *file, t_list **text)
 {
 	int		fd;
 	char	*line;
@@ -68,8 +76,6 @@ int32_t	file_read(char *file, t_list **text, int *map_width)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (*map_width < (int)ft_strlen(line))
-			*map_width = ft_strlen(line);
 		ft_lstadd_back(text, ft_lstnew(line));
 		line = get_next_line(fd);
 	}
@@ -77,6 +83,10 @@ int32_t	file_read(char *file, t_list **text, int *map_width)
 	return (0);
 }
 
+/**
+ * extract the color out of the text format rrr,ggg,bbb
+ * into one integer where byte represents one color (+alpha value)
+ */
 int32_t	calculate_color(char *rgb)
 {
 	char	**values;
@@ -102,51 +112,47 @@ int32_t	calculate_color(char *rgb)
 	return (color);
 }
 
+/**
+ * assign values to the placeholders in 'data' according to indicators parsed
+ */
 int32_t	set_variable(t_var *data, char **elmnts)
 {
-	if (ft_strlen(elmnts[0]) == 2)
+	if (ft_strlen(elmnts[0]) <= 2)
 	{
-		if (ft_strncmp(elmnts[0], "NO", 3))
+		if (!ft_strncmp(elmnts[0], "NO", 3))
 			data->path_north = ft_strdup(elmnts[1]);
-		if (ft_strncmp(elmnts[0], "SO", 3))
+		else if (!ft_strncmp(elmnts[0], "SO", 3))
 			data->path_south = ft_strdup(elmnts[1]);
-		if (ft_strncmp(elmnts[0], "EA", 3))
+		else if (!ft_strncmp(elmnts[0], "EA", 3))
 			data->path_easth = ft_strdup(elmnts[1]);
-		if (ft_strncmp(elmnts[0], "WE", 3))
+		else if (!ft_strncmp(elmnts[0], "WE", 3))
 			data->path_westh = ft_strdup(elmnts[1]);
-	}
-	else if (ft_strlen(elmnts[0]) == 1)
-	{
-		if (elmnts[0][0] == 'F')
+		else if (!ft_strncmp(elmnts[0], "F", 2))
 			data->floor = calculate_color(elmnts[1]);
-		if (elmnts[0][0] == 'C')
+		else if (!ft_strncmp(elmnts[0], "C", 2))
 			data->ceiling = calculate_color(elmnts[1]);
+		else
+			return (free_2dstr(elmnts), 1);
 	}
+	else
+		return (free_2dstr(elmnts), 1);
+	free_2dstr(elmnts);
 	return (0);
 }
-
+/**
+ * parse variables and determine their validity
+ */
 int32_t	check_variable(t_var *data, char *line)
 {
 	char	**elmnts;
-	int		i;
-
 	elmnts = ft_split(line, ' ');
 	if (!elmnts)
 		return (1);
-	if (ft_2d_array_size((void**)(void **)elmnts) != 2 || \
-		ft_strlen(elmnts[0]) > 2 || \
-		!((ft_strlen(elmnts[0]) == 2 && ft_strchr("OOEA", elmnts[0][1])) || \
-			(ft_strlen(elmnts[0]) == 1 && ft_strchr("NSWEFC", elmnts[0][0]))))
+	if (ft_2d_array_size((void **)elmnts) != 2)
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-		{
 			ft_printf("Variable not identifyable\n");
-			i = -1;
-			while (elmnts[++i])
-				ft_printf("Variable component NR %d: %s\n", i + 1, elmnts[i]);
-			ft_printf("%s\n", ft_strchr("NSWEFC", elmnts[0][0]));
-		}
 		free_2dstr(elmnts);
 		return (1);
 	}
@@ -166,6 +172,7 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 		{
 			text = text->next;
 			*map_start = *map_start + 1;
+			free(line);
 			continue ;
 		}
 		if (ft_strchr("01", line[0]))
@@ -192,7 +199,7 @@ int32_t	construct_map(t_var *data, t_list *text, int map_start)
 		return (1);
 	i = 0;
 	while (text)
-	{
+	{ 
 		data->map[i] = (char *)text->content;
 		text = text->next;
 		i++;
@@ -332,7 +339,7 @@ int	map_checking_x(char **map)
 		i[1] = 0;
 		while (i[0] >= 0 && subs[i[1]])
 		{
-			trimm = ft_strtrim(subs[i[1]], "0234");
+			trimm = ft_strtrim(subs[i[1]], "023456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]{}(),./?\\!@#$%^&*\":><");
 			if (ft_strlen(subs[i[1]]) != ft_strlen(trimm))
 				i[0] = -42;
 			free(trimm);
@@ -415,10 +422,10 @@ void	print_data(t_var *data)
 {
 	int	i;
 
-	ft_printf("NO %s\n", data->texture_north);
-	ft_printf("SO %s\n", data->texture_south);
-	ft_printf("WE %s\n", data->texture_westh);
-	ft_printf("EA %s\n", data->texture_easth);
+	ft_printf("NO %s\n", data->path_north);
+	ft_printf("SO %s\n", data->path_south);
+	ft_printf("WE %s\n", data->path_westh);
+	ft_printf("EA %s\n", data->path_easth);
 	ft_printf("Floor %d\n", data->floor);
 	ft_printf("Ceiling %d\n", data->ceiling);
 	i = -1;
@@ -455,7 +462,7 @@ int32_t	incomplete(t_var *data)
 	{
 		if (DEBUG == 1)
 			ft_printf("One or more rendering components are missing or faulty\n");
-		return (1);
+		return (print_data(data),  1);
 	}
 	return (0);
 }
@@ -473,7 +480,7 @@ int32_t	parse_input(int argc, char **argv, t_var *data)
 	map_width = 0;
 	map_start = 0;
 	text = NULL;
-	if (file_read(argv[1], &text, &map_width))
+	if (file_read(argv[1], &text))
 		return (1);
 	if (parse_values(text, data, &map_start))
 		return (ft_lstclear(&text, free), 1);

@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/22 17:09:36 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/22 20:05:12 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,10 @@ int32_t	main(int argc, char **argv)
 
 	init(&data);
 	if (parse_input(argc, argv, &data))
-		exit (EXIT_FAILURE);
+	{
+		ft_printf("parsing issues\n");
+		exit (42);
+	}
 	print_data(&data);
 
 	bonus(&data);
