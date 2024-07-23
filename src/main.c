@@ -6,7 +6,7 @@
 /*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/23 13:33:44 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:26:34 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void	hook(void *param)
 		debug_stick(data);
 	else
 		return;
+	filler(data);
+	draw_player_triangle(data);
 	rayMarcher(data);
 }
 
@@ -121,7 +123,7 @@ int32_t	main(int argc, char **argv)
 
 	bonus(&data);
 
-	// rayMarch/er(&data);
+	rayMarcher(&data);
 
 	mlx_loop_hook(data.mlx, &hook, &data);
 	mlx_loop(data.mlx);

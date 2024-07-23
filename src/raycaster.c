@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/05 07:20:10 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/23 16:05:06 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,9 +155,9 @@ void	wall_walker(t_var *data, t_ray *ray, double *hit)
 	{
 		printf("POS\tX\t%lf\tY\t%lf\n", data->ply_x, data->ply_y);
 		printf("RayDir\tX\t%lf\tY\t%lf\n", ray->x, ray->y);
-		mlx_put_pixel(data->map_img, (int)data->ply_y, (int)data->ply_x, create_rgba(255, 42, 0, 255));
-		mlx_put_pixel(data->map_img, (int)(data->ply_y + ray->y * 9), (int)(data->ply_x + ray->x * 9), create_rgba(255, 42, 0, 255));
-		mlx_put_pixel(data->map_img, (int)(data->ply_y + ray->y * 18), (int)(data->ply_x + ray->x * 18), create_rgba(255, 42, 0, 255));
+		// mlx_put_pixel(data->map_img, (int)data->ply_y, (int)data->ply_x, create_rgba(255, 42, 0, 255));
+		// mlx_put_pixel(data->map_img, (int)(data->ply_y + ray->y * 9), (int)(data->ply_x + ray->x * 9), create_rgba(255, 42, 0, 255));
+		// mlx_put_pixel(data->map_img, (int)(data->ply_y + ray->y * 18), (int)(data->ply_x + ray->x * 18), create_rgba(255, 42, 0, 255));
 
 		
 	}

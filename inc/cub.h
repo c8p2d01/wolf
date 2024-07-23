@@ -36,8 +36,8 @@ typedef struct s_ray
 
 typedef struct s_var
 {
-	mlx_t	*mlx;
-	mlx_t	*main_mlx;
+	mlx_t		*mlx;
+	mlx_t		*main_mlx;
 
 	mlx_image_t	*map_img;
 	mlx_image_t	*main_img;
@@ -59,10 +59,10 @@ typedef struct s_var
 	int		map_width;
 	int		map_height;
 
-	double	ply_x;
-	double	ply_y;
-	double	dir_x;
-	double	dir_y;
+	double	ply_x; //pixel location
+	double	ply_y; //pixel location
+	double	dir_x; //where am I looking at?
+	double	dir_y; //where am I looking at?
 
 	t_ray	rays[WIDTH];
 
@@ -74,7 +74,7 @@ typedef struct s_var
 // void	renderer(t_var *data);
 
 void	putPixel(int color);
-int	create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
+int		create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
 void	step(t_var *data, int stepsize);
 void	turn(t_var *data, float degree);
 
@@ -87,5 +87,7 @@ void	print_data(t_var *data);
 
 void	filler(t_var *data);
 void	mini_filler(t_var *data, int x, int y, char c);
+void	draw_player_triangle(t_var *data);
+double	deg_2_rad(float degree);
 
 #endif
