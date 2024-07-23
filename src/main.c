@@ -6,7 +6,7 @@
 /*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/23 19:26:34 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:14:52 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	hook(void *param)
 	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
 		turn(data, -3);
 	else if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
-		memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
+		ft_memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
 	else if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
 		debug_stick(data);
 	else
@@ -104,10 +104,10 @@ int	bonus(t_var *data)
 	if (!data->mlx)
 		exit (EXIT_FAILURE);
 	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
+	// ft_memset(data->map_img->pixels, 255, data->map_img->width * data->map_img->height * sizeof(int));
 	filler(data);
 
 	// data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
-	// ft_memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
 	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
 	return (0);
 }

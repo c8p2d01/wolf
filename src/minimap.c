@@ -6,7 +6,7 @@
 /*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:13:12 by tsimitop          #+#    #+#             */
-/*   Updated: 2024/07/23 19:36:37 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/07/23 20:16:06 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,12 @@ void	mini_filler(t_var *data, int x, int y, char c)
 			if (c == '1')
 				mlx_put_pixel(data->map_img, y * ZOOM + y_count, \
 				x * ZOOM + x_count, create_rgba(255, 0, 0, 50));
-			else
+			else if (c == '0' || c == 'N' || c == 'E' || c == 'S' || c == 'W')
 				mlx_put_pixel(data->map_img, y * ZOOM + y_count, \
 				x * ZOOM + x_count, create_rgba( 0, 255, 255, 50));
+			else
+				mlx_put_pixel(data->map_img, y * ZOOM + y_count, \
+				x * ZOOM + x_count, create_rgba( 0, 0, 0, 50));
 			y_count++;
 		}
 		x_count++;
