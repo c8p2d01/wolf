@@ -6,7 +6,7 @@
 /*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/22 17:01:07 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:33:44 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,10 @@ int	bonus(t_var *data)
 	if (!data->mlx)
 		exit (EXIT_FAILURE);
 	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
-	ft_memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
+	filler(data);
+
+	// data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
+	// ft_memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
 	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
 	return (0);
 }

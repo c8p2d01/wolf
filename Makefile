@@ -10,7 +10,8 @@ SD = ./src/
 SRC =	main.c \
 		input_check.c \
 		raycaster.c \
-		utils.c
+		utils.c \
+		minimap.c
 
 #SRC = $(cd src ; find . -name "*.c"; cd -)
 

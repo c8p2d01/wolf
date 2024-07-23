@@ -85,5 +85,7 @@ void	rayMarcher(t_var *data);
 
 void	print_data(t_var *data);
 
+void	filler(t_var *data);
+void	mini_filler(t_var *data, int x, int y, char c);
 
 #endif
