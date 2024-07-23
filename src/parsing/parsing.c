@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/23 14:46:39 by cdahlhof         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "parsing.h"
 
 int32_t	parse_input(int argc, char **argv, t_var *data)
@@ -33,10 +21,10 @@ int32_t	parse_input(int argc, char **argv, t_var *data)
 		return (ft_lstclear(&text, free), 1);
 	ft_lstclear(&text, NULL);
 	if (check_map(data))
-		return(free_data(data));
+		return (free_data(data));
 	if (find_player(data))
-		return(free_data(data));
+		return (free_data(data));
 	if (incomplete(data))
-		return(free_data(data));
+		return (free_data(data));
 	return (0);
 }

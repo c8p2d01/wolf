@@ -13,7 +13,7 @@ int32_t	construct_map(t_var *data, t_list *text, int map_start)
 		return (1);
 	i = 0;
 	while (text)
-	{ 
+	{
 		data->map[i] = (char *)text->content;
 		text = text->next;
 		i++;
@@ -57,6 +57,7 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 int32_t	check_variable(t_var *data, char *line)
 {
 	char	**elmnts;
+
 	elmnts = ft_split(line, ' ');
 	if (!elmnts)
 		return (1);

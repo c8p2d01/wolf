@@ -1,10 +1,9 @@
-
-#ifndef CUB_H
-# include "../../inc/cub.h"
-#endif
-
 #ifndef PARSING_H
 # define PARSING_H
+
+# ifndef CUB_H
+#  include "../../inc/cub.h"
+# endif
 
 // file processing
 
@@ -38,6 +37,6 @@ int32_t	init_player(t_var *data, char pov);
 void	print_data(t_var *data);
 int32_t	incomplete(t_var *data);
 int32_t	free_data(t_var *data);
-int32_t	texture_init(char *file, mlx_texture_t* dest);
+int32_t	texture_init(char *file, mlx_texture_t *dest);
 
 #endif

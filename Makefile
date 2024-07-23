@@ -74,7 +74,7 @@ $(NAME): $(OBJS)
 
 clean:
 	@make -s red
-	rm -rdf $(OBJ_DIR)
+	rm -rdf $(BUILD)
 	make clean -C $(LFT)
 	make clean -C $(MLX)
 	@make -s clear

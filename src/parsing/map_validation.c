@@ -6,7 +6,7 @@ int32_t	check_map(t_var *data)
 	int		res;
 
 	rotated = rotate_table(data->map);
-	data->map_width = ft_2d_array_size((void **)rotated) - 1; // unchecked '-1' validation testing required
+	data->map_width = ft_2d_array_size((void **)rotated) - 1;
 	res = map_checking_x(data->map) + map_checking_x(rotated);
 	free_2dstr(rotated);
 	if (res)
@@ -20,7 +20,7 @@ int32_t	check_map(t_var *data)
 
 /**
  * check if a line is rule compliant
- * -> all of its segments (divided by ' ') brgin and end with '1'
+ * -> all of its segments (divided by ' ') begin and end with '1'
  */
 int32_t	map_checking_x(char **map)
 {
@@ -37,7 +37,7 @@ int32_t	map_checking_x(char **map)
 		i[1] = 0;
 		while (i[0] >= 0 && subs[i[1]])
 		{
-			trimm = ft_strtrim(subs[i[1]], "023456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ[]{}(),./?\\!@#$%^&*\":><");
+			trimm = ft_strNOTtrim(subs[i[1]], "1");
 			if (ft_strlen(subs[i[1]]) != ft_strlen(trimm))
 				i[0] = -42;
 			free(trimm);
@@ -81,7 +81,7 @@ char	*column_to_line(char **table, int index)
 	int		l;
 	char	*res;
 
-	res = ft_calloc(ft_2d_array_size((void**)table) + 1, sizeof(char));
+	res = ft_calloc(ft_2d_array_size((void **)table) + 1, sizeof(char));
 	l = 0;
 	while (table[l])
 	{

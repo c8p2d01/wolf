@@ -1,4 +1,3 @@
-
 #include "parsing.h"
 
 /**
@@ -7,6 +6,7 @@
 int32_t	file_read(char *file, t_list **text)
 {
 	int		fd;
+	char	*read_line;
 	char	*line;
 
 	fd = open(file, O_RDONLY);
@@ -19,11 +19,13 @@ int32_t	file_read(char *file, t_list **text)
 		}
 		return (1);
 	}
-	line = get_next_line(fd);
-	while (line)
+	read_line = get_next_line(fd);
+	while (read_line)
 	{
+		line = ft_strtrim(read_line, "\n");
+		free(read_line);
 		ft_lstadd_back(text, ft_lstnew(line));
-		line = get_next_line(fd);
+		read_line = get_next_line(fd);
 	}
 	close(fd);
 	return (0);
