@@ -1,24 +1,40 @@
-NAME = cub3d
+#OUTPUT NAME
+NAME := cub3d
 
-CC = cc
+# Folders:
+BUILD	= ./build
+SOURCE	= ./src
 
-CFLAGS = #-Wall -Werror -Wextra -g -Wno-unused-variable 
-
+# Other Variables:
+COMPILER:=	cc
+COMPFLAGS:=	-g #-Wall -Werror -Wextra -Wno-unused-variable 
 DEFINES = -D DEBUG=1
 
-SD = ./src/
-SRC =	main.c \
-		input_check.c \
-		raycaster.c \
-		utils.c
+# Source Files:
+SRCFILES:=\
+			main.c \
+			raycaster.c \
+			utils.c \
+			parsing/file_processing.c \
+			parsing/map_validation.c \
+			parsing/map_variables.c \
+			parsing/parse_utils.c \
+			parsing/parsing.c \
+			parsing/player.c
 
-#SRC = $(cd src ; find . -name "*.c"; cd -)
+# ------------------------------------------
+# Do not change anything beyond this point!
+# ------------------------------------------
 
-SRF = $(addprefix $(SD),$(SRC))
+# Process Variables
+CC:=		$(COMPILER)
+CFLAGS:=	$(COMPFLAGS)
+SRCS:=		$(addprefix $(SOURCE)/,$(SRCFILES))
+OBJS:=		$(SRCS:$(SOURCE)/%.c=$(BUILD)/%.o)
+NAME:=		./$(NAME)
+OS:=		$(shell uname -s)
 
-OD = ./obj/
-OBJ = $(SRC:.c=.o)
-OBF = $(SRF:$(SD)%.c=$(OD)%.o)
+.PHONY: all clean fclean re e red clear green
 
 LFT = ./ft_libft
 MLX = ./MLX42
@@ -36,9 +52,7 @@ SUBM_FLAG	=
 endif
 
 all: $(SUBM_FLAG) lib
-	@make -s green
-	make $(NAME)
-	@make -s clear
+	make -j $(nproc) $(NAME)
 
 submodule: 
 	@git submodule init 
@@ -48,24 +62,25 @@ lib:
 	make bonus -C $(LFT)
 	make -C $(MLX)
 
-$(OD)%.o: $(SD)%.c
-	@mkdir -p $(OD)
-	$(CC) $(DEFINES) $(CFLAGS) -c -o $@ $<
+# Compile .cpp files to .o Files
+$(OBJS): $(BUILD)%.o : $(SOURCE)%.c
+	@mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
 
-$(NAME): $(OBF)
-	$(CC) $(DEFINES) $(OBF) -o $(NAME) $(LIBRARYS)
+# Main Build Rule
+$(NAME): $(OBJS)
+	@echo "--> Compiling Executable"
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBRARYS)
 
 clean:
 	@make -s red
-	rm -rdf $(OD)
+	rm -rdf $(BUILD)
 	make clean -C $(LFT)
 	make clean -C $(MLX)
 	@make -s clear
 
 fclean: clean
 	@make -s red
-	make fclean -C $(LFT)
-	make fclean -C $(MLX)
 	rm -rdf $(NAME)
 	@make -s clear
 
