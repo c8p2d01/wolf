@@ -68,13 +68,8 @@ typedef struct s_var
 
 }	t_var;
 
-// void	rayCreation(t_var	*data, double *rayX, double *rayY, int rayNumber);
-// void	firstStep(t_var *data, double *rayR, double *dst, bool isX);
-// int		rayMarcher(t_var *data, double *dst, int rayNumber);
-// void	renderer(t_var *data);
-
 void	putPixel(int color);
-int	create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
+int		create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
 void	step(t_var *data, int stepsize);
 void	turn(t_var *data, float degree);
 
@@ -83,7 +78,8 @@ void	init(t_var *var);
 int32_t	parse_input(int argc, char **argv, t_var *data);
 void	rayMarcher(t_var *data);
 
-void	print_data(t_var *data);
-
+# ifndef PARSING_H
+#  include "../src/parsing/parsing.h"
+# endif
 
 #endif
