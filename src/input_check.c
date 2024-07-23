@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/22 20:24:53 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:19:53 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,29 +255,31 @@ int32_t	extract_player(t_var *data)
 
 int32_t	find_player(t_var *data)
 {
-	int		height;
+	char	c;
+	int		i;
 	char	*line;
 
+	c = 48;
+	i = 0;
 	if (!data || !data->map)
 		return (1);
-	data->ply_x = 0;
-	while (data->ply_x < data->map_height)
+	while (i < data->map_height)
 	{
-		line = ft_strtrim(data->map[(int)data->ply_x], " 01234\n");
+		line = ft_strtrim(data->map[i], " 01234\n");
 		if (ft_strlen(line))
-			break ;
+		{
+			c = line[0];
+			data->ply_x = i;
+			data->dir_x += 42 * ft_strlen(line);
+		}
 		free(line);
-		data->ply_x += 1;
+		i -= -1;
 	}
-	if (!ft_strchr("WSNE", line[0]))
+	if (data->dir_x != 42 || !ft_strchr("WSNE", c))
 	{
-		ft_printf("Error\n");
-		if (DEBUG == 1)
-			ft_printf("Erroneus char in map, map-line %d\n", (int)data->ply_x + 1);
+		ft_printf("Error\nErroneus char in map\n");
 		return (1);
 	}
-	if (line)
-		free(line);
 	return (extract_player(data));
 }
 
