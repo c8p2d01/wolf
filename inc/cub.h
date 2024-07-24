@@ -34,6 +34,12 @@ typedef struct s_ray
 	char	*wall;
 }	t_ray;
 
+typedef struct	s_vctr
+{
+	double	y;
+	double	x;
+}	t_vctr;
+
 typedef struct s_var
 {
 	mlx_t		*mlx;
