@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
 /*   Updated: 2024/07/22 17:05:42 by cdahlhof         ###   ########.fr       */
@@ -49,4 +49,3 @@ void	turn(t_var *data, float degree)
 	data->dir_x = p[0];
 	data->dir_y = p[1];
 }
-
