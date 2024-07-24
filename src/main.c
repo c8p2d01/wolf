@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/22 20:05:12 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:09:59 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,37 +45,79 @@ void	debug_stick(t_var *data)
 		"map", pos[0], pos[1]);
 }
 
-
-void	step(t_var *data, int stepsize)
-{
-	data->ply_x += data->dir_x * stepsize;
-	data->ply_y += data->dir_y * stepsize;
-}
-
-void	hook(void *param)
+void	hold_hook(void *param)
 {
 	t_var	*data;
 
 	data = param;
-	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
+	// if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
+		// setp(data, 1);
+	// if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
+		// setp(data, -1);
+	// if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
+		// turn(data, 3);
+	// if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
+		// turn(data, -3);
+	// else
+	// 	return;
+}
+
+void	wasd_hook(mlx_key_data_t key, t_var *data)
+{
+	if (key.action == 1)
+	{
+		if (key.key == MLX_KEY_W)
+			straight(data, 1);
+		if (key.key == MLX_KEY_S)
+			straight(data, -1);
+		if (key.key == MLX_KEY_A)
+			strafe(data, -1);
+		if (key.key == MLX_KEY_D)
+			strafe(data, 1);
+		// display_movement(data);
+		apply_movement(data);
+	}
+	if (key.action == 0)
+	{
+		if (key.key == MLX_KEY_W)
+			straight(data, -1);
+		if (key.key == MLX_KEY_S)
+			straight(data, 1);
+		if (key.key == MLX_KEY_A)
+			strafe(data, 1);
+		if (key.key == MLX_KEY_D)
+			strafe(data, -1);
+		// display_movement(data);
+		apply_movement(data);
+	}
+}
+
+void	press_hook(mlx_key_data_t key, void *param)
+{
+	t_var	*data;
+
+	data = param;
+	if (key.key == MLX_KEY_ESCAPE)
 	{
 		mlx_close_window(data->mlx);
+		free_data(data);
 		return ;
 	}
-	if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
-		step(data, 1);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
-		step(data, -1);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
-		turn(data, 3);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
-		turn(data, -3);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
+	if (key.key == MLX_KEY_W || key.key == MLX_KEY_A || \
+		key.key == MLX_KEY_S || key.key == MLX_KEY_D)
+		wasd_hook(key, data);
+	else if (key.key == MLX_KEY_LEFT || key.key == MLX_KEY_RIGHT)
+	{
+		if (key.key == MLX_KEY_LEFT)
+			turn(data, LEFT);
+		if (key.key == MLX_KEY_RIGHT)
+			turn(data, RIGHT);
+		// display_movement(data);
+		apply_movement(data);
+	}
+	else if (key.key == MLX_KEY_TAB)
 		memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
-	else if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
-		debug_stick(data);
-	else
-		return;
+	// printf("Re-render?\n");
 }
 
 void	init(t_var *data)
@@ -90,10 +132,10 @@ void	init(t_var *data)
 	data->texture_south = NULL;
 	data->texture_westh = NULL;
 	data->texture_easth = NULL;
-	data->ply_x = 0;
-	data->ply_y = 0;
-	data->dir_x = 0;
-	data->dir_y = 0;
+	data->player.x = 0;
+	data->player.y = 0;
+	data->direct.x = 0;
+	data->direct.y = 0;
 	data->map_width = -1;
 	data->map_height = -1;
 	data->map = NULL;
@@ -127,7 +169,9 @@ int32_t	main(int argc, char **argv)
 
 	bonus(&data);
 
-	mlx_loop_hook(data.mlx, &hook, &data);
+	mlx_loop_hook(data.mlx, &hold_hook, &data);
+	// mlx_mouse_hook(data.main_mlx, )
+	mlx_key_hook(data.mlx, &press_hook, &data);
 	mlx_loop(data.mlx);
 	mlx_terminate(data.mlx);
 	return (EXIT_SUCCESS);

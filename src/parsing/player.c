@@ -16,13 +16,13 @@ int32_t	find_player(t_var *data)
 		if (ft_strlen(line))
 		{
 			c = line[0];
-			data->ply_x = i;
-			data->dir_x += 42 * ft_strlen(line);
+			data->player.x = i;
+			data->direct.x += 42 * ft_strlen(line);
 		}
 		free(line);
 		i -= -1;
 	}
-	if (data->dir_x != 42 || !ft_strchr("WSNE", c))
+	if (data->direct.x != 42 || !ft_strchr("WSNE", c))
 		return (ft_printf("Error\nErroneus char in map\n") * 0 + 1);
 	return (extract_player(data));
 }
@@ -32,7 +32,7 @@ int32_t	extract_player(t_var *data)
 	char	*line;
 	char	c;
 
-	line = data->map[(int)data->ply_x];
+	line = data->map[(int)data->player.x];
 	c = '0';
 	if (ft_strchr(line, 'N'))
 		c = 'N';
@@ -42,25 +42,26 @@ int32_t	extract_player(t_var *data)
 		c = 'W';
 	if (ft_strchr(line, 'E'))
 		c = 'E';
-	data->ply_y = ft_strchr(line, c) - line;
-	data->ply_x *= ZOOM;
-	data->ply_y *= ZOOM;
-	data->ply_x += ZOOM / 2;
-	data->ply_y += ZOOM / 2;
+	data->player.y = ft_strchr(line, c) - line;
+	data->player.x *= ZOOM;
+	data->player.y *= ZOOM;
+	data->player.x += ZOOM / 2;
+	data->player.y += ZOOM / 2;
 	return (init_player(data, c));
 }
 
 int32_t	init_player(t_var *data, char pov)
 {
+	data->direct.x = 0;
 	printf("facing %c \n", pov);
 	if (pov == 'N')
-		data->dir_x = -1;
+		data->direct.x = -1;
 	else if (pov == 'S')
-		data->dir_x = 1;
+		data->direct.x = 1;
 	else if (pov == 'W')
-		data->dir_y = -1;
+		data->direct.y = -1;
 	else if (pov == 'E')
-		data->dir_y = 1;
+		data->direct.y = 1;
 	else
 	{
 		if (DEBUG == 1)

@@ -20,7 +20,11 @@ SRCFILES:=\
 			parsing/map_variables.c \
 			parsing/parse_utils.c \
 			parsing/parsing.c \
-			parsing/player.c
+			parsing/player.c \
+			\
+			movement/move.c \
+			movement/wall_collision.c \
+
 
 # ------------------------------------------
 # Do not change anything beyond this point!

@@ -30,16 +30,16 @@
  */
 void create_projection_reference(t_var	*data, double *plane)
 {
-	normalize_2d(&data->dir_x, &data->dir_y);
-	double	rotator = veclen_2d(data->dir_x, data->dir_y)
+	normalise_2d(&data->direct.x, &data->direct.y);
+	double	rotator = veclen_2d(data->direct.x, data->direct.y)
 				 * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
-	(plane)[0] = data->dir_x;
-	plane[1] = data->dir_y * -1;
-	normalize_2d(&(plane[0]), &(plane[1]));
+	(plane)[0] = data->direct.x;
+	plane[1] = data->direct.y * -1;
+	normalise_2d(&(plane[0]), &(plane[1]));
 
 	plane[0] *= rotator;
 	plane[1] *= rotator;
-	normalize_2d(&(plane[0]), &(plane[1]));
+	normalise_2d(&(plane[0]), &(plane[1]));
 }
 
 /**
@@ -56,16 +56,16 @@ t_ray	rayCreator(t_var *data, int num)
 
 	ray.number = num;
 	create_projection_reference(data, ortho); // only do this once in the end
-	ray.x = data->dir_x + (num - WIDTH / 2) * (ortho[1] / FOV);
+	ray.x = data->direct.x + (num - WIDTH / 2) * (ortho[1] / FOV);
 	if (ray.x == 0)
 		ray.x += 0.0001;
-	ray.y = data->dir_y + (num - WIDTH / 2) * (ortho[0] / FOV);
+	ray.y = data->direct.y + (num - WIDTH / 2) * (ortho[0] / FOV);
 	if (ray.y == 0)
 		ray.y += 0.0001;
-	normalize_2d(&ray.x, &ray.y);
+	normalise_2d(&ray.x, &ray.y);
 	if (DEBUG == 1 && num == WIDTH / 4)
 	{
-		// printf("casting ray from %lf\n\t\t%lf\n", data->ply_x, data->ply_y);
+		// printf("casting ray from %lf\n\t\t%lf\n", data->player.x, data->player.y);
 		// printf("casting ray towards \t%lf\n\t\t\t%lf\n", ray.x, ray.y);
 	}
 	return (ray);
