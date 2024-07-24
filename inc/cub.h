@@ -25,10 +25,16 @@ typedef struct s_ray
 	char	*wall;
 }	t_ray;
 
+typedef struct	s_vctr
+{
+	double	y;
+	double	x;
+}	t_vctr;
+
 typedef struct s_var
 {
-	mlx_t	*mlx;
-	mlx_t	*main_mlx;
+	mlx_t		*mlx;
+	mlx_t		*main_mlx;
 
 	mlx_image_t	*map_img;
 	mlx_image_t	*main_img;
@@ -74,5 +80,9 @@ void	rayMarcher(t_var *data);
 # ifndef MOVEMENT_H
 #  include "../src/movement/movement.h"
 # endif
+void	filler(t_var *data);
+void	mini_filler(t_var *data, int x, int y, char c);
+void	draw_player_triangle(t_var *data);
+double	deg_2_rad(float degree);
 
 #endif

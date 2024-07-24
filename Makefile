@@ -15,6 +15,8 @@ SRCFILES:=\
 			main.c \
 			raycaster.c \
 			utils.c \
+			minimap.c \
+			\
 			parsing/file_processing.c \
 			parsing/map_validation.c \
 			parsing/map_variables.c \
@@ -49,11 +51,11 @@ RED = "\033[38;2;255;51;51m"
 GRN = "\033[38;2;170;255;170m"
 CLEAR = "\033[0m"
 
-ifeq ($(SUBM_STATE),)
-SUBM_FLAG	= submodule
-else 
-SUBM_FLAG	= 
-endif
+# ifeq ($(SUBM_STATE),)
+# SUBM_FLAG	= submodule
+# else 
+# SUBM_FLAG	= 
+# endif
 
 all: $(SUBM_FLAG) lib
 	make -j $(nproc) $(NAME)

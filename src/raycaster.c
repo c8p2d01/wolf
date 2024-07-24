@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
 /*   Updated: 2024/07/22 17:07:16 by cdahlhof         ###   ########.fr       */

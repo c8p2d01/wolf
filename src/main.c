@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/07/23 19:09:59 by cdahlhof         ###   ########.fr       */
+=======
+/*   Updated: 2024/07/23 20:14:52 by tsimitop         ###   ########.fr       */
+>>>>>>> origin/3-create-minimap
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +153,11 @@ int	bonus(t_var *data)
 					(int)(data->map_height * ZOOM), "MAP", true); //bonus
 	if (!data->mlx)
 		exit (EXIT_FAILURE);
-	data->map_img = mlx_new_image(data->mlx, (int)(data->map_width * ZOOM), (int)(data->map_height * ZOOM));
-	memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
+	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
+	// ft_memset(data->map_img->pixels, 255, data->map_img->width * data->map_img->height * sizeof(int));
+	filler(data);
+
+	// data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
 	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
 	return (0);
 }

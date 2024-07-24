@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/10 22:09:01 by cdahlhof          #+#    #+#             */
 /*   Updated: 2024/07/22 17:05:42 by cdahlhof         ###   ########.fr       */
@@ -31,5 +31,3 @@ bool	close_enough(double a, double b, double closeness)
 		return (true);
 	return (false);
 }
-
-
