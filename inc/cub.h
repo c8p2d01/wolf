@@ -81,6 +81,7 @@ void	rayMarcher(t_var *data);
 # ifndef MOVEMENT_H
 #  include "../src/movement/movement.h"
 # endif
+
 void	filler(t_var *data);
 void	mini_filler(t_var *data, int x, int y, char c);
 void	draw_player_triangle(t_var *data);
