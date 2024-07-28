@@ -56,7 +56,7 @@ void	apply_movement(t_var *data)
 {
 	normalise2d(&data->move);
 
-	wall_collision(data)
+	wall_collision(data);
 	data->player.x += data->move.x * MOVEMENT_SPEED;
 	data->player.y += data->move.y * MOVEMENT_SPEED;
 }
