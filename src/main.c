@@ -6,7 +6,7 @@
 /*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/06/06 17:21:19 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/07/23 19:09:59 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,39 +45,58 @@ void	debug_stick(t_var *data)
 		"map", pos[0], pos[1]);
 }
 
-
-void	step(t_var *data, int stepsize)
-{
-	data->ply_x += data->dir_x * stepsize;
-	data->ply_y += data->dir_y * stepsize;
-}
-
-void	hook(void *param)
+void	hold_hook(void *param)
 {
 	t_var	*data;
 
 	data = param;
-	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
+	if (mlx_is_key_down(data->mlx, MLX_KEY_UP) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_A) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_DOWN) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_D) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_LEFT) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
+	{
+		if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
+			straight(data, PRESS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
+			straight(data, MINUS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+			strafe(data, PRESS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+			strafe(data, MINUS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
+			turn(data, LEFT);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
+			turn(data, RIGHT);
+		filler(data);
+		apply_movement(data);
+		draw_player_triangle(data);
+		data->move.x = 0;
+		data->move.y = 0;
+	}
+}
+
+void	press_hook(mlx_key_data_t key, void *param)
+{
+	t_var	*data;
+
+	data = param;
+	if (key.key == MLX_KEY_ESCAPE)
 	{
 		mlx_close_window(data->mlx);
+		free_data(data);
 		return ;
 	}
-	if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
-		step(data, 1);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
-		step(data, -1);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
-		turn(data, 3);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
-		turn(data, -3);
-	else if (mlx_is_key_down(data->mlx, MLX_KEY_TAB))
-		ft_memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
-	else if (mlx_is_mouse_down(data->mlx, MLX_MOUSE_BUTTON_LEFT))
-		debug_stick(data);
-	else
-		return;
-	filler(data);
-	draw_player_triangle(data);
+	else if (key.action && (key.key == MLX_KEY_LEFT || key.key == MLX_KEY_RIGHT))
+	{
+		if (key.key == MLX_KEY_LEFT)
+			turn(data, LEFT);
+		if (key.key == MLX_KEY_RIGHT)
+			turn(data, RIGHT);
+	}
+	else if (key.key == MLX_KEY_TAB)
+		memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
 }
 
 void	init(t_var *data)
@@ -92,10 +111,10 @@ void	init(t_var *data)
 	data->texture_south = NULL;
 	data->texture_westh = NULL;
 	data->texture_easth = NULL;
-	data->ply_x = 0;
-	data->ply_y = 0;
-	data->dir_x = 0;
-	data->dir_y = 0;
+	data->player.x = 0;
+	data->player.y = 0;
+	data->direct.x = 0;
+	data->direct.y = 0;
 	data->map_width = -1;
 	data->map_height = -1;
 	data->map = NULL;
@@ -103,14 +122,18 @@ void	init(t_var *data)
 	data->floor = -1;
 }
 
-int	bonus(t_var *data)
+int	minimap(t_var *data)
 {
 	data->mlx = mlx_init((int)(data->map_width * ZOOM),
-					(int)(data->map_height * ZOOM), "MAP", true); //bonus
+					(int)(data->map_height * ZOOM), "MAP", true); //minimap
 	if (!data->mlx)
 		exit (EXIT_FAILURE);
 	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
+	// ft_memset(data->map_img->pixels, 255, data->map_img->width * data->map_img->height * sizeof(int));
 	filler(data);
+	draw_player_triangle(data);
+
+	// data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
 	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
 	return (0);
 }
@@ -127,9 +150,11 @@ int32_t	main(int argc, char **argv)
 	}
 	print_data(&data);
 
-	bonus(&data);
+	minimap(&data);
 
-	mlx_loop_hook(data.mlx, &hook, &data);
+	mlx_loop_hook(data.mlx, &hold_hook, &data);
+	// mlx_mouse_hook(data.main_mlx, )
+	mlx_key_hook(data.mlx, &press_hook, &data);
 	mlx_loop(data.mlx);
 	mlx_terminate(data.mlx);
 	return (EXIT_SUCCESS);

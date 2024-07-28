@@ -32,20 +32,12 @@ bool	close_enough(double a, double b, double closeness)
 	return (false);
 }
 
-void	turn(t_var *data, float degree)
+char	map_char(t_var *data, int x, int y)
 {
-	double	p[2];
-	double	rad;
-
-	rad = deg_2_rad(degree);
-
-	p[0] = data->dir_x * cos(rad) - data->dir_y * sin(rad);
-	p[1] = data->dir_x * sin(rad) + data->dir_y * cos(rad);
-	if (data->dir_x == 0)
-		data->dir_x = 0.00001;
-	if (data->dir_y == 0)
-		data->dir_y = 0.00001;
-	normalize_2d(p, p + 1);
-	data->dir_x = p[0];
-	data->dir_y = p[1];
+	if (0 > x || x >= data->map_width ||\
+		0 > y || y >= data->map_height)
+	{
+		return ('1');
+	}
+	return (data->map[x][y]);
 }

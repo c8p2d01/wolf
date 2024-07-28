@@ -15,8 +15,8 @@ void	print_data(t_var *data)
 	ft_printf("map height %d\n", data->map_height * ZOOM);
 	while (data->map && data->map[++i])
 		ft_printf("%s\n", data->map[i]);
-	printf("\nPlayer Position %lf, %lf\n", data->ply_x, data->ply_y);
-	printf("Player View %lf, %lf\n", data->dir_x, data->dir_y);
+	printf("\nPlayer Position %lf, %lf\n", data->player.x, data->player.y);
+	printf("Player View %lf, %lf\n", data->direct.x, data->direct.y);
 }
 
 /**
@@ -34,10 +34,10 @@ int32_t	incomplete(t_var *data)
 		texture_init(data->path_westh, data->texture_westh) || \
 		data->path_easth == NULL || \
 		texture_init(data->path_easth, data->texture_easth) || \
-		data->ply_x == 0 || \
-		data->ply_y == 0 || \
-		(data->dir_x == 0 && \
-		data->dir_y == 0) || \
+		data->player.x == 0 || \
+		data->player.y == 0 || \
+		(data->direct.x == 0 && \
+		data->direct.y == 0) || \
 		data->map_width == -1 || \
 		data->map_height == -1 || \
 		data->map == NULL || \

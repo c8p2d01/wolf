@@ -14,16 +14,7 @@
 
 # include "../ft_libft/inc/libft.h"
 
-# ifndef DEBUG
-#  define DEBUG 1
-# endif
-
-# define PI 3.14159265359
-
-# define FOV 90
-# define RENDER 3000
-# define WIDTH 200
-# define ZOOM 20
+# include "configs.h"
 
 typedef struct s_ray
 {
@@ -65,10 +56,9 @@ typedef struct s_var
 	int		map_width;
 	int		map_height;
 
-	double	ply_x; //pixel location
-	double	ply_y; //pixel location
-	double	dir_x; //where am I looking at?
-	double	dir_y; //where am I looking at?
+	vec2d_t	player;
+	vec2d_t	direct;
+	vec2d_t	move;
 
 	t_ray	rays[WIDTH];
 
@@ -77,7 +67,7 @@ typedef struct s_var
 void	putPixel(int color);
 int		create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
 void	step(t_var *data, int stepsize);
-void	turn(t_var *data, float degree);
+char	map_char(t_var *data, int x, int y);
 
 void	rem(t_var *var);
 void	init(t_var *var);
@@ -86,6 +76,10 @@ void	rayMarcher(t_var *data);
 
 # ifndef PARSING_H
 #  include "../src/parsing/parsing.h"
+# endif
+
+# ifndef MOVEMENT_H
+#  include "../src/movement/movement.h"
 # endif
 
 void	filler(t_var *data);

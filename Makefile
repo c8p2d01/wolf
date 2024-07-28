@@ -16,12 +16,16 @@ SRCFILES:=\
 			raycaster.c \
 			utils.c \
 			minimap.c \
+			\
 			parsing/player.c\
 			parsing/file_processing.c \
 			parsing/map_validation.c \
 			parsing/map_variables.c \
 			parsing/parse_utils.c \
-			parsing/parsing.c
+			parsing/parsing.c \
+			\
+			movement/move.c \
+			movement/wall_collision.c \
 
 # ------------------------------------------
 # Do not change anything beyond this point!
