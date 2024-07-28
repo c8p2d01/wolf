@@ -67,6 +67,7 @@ typedef struct s_var
 void	putPixel(int color);
 int		create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a);
 void	step(t_var *data, int stepsize);
+char	map_char(t_var *data, int x, int y);
 
 void	rem(t_var *var);
 void	init(t_var *var);

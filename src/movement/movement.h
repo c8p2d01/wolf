@@ -11,14 +11,21 @@ typedef enum function_callsign
 	RIGHT	= 0,
 }	function_callsign_t;
 
-// move
+typedef enum key_state
+{
+	UP		= 0,
+	PRESS	= 1,
+	MINUS	= 2,
+}	key_state_t;
 
-void	straight(t_var *data, int sign);
-void	strafe(t_var *data, int sign);
+// move
+void	straight(t_var *data, key_state_t action);
+void	strafe(t_var *data, key_state_t action);
 void	turn(t_var *data, int direction);
 void	apply_movement(t_var *data);
 void	display_movement(t_var *data);
 
 // wall_collision
+bool	wall_collision(t_var *data);
 
 #endif

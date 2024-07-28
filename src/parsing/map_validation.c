@@ -6,7 +6,7 @@ int32_t	check_map(t_var *data)
 	int		res;
 
 	rotated = rotate_table(data->map);
-	data->map_width = ft_2d_array_size((void **)rotated) - 1;
+	data->map_width = ft_2d_array_size((void **)rotated);
 	res = map_checking_x(data->map) + map_checking_x(rotated);
 	free_2dstr(rotated);
 	if (res)

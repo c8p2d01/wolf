@@ -31,3 +31,13 @@ bool	close_enough(double a, double b, double closeness)
 		return (true);
 	return (false);
 }
+
+char	map_char(t_var *data, int x, int y)
+{
+	if (0 > x || x >= data->map_width ||\
+		0 > y || y >= data->map_height)
+	{
+		return ('1');
+	}
+	return (data->map[x][y]);
+}

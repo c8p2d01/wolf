@@ -6,11 +6,7 @@
 /*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2024/07/23 19:09:59 by cdahlhof         ###   ########.fr       */
-=======
-/*   Updated: 2024/07/23 20:14:52 by tsimitop         ###   ########.fr       */
->>>>>>> origin/3-create-minimap
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,45 +50,30 @@ void	hold_hook(void *param)
 	t_var	*data;
 
 	data = param;
-	// if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
-		// setp(data, 1);
-	// if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
-		// setp(data, -1);
-	// if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
-		// turn(data, 3);
-	// if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
-		// turn(data, -3);
-	// else
-	// 	return;
-}
-
-void	wasd_hook(mlx_key_data_t key, t_var *data)
-{
-	if (key.action == 1)
+	if (mlx_is_key_down(data->mlx, MLX_KEY_UP) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_A) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_DOWN) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_D) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_LEFT) ||\
+		mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
 	{
-		if (key.key == MLX_KEY_W)
-			straight(data, 1);
-		if (key.key == MLX_KEY_S)
-			straight(data, -1);
-		if (key.key == MLX_KEY_A)
-			strafe(data, -1);
-		if (key.key == MLX_KEY_D)
-			strafe(data, 1);
-		// display_movement(data);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
+			straight(data, PRESS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
+			straight(data, MINUS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+			strafe(data, PRESS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+			strafe(data, MINUS);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
+			turn(data, LEFT);
+		if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
+			turn(data, RIGHT);
+		filler(data);
 		apply_movement(data);
-	}
-	if (key.action == 0)
-	{
-		if (key.key == MLX_KEY_W)
-			straight(data, -1);
-		if (key.key == MLX_KEY_S)
-			straight(data, 1);
-		if (key.key == MLX_KEY_A)
-			strafe(data, 1);
-		if (key.key == MLX_KEY_D)
-			strafe(data, -1);
-		// display_movement(data);
-		apply_movement(data);
+		draw_player_triangle(data);
+		data->move.x = 0;
+		data->move.y = 0;
 	}
 }
 
@@ -107,21 +88,15 @@ void	press_hook(mlx_key_data_t key, void *param)
 		free_data(data);
 		return ;
 	}
-	if (key.key == MLX_KEY_W || key.key == MLX_KEY_A || \
-		key.key == MLX_KEY_S || key.key == MLX_KEY_D)
-		wasd_hook(key, data);
-	else if (key.key == MLX_KEY_LEFT || key.key == MLX_KEY_RIGHT)
+	else if (key.action && (key.key == MLX_KEY_LEFT || key.key == MLX_KEY_RIGHT))
 	{
 		if (key.key == MLX_KEY_LEFT)
 			turn(data, LEFT);
 		if (key.key == MLX_KEY_RIGHT)
 			turn(data, RIGHT);
-		// display_movement(data);
-		apply_movement(data);
 	}
 	else if (key.key == MLX_KEY_TAB)
 		memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
-	// printf("Re-render?\n");
 }
 
 void	init(t_var *data)
@@ -147,15 +122,16 @@ void	init(t_var *data)
 	data->floor = -1;
 }
 
-int	bonus(t_var *data)
+int	minimap(t_var *data)
 {
 	data->mlx = mlx_init((int)(data->map_width * ZOOM),
-					(int)(data->map_height * ZOOM), "MAP", true); //bonus
+					(int)(data->map_height * ZOOM), "MAP", true); //minimap
 	if (!data->mlx)
 		exit (EXIT_FAILURE);
 	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
 	// ft_memset(data->map_img->pixels, 255, data->map_img->width * data->map_img->height * sizeof(int));
 	filler(data);
+	draw_player_triangle(data);
 
 	// data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
 	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
@@ -174,7 +150,7 @@ int32_t	main(int argc, char **argv)
 	}
 	print_data(&data);
 
-	bonus(&data);
+	minimap(&data);
 
 	mlx_loop_hook(data.mlx, &hold_hook, &data);
 	// mlx_mouse_hook(data.main_mlx, )

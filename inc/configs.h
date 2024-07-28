@@ -11,8 +11,8 @@
 # define RENDER 3000
 # define WIDTH 200
 # define ZOOM 20
-# define WALL_DISTANCE 0.1
-# define MOVEMENT_SPEED 0.1
-# define TURN_SPEED 5 //		in degree per frame
+# define WALL_DISTANCE 0.125
+# define MOVEMENT_SPEED 0.3
+# define TURN_SPEED 3 //		in degree per frame
 
 #endif

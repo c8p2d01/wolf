@@ -1,31 +1,41 @@
 #include "./movement.h"
 
-void	straight(t_var *data, int sign)
+void	straight(t_var *data, key_state_t action)
 {
-	if (sign < 0)
-	{
-		data->move.x -= data->direct.x;
-		data->move.y -= data->direct.y;
-	}
-	else
+	if (action == PRESS)
 	{
 		data->move.x += data->direct.x;
 		data->move.y += data->direct.y;
 	}
+	else if (action == MINUS)
+	{
+		data->move.x -= data->direct.x;
+		data->move.y -= data->direct.y;
+	}
+	// else
+	// {
+	// 	data->move.x = 0;
+	// 	data->move.y = 0;
+	// }
 }
 
-void	strafe(t_var *data, int sign)
+void	strafe(t_var *data, key_state_t action)
 {
-	if (sign < 0)
+	if (action == PRESS)
 	{
 		data->move.x += data->direct.y;
 		data->move.y -= data->direct.x;
 	}
-	else
+	else if (action == MINUS)
 	{
 		data->move.x -= data->direct.y;
 		data->move.y += data->direct.x;
 	}
+	// else
+	// {
+	// 	data->move.x = 0;
+	// 	data->move.y = 0;
+	// }
 }
 
 void	turn(t_var *data, int direction)
@@ -44,18 +54,11 @@ void	turn(t_var *data, int direction)
 
 void	apply_movement(t_var *data)
 {
-	vec2d_t actual_move;
+	normalise2d(&data->move);
 
-	// if (wall_collision(data))
-	// 	slde(data);
-	// else
-	{
-		actual_move.x = data->move.x;
-		actual_move.y = data->move.y;
-		normalise2d(&actual_move);
-		data->player.x += actual_move.x;
-		data->player.y += actual_move.y;
-	}
+	wall_collision(data)
+	data->player.x += data->move.x * MOVEMENT_SPEED;
+	data->player.y += data->move.y * MOVEMENT_SPEED;
 }
 
 void	display_movement(t_var *data)
@@ -66,8 +69,3 @@ void	display_movement(t_var *data)
 	mlx_put_pixel(data->map_img, 25 + data->move.y * 10, 25 + data->move.x * 10, create_rgba(42, 255, 0, 255));
 	mlx_put_pixel(data->map_img, 25 + data->direct.y * 15, 25 + data->direct.x * 15, create_rgba(42, 0, 255, 255));
 }
-
-// void	apply_movement(t_var *data)
-// {
-// 	data
-// }

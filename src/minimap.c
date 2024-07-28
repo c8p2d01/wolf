@@ -128,18 +128,18 @@ void draw_player_triangle(t_var *data)
 	t_vctr	back_right;
 	t_vctr	front;
 
-	front.x = data->ply_x + data->dir_x * 5;
-	front.y = data->ply_y + data->dir_y * 5;
+	front.x = data->player.x + data->direct.x * 5;
+	front.y = data->player.y + data->direct.y * 5;
 	rad = deg_2_rad(140); // Back left of player
-	p[0] = data->dir_x * cos(rad) - data->dir_y * sin(rad);
-	p[1] = data->dir_x * sin(rad) + data->dir_y * cos(rad);
-	back_left.x = data->ply_x + p[0] * 5;
-	back_left.y = data->ply_y + p[1] * 5;
+	p[0] = data->direct.x * cos(rad) - data->direct.y * sin(rad);
+	p[1] = data->direct.x * sin(rad) + data->direct.y * cos(rad);
+	back_left.x = data->player.x + p[0] * 5;
+	back_left.y = data->player.y + p[1] * 5;
 	rad = deg_2_rad(220); // Back right of player
-	p[0] = data->dir_x * cos(rad) - data->dir_y * sin(rad);
-	p[1] = data->dir_x * sin(rad) + data->dir_y * cos(rad);
-	back_right.x = data->ply_x + p[0] * 5;
-	back_right.y = data->ply_y + p[1] * 5;
+	p[0] = data->direct.x * cos(rad) - data->direct.y * sin(rad);
+	p[1] = data->direct.x * sin(rad) + data->direct.y * cos(rad);
+	back_right.x = data->player.x + p[0] * 5;
+	back_right.y = data->player.y + p[1] * 5;
 	draw_line(data->map_img, front.x, front.y, back_left.x, \
 	back_left.y, create_rgba(0, 255, 255, 220)); // Front to Back Left
 	draw_line(data->map_img, front.x, front.y, back_right.x, \
