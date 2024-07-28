@@ -148,6 +148,54 @@ void draw_player_triangle(t_var *data)
 	back_right.y, create_rgba(0, 255, 255, 220)); // Back Left to Back Right
 }
 
+int	check_if_wall(t_var *data, double x, double y)
+{
+	int		multiply;
+	int		y1;
+	int		x1;
+	int		temp_y;
+	int		temp_x;
+	double	theta;
+	double	p[2];
+	double	rad;
+
+	temp_x = x + (x1 * multiply);
+	temp_y = y + (y1 * multiply);
+	y1 = data->dir_y;
+	x1 = data->dir_x;
+	y = data->ply_y;
+	x = data->ply_x;
+	multiply = 1;
+	theta = atan2(temp_y, temp_x);
+	rad = deg_2_rad(theta);
+	p[0] = data->dir_x * cos(rad) - data->dir_y * sin(rad);
+	p[1] = data->dir_x * sin(rad) + data->dir_y * cos(rad);
+	temp_x = x + (x1 + p[0] * multiply);
+	temp_y = y + (y1 + p[1] * multiply);
+	while (data->map[temp_x / ZOOM][temp_y / ZOOM] != '1')
+	{
+		multiply++;
+		temp_x = x + (x1 + p[0] * multiply);
+		temp_y = y + (y1 + p[1] * multiply);
+		theta = atan2(temp_y, temp_x);
+		rad = deg_2_rad(theta);
+		p[0] = data->dir_x * cos(rad) - data->dir_y * sin(rad);
+		p[1] = data->dir_x * sin(rad) + data->dir_y * cos(rad);
+	}
+	return (multiply);
+}
+
+void	draw_player_fov_rays(t_var *data)
+{
+	t_vctr	front;
+	int	multiply;
+
+	multiply = check_if_wall(data, data->ply_x + data->dir_x, data->ply_y + data->dir_y);
+	front.x = data->ply_x + data->dir_x * multiply;
+	front.y = data->ply_y + data->dir_y * multiply;
+	draw_line(data->map_img, data->ply_x, data->ply_y, front.x, front.y, create_rgba(255, 255, 255, 75)); //center line
+}
+
 /*
 	-------------------------
 	| rad = deg_2_rad(140);	|

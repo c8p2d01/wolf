@@ -77,6 +77,7 @@ void	hook(void *param)
 	else
 		return;
 	filler(data);
+	draw_player_fov_rays(data);
 	draw_player_triangle(data);
 }
 
@@ -111,6 +112,8 @@ int	bonus(t_var *data)
 		exit (EXIT_FAILURE);
 	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
 	filler(data);
+	draw_player_fov_rays(data);
+	draw_player_triangle(data);
 	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
 	return (0);
 }

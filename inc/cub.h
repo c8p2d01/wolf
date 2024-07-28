@@ -64,6 +64,7 @@ typedef struct s_var
 	char	**map;
 	int		map_width;
 	int		map_height;
+	// int		map_size;
 
 	double	ply_x; //pixel location
 	double	ply_y; //pixel location
@@ -92,5 +93,7 @@ void	filler(t_var *data);
 void	mini_filler(t_var *data, int x, int y, char c);
 void	draw_player_triangle(t_var *data);
 double	deg_2_rad(float degree);
+t_ray	rayCreator(t_var *data, int num);
+void	draw_player_fov_rays(t_var *data);
 
 #endif
