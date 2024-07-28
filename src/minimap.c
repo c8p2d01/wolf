@@ -47,13 +47,13 @@ void	mini_filler(t_var *data, int x, int y, char c)
 		while (y_count < ZOOM)
 		{
 			if (c == '1')
-				mlx_put_pixel(data->map_img, y * ZOOM + y_count, \
+				mlx_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
 				x * ZOOM + x_count, create_rgba(255, 0, 0, 50));
 			else if (c == '0' || c == 'N' || c == 'E' || c == 'S' || c == 'W')
-				mlx_put_pixel(data->map_img, y * ZOOM + y_count, \
+				mlx_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
 				x * ZOOM + x_count, create_rgba( 0, 255, 255, 50));
 			else
-				mlx_put_pixel(data->map_img, y * ZOOM + y_count, \
+				mlx_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
 				x * ZOOM + x_count, create_rgba( 0, 0, 0, 50));
 			y_count++;
 		}
@@ -140,11 +140,11 @@ void draw_player_triangle(t_var *data)
 	p[1] = data->direct.x * sin(rad) + data->direct.y * cos(rad);
 	back_right.x = data->player.x + p[0] * 5;
 	back_right.y = data->player.y + p[1] * 5;
-	draw_line(data->map_img, front.x, front.y, back_left.x, \
+	draw_line(data->map_render_img, front.x, front.y, back_left.x, \
 	back_left.y, create_rgba(0, 255, 255, 220)); // Front to Back Left
-	draw_line(data->map_img, front.x, front.y, back_right.x, \
+	draw_line(data->map_render_img, front.x, front.y, back_right.x, \
 	back_right.y, create_rgba(0, 255, 255, 220)); // Front to Back Right
-	draw_line(data->map_img, back_left.x, back_left.y, back_right.x, \
+	draw_line(data->map_render_img, back_left.x, back_left.y, back_right.x, \
 	back_right.y, create_rgba(0, 255, 255, 220)); // Back Left to Back Right
 }
 

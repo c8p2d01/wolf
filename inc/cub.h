@@ -33,11 +33,13 @@ typedef struct	s_vctr
 
 typedef struct s_var
 {
-	mlx_t		*mlx;
+	mlx_t		*map_mlx;
 	mlx_t		*main_mlx;
 
-	mlx_image_t	*map_img;
-	mlx_image_t	*main_img;
+	mlx_image_t	*map_layout_img;
+	mlx_image_t	*map_render_img;
+	mlx_image_t	*main_static_img;
+	mlx_image_t	*main_render_img;
 
 	char			*path_north;
 	char			*path_south;
@@ -80,6 +82,10 @@ void	rayMarcher(t_var *data);
 
 # ifndef MOVEMENT_H
 #  include "../src/movement/movement.h"
+# endif
+
+# ifndef RENDERING_H
+#  include "../src/rendering/rendering.h"
 # endif
 
 void	filler(t_var *data);

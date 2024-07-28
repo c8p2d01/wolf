@@ -34,42 +34,42 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <memory.h>
-#define HEIGHT 256
 
-void	debug_stick(t_var *data)
-{
-	int	pos[2];
+// void	debug_stick(t_var *data)
+// {
+// 	int	pos[2];
 
-	mlx_get_mouse_pos(data->mlx, pos, pos + 1);
-	printf("clicked window %s at position %i : %i\n",
-		"map", pos[0], pos[1]);
-}
+// 	mlx_get_mouse_pos(data->map_mlx, pos, pos + 1);
+// 	printf("clicked window %s at position %i : %i\n",
+// 		"map", pos[0], pos[1]);
+// }
 
 void	hold_hook(void *param)
 {
 	t_var	*data;
 
 	data = param;
-	if (mlx_is_key_down(data->mlx, MLX_KEY_UP) ||\
-		mlx_is_key_down(data->mlx, MLX_KEY_A) ||\
-		mlx_is_key_down(data->mlx, MLX_KEY_DOWN) ||\
-		mlx_is_key_down(data->mlx, MLX_KEY_D) ||\
-		mlx_is_key_down(data->mlx, MLX_KEY_LEFT) ||\
-		mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
+	if (mlx_is_key_down(data->map_mlx, MLX_KEY_UP) ||\
+		mlx_is_key_down(data->map_mlx, MLX_KEY_A) ||\
+		mlx_is_key_down(data->map_mlx, MLX_KEY_DOWN) ||\
+		mlx_is_key_down(data->map_mlx, MLX_KEY_D) ||\
+		mlx_is_key_down(data->map_mlx, MLX_KEY_LEFT) ||\
+		mlx_is_key_down(data->map_mlx, MLX_KEY_RIGHT))
 	{
-		if (mlx_is_key_down(data->mlx, MLX_KEY_UP))
+		if (mlx_is_key_down(data->map_mlx, MLX_KEY_UP))
 			straight(data, PRESS);
-		if (mlx_is_key_down(data->mlx, MLX_KEY_DOWN))
+		if (mlx_is_key_down(data->map_mlx, MLX_KEY_DOWN))
 			straight(data, MINUS);
-		if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+		if (mlx_is_key_down(data->map_mlx, MLX_KEY_D))
 			strafe(data, PRESS);
-		if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+		if (mlx_is_key_down(data->map_mlx, MLX_KEY_A))
 			strafe(data, MINUS);
-		if (mlx_is_key_down(data->mlx, MLX_KEY_LEFT))
+		if (mlx_is_key_down(data->map_mlx, MLX_KEY_LEFT))
 			turn(data, LEFT);
-		if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
+		if (mlx_is_key_down(data->map_mlx, MLX_KEY_RIGHT))
 			turn(data, RIGHT);
-		filler(data);
+		memset(data->map_render_img->pixels, 0, data->map_render_img->width *\
+								data->map_render_img->height * sizeof(int));
 		apply_movement(data);
 		draw_player_triangle(data);
 		data->move.x = 0;
@@ -84,7 +84,7 @@ void	press_hook(mlx_key_data_t key, void *param)
 	data = param;
 	if (key.key == MLX_KEY_ESCAPE)
 	{
-		mlx_close_window(data->mlx);
+		mlx_close_window(data->map_mlx);
 		free_data(data);
 		return ;
 	}
@@ -95,8 +95,6 @@ void	press_hook(mlx_key_data_t key, void *param)
 		if (key.key == MLX_KEY_RIGHT)
 			turn(data, RIGHT);
 	}
-	else if (key.key == MLX_KEY_TAB)
-		memset(data->map_img->pixels, 128, data->map_img->width * data->map_img->height * sizeof(int));
 }
 
 void	init(t_var *data)
@@ -124,17 +122,18 @@ void	init(t_var *data)
 
 int	minimap(t_var *data)
 {
-	data->mlx = mlx_init((int)(data->map_width * ZOOM),
+	data->map_mlx = mlx_init((int)(data->map_width * ZOOM),
 					(int)(data->map_height * ZOOM), "MAP", true); //minimap
-	if (!data->mlx)
+	if (!data->map_mlx)
 		exit (EXIT_FAILURE);
-	data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
-	// ft_memset(data->map_img->pixels, 255, data->map_img->width * data->map_img->height * sizeof(int));
+	data->map_layout_img = mlx_new_image(data->map_mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
+	data->map_render_img = mlx_new_image(data->map_mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
+
 	filler(data);
 	draw_player_triangle(data);
 
-	// data->map_img = mlx_new_image(data->mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
-	mlx_image_to_window(data->mlx, data->map_img, 0, 0);
+	mlx_image_to_window(data->map_mlx, data->map_layout_img, 0, 0);
+	mlx_image_to_window(data->map_mlx, data->map_render_img, 0, 0);
 	return (0);
 }
 
@@ -152,10 +151,10 @@ int32_t	main(int argc, char **argv)
 
 	minimap(&data);
 
-	mlx_loop_hook(data.mlx, &hold_hook, &data);
+	mlx_loop_hook(data.map_mlx, &hold_hook, &data);
 	// mlx_mouse_hook(data.main_mlx, )
-	mlx_key_hook(data.mlx, &press_hook, &data);
-	mlx_loop(data.mlx);
-	mlx_terminate(data.mlx);
+	mlx_key_hook(data.map_mlx, &press_hook, &data);
+	mlx_loop(data.map_mlx);
+	mlx_terminate(data.map_mlx);
 	return (EXIT_SUCCESS);
 }
