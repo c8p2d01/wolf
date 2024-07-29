@@ -7,14 +7,14 @@ bool	wall_collision(t_var *data)
 	step.x = (int)((data->player.x + data->move.x * MOVEMENT_SPEED) / ZOOM);
 	step.y = (int)((data->player.y + data->move.y * MOVEMENT_SPEED) / ZOOM);
 	if (ft_strchr("12", map_char(data,\
-						(int)step.x, (int)data->player.y / ZOOM)))
-	{
-		data->move.x = 0;
-	}
-	if (ft_strchr("12", map_char(data,\
-						(int)data->player.x / ZOOM, (int)step.y)))
+						(int)step.y, (int)data->player.x / ZOOM)))
 	{
 		data->move.y = 0;
+	}
+	if (ft_strchr("12", map_char(data,\
+						(int)data->player.y / ZOOM, (int)step.x)))
+	{
+		data->move.x = 0;
 	}
 	return (0);
 }
