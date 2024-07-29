@@ -26,7 +26,6 @@ int32_t	incomplete(t_var *data)
 {
 	if (!data)
 		return (1);
-	printf("full %u\tmodded %i\n", data->floor, 256 + ((long)(data->floor >> 0) % 256));
 	if (data->path_north == NULL || \
 		texture_init(data->path_north, data->texture_north) || \
 		data->path_south == NULL || \
@@ -94,6 +93,8 @@ int32_t	texture_init(char *file, mlx_texture_t *dest)
 	if (!ft_strncmp(end, ".png", 4))
 		dest = mlx_load_png(file);
 	else
+		return (1);
+	if (!dest)
 		return (1);
 	return (0);
 }

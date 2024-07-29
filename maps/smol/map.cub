@@ -1,15 +1,15 @@
-NO maps/subject/textures/North.png
-SO maps/subject/textures/South.png
-WE maps/subject/textures/Westh.png
-EA maps/subject/textures/Easth.png
+NO maps/smol/textures/North.png
+SO maps/smol/textures/South.png
+WE maps/smol/textures/Westh.png
+EA maps/smol/textures/Easth.png
 F        0,0,0
 C        0,30,42
 
 
-1111111
-1000001
-1010001
-1001001
-10N0101
-1000001
-1111111
+1111111111111111
+1000000000000001
+1010000000010001
+1001000000000001
+10N0100000010001
+1000000000000001
+1111111111111111
