@@ -26,6 +26,7 @@ int32_t	incomplete(t_var *data)
 {
 	if (!data)
 		return (1);
+	printf("full %u\tmodded %i\n", data->floor, 256 + ((long)(data->floor >> 0) % 256));
 	if (data->path_north == NULL || \
 		texture_init(data->path_north, data->texture_north) || \
 		data->path_south == NULL || \
@@ -41,8 +42,8 @@ int32_t	incomplete(t_var *data)
 		data->map_width == -1 || \
 		data->map_height == -1 || \
 		data->map == NULL || \
-		data->ceiling < 0 || \
-		data->floor < 0)
+		data->ceiling == 42 || \
+		data->floor == 42)
 	{
 		if (DEBUG == 1)
 			ft_printf("One or more rendering components are missing/faulty\n");
