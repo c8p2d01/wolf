@@ -60,12 +60,3 @@ void	apply_movement(t_var *data)
 	data->player.x += data->move.x * MOVEMENT_SPEED;
 	data->player.y += data->move.y * MOVEMENT_SPEED;
 }
-
-void	display_movement(t_var *data)
-{
-	// Center
-	mlx_put_pixel(data->map_img, 25, 25, create_rgba(255, 42, 0, 255));
-	// dir
-	mlx_put_pixel(data->map_img, 25 + data->move.y * 10, 25 + data->move.x * 10, create_rgba(42, 255, 0, 255));
-	mlx_put_pixel(data->map_img, 25 + data->direct.y * 15, 25 + data->direct.x * 15, create_rgba(42, 0, 255, 255));
-}

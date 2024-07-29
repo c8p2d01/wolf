@@ -12,7 +12,7 @@
 
 #include "../inc/cub.h"
 
-int	create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a)
+int32_t	create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
@@ -32,10 +32,10 @@ bool	close_enough(double a, double b, double closeness)
 	return (false);
 }
 
-char	map_char(t_var *data, int x, int y)
+char	map_char(t_var *data, int y, int x)
 {
-	if (0 > x || x >= data->map_width ||\
-		0 > y || y >= data->map_height)
+	if (0 > x || x >= data->map_height ||\
+		0 > y || y >= data->map_width)
 	{
 		return ('1');
 	}

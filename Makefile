@@ -26,6 +26,8 @@ SRCFILES:=\
 			\
 			movement/move.c \
 			movement/wall_collision.c \
+			\
+			rendering/floor_ceiling.c
 
 # ------------------------------------------
 # Do not change anything beyond this point!
