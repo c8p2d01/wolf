@@ -21,6 +21,7 @@
 # define PI 3.14159265359
 
 # define FOV 90
+// # define FOV_DIV 4
 # define RENDER 3000
 # define WIDTH 200
 # define ZOOM 20
@@ -31,7 +32,7 @@ typedef struct s_ray
 	double	x;
 	double	y;
 	double	wallDst;
-	char	*wall;
+	// char	*wall;
 }	t_ray;
 
 typedef struct	s_vctr
@@ -39,6 +40,22 @@ typedef struct	s_vctr
 	double	y;
 	double	x;
 }	t_vctr;
+
+typedef struct	s_intvctr
+{
+	int	y;
+	int	x;
+}	t_intvctr;
+
+typedef struct s_draw_ray
+{
+	int			i;
+	// t_ray		*ray;
+	t_vctr		s_dist;
+	t_vctr		d_dist;
+	t_intvctr	step;
+	t_intvctr	map;
+}	t_draw_ray;
 
 typedef struct s_var
 {
@@ -70,7 +87,7 @@ typedef struct s_var
 	double	ply_y; //pixel location
 	double	dir_x; //where am I looking at?
 	double	dir_y; //where am I looking at?
-
+	t_vctr			direct;
 	t_ray	rays[WIDTH];
 
 }	t_var;
@@ -94,6 +111,12 @@ void	mini_filler(t_var *data, int x, int y, char c);
 void	draw_player_triangle(t_var *data);
 double	deg_2_rad(float degree);
 t_ray	rayCreator(t_var *data, int num);
-void	draw_player_fov_rays(t_var *data);
+void	draw_fov_lines(t_var *data);
+void	calc_distances(t_var *data, t_draw_ray *draw_r);
+void	print_map(t_var *data);
+void	hit_wall(t_var *data, t_draw_ray *draw_r);
+void	draw_ray(t_var *data, t_draw_ray *draw_r);
+// void	draw_line(mlx_image_t *img, int x0, int y0, int x1, int y1, int color);
+void	draw_line(t_var *data, t_vctr zeroth, t_vctr first, int color);
 
 #endif
