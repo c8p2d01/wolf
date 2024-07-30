@@ -3,6 +3,7 @@
 int32_t	construct_map(t_var *data, t_list *text, int map_start)
 {
 	int32_t	i;
+	int32_t	l;
 
 	i = 0;
 	while (i++ < map_start)
@@ -14,6 +15,13 @@ int32_t	construct_map(t_var *data, t_list *text, int map_start)
 	i = 0;
 	while (text)
 	{
+		l = ft_strlen((char *)text->content);
+		if (l != data->map_width)
+		{
+			text->content = ft_realloc(text->content, l, \
+													data->map_width - l + 1);
+			ft_memset(text->content + l, ' ', data->map_width - l);
+		}
 		data->map[i] = (char *)text->content;
 		text = text->next;
 		i++;
@@ -30,6 +38,7 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 
 	while (text)
 	{
+		update_map_width(data, (char *)text->content);
 		line = ft_strtrim((char *)text->content, "\t\n\v\f\r ");
 		if (!line)
 			return (1);

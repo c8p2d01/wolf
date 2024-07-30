@@ -98,3 +98,14 @@ int32_t	texture_init(char *file, mlx_texture_t *dest)
 		return (1);
 	return (0);
 }
+
+void	update_map_width(t_var *data, char *line)
+{
+	int32_t	len;
+
+	if (!data || !line)
+		return ;
+	len = ft_strlen(line);
+	if (data->map_width < len)
+		data->map_width = len;
+}
