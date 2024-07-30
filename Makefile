@@ -86,12 +86,14 @@ clean:
 	make clean -C $(MLX)
 	@make -s clear
 
-fclean: clean
+fclean:
 	@make -s red
 	rm -rdf $(NAME)
+	make fclean -C $(LFT)
+	make fclean -C $(MLX)
 	@make -s clear
 
-re: fclean all
+re: fclean .WAIT all
 
 ree: re
 	./$(NAME) maps/smol/map.cub
