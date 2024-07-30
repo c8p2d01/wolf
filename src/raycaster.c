@@ -49,24 +49,28 @@ void create_projection_reference(t_var	*data, double *plane)
  * @param num 
  * @return t_ray* 
  */
+/**
+ * @brief create a ray in relation to POV and window width
+ * 
+ * @param data 
+ * @param num 
+ * @return t_ray* 
+ */
 t_ray	rayCreator(t_var *data, int num)
 {
-	t_ray			ray;
-	static double	ortho[2];
+	t_ray	ray;
+	vec2d_t	orth;
 
 	ray.number = num;
-	create_projection_reference(data, ortho); // only do this once in the end
-	ray.x = data->direct.x + (num - WIDTH / 2) * (ortho[1] / FOV);
-	if (ray.x == 0)
-		ray.x += 0.0001;
-	ray.y = data->direct.y + (num - WIDTH / 2) * (ortho[0] / FOV);
-	if (ray.y == 0)
-		ray.y += 0.0001;
+	normalise2d(&data->direct);
+	orth = rotate2d(&data->direct, 90);
+	resize2d(&orth, 2 * tan(deg_2_rad(FOV / 2)));
+	ray.x = data->direct.x;
+	ray.y = data->direct.y;
+	ray.x -= orth.x / 2;
+	ray.y -= orth.y / 2;
+	ray.x += (orth.x / WIDTH) * num;
+	ray.y += (orth.y / WIDTH) * num;
 	normalise_2d(&ray.x, &ray.y);
-	if (DEBUG == 1 && num == WIDTH / 4)
-	{
-		// printf("casting ray from %lf\n\t\t%lf\n", data->player.x, data->player.y);
-		// printf("casting ray towards \t%lf\n\t\t\t%lf\n", ray.x, ray.y);
-	}
 	return (ray);
 }
