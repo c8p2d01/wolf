@@ -1,6 +1,6 @@
 #include "./movement.h"
 
-void	straight(t_var *data, key_state_t action)
+void	straight(t_var *data, t_key_state action)
 {
 	if (action == PRESS)
 	{
@@ -14,7 +14,7 @@ void	straight(t_var *data, key_state_t action)
 	}
 }
 
-void	strafe(t_var *data, key_state_t action)
+void	strafe(t_var *data, t_key_state action)
 {
 	if (action == PRESS)
 	{

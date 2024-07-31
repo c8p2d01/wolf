@@ -40,7 +40,7 @@ void	layout_color(t_var *data, int zoom_x, int zoom_y, char c)
 		zoom_x, MAP_GRND << 8 | MAP_OPACITY);
 	else
 		prot_put_pixel(data->map_layout_img, zoom_y, \
-		zoom_x, MAP_OPACITY);
+		zoom_x, 0);
 }
 
 void	mini_filler(t_var *data, int x, int y, char c)
