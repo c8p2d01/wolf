@@ -2,8 +2,8 @@ NO maps/subject/textures/North.png
 SO maps/subject/textures/South.png
 WE maps/subject/textures/Westh.png
 EA maps/subject/textures/Easth.png
-F        220,100,0
-C                       225,30,0
+F        0,42,30
+C        0,30,42
 
 
 

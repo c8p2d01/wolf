@@ -8,12 +8,11 @@
 # define PI 3.14159265359
 
 # define FOV 90
-# define RENDER 3000
-# define WIDTH 200
-# define HEIGHT 200
-# define ZOOM 20
-# define WALL_DISTANCE 0.125
-# define MOVEMENT_SPEED 0.3
+# define RENDER 8
+# define WIDTH 620
+# define HEIGHT 500
+# define ZOOM 10
+# define MOVEMENT_SPEED 0.5
 # define TURN_SPEED 3 //		in degree per frame
 # define MAP_OPACITY 128
 
