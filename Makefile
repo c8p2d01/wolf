@@ -7,7 +7,7 @@ SOURCE	= ./src
 
 # Other Variables:
 COMPILER:=	cc
-COMPFLAGS:=	-g #-Wall -Werror -Wextra -Wno-unused-variable 
+COMPFLAGS:=	-g -fsanitize=address #-Wall -Werror -Wextra -Wno-unused-variable 
 DEFINES = -D DEBUG=1
 
 # Source Files:
@@ -15,7 +15,11 @@ SRCFILES:=\
 			main.c \
 			raycaster.c \
 			utils.c \
-			minimap.c \
+			\
+			minimap/map_plane.c \
+			minimap/draw_triangle.c \
+			minimap/draw_mini_rays.c \
+			minimap/debug_options.c \
 			\
 			parsing/player.c\
 			parsing/file_processing.c \
@@ -52,11 +56,11 @@ RED = "\033[38;2;255;51;51m"
 GRN = "\033[38;2;170;255;170m"
 CLEAR = "\033[0m"
 
-# ifeq ($(SUBM_STATE),)
-# SUBM_FLAG	= submodule
-# else 
-# SUBM_FLAG	= 
-# endif
+ifeq ($(SUBM_STATE),)
+SUBM_FLAG	= submodule
+else 
+SUBM_FLAG	= 
+endif
 
 all: $(SUBM_FLAG) lib
 	make -j $(nproc) $(NAME)
@@ -89,11 +93,12 @@ clean:
 fclean:
 	@make -s red
 	rm -rdf $(NAME)
+	rm -rdf $(BUILD)
 	make fclean -C $(LFT)
 	make fclean -C $(MLX)
 	@make -s clear
 
-re: fclean .WAIT all
+re: fclean all
 
 ree: re
 	./$(NAME) maps/smol/map.cub

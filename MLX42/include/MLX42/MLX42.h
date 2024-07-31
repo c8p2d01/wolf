@@ -692,7 +692,7 @@ const mlx_texture_t* mlx_get_font(void);
  * This function lets you retrieve the X offset 
  * of the given char in the font texture.
  * 
- * NOTE: A single character is 10 * 20 in pixels!
+ * NOTE: A single character is 10 * 20 in 	s!
  * 
  * @param[in] c The character to get the offset from.
  * @return Non-negative if found or -1 if not found.

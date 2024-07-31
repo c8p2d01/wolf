@@ -32,11 +32,6 @@
 	from there on iterate in steps
 */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <memory.h>
-
 // void	debug_stick(t_var *data)
 // {
 // 	int	pos[2];
@@ -74,7 +69,10 @@ void	hold_hook(void *param)
 								data->map_render_img->height * sizeof(int));
 		apply_movement(data);
 		if (data->map_visibility)
+		{
+			draw_fov_lines(data);
 			draw_player_triangle(data);
+		}
 		data->move.x = 0;
 		data->move.y = 0;
 	}
@@ -99,14 +97,26 @@ void	press_hook(mlx_key_data_t key, void *param)
 		if (key.key == MLX_KEY_RIGHT)
 			turn(data, RIGHT);
 	}
-	else if (key.key == MLX_KEY_M)
+	else if (key.key == MLX_KEY_M && key.action == 1)
 	{
-		if (mlx_is_key_down(data->_mlx, MLX_KEY_LEFT_SHIFT))
-			data->map_visibility = 0;
+		data->map_visibility = !data->map_visibility;
+		if (data->map_visibility)
+		{
+			filler(data);
+			draw_player_triangle(data);
+		}
 		else
-			data->map_visibility = 1;
-		filler(data);
-		draw_player_triangle(data);
+		{
+		memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
+								data->map_render_img->height * sizeof(int));
+		memset(data->map_layout_img->pixels, 0, data->map_layout_img->width * \
+								data->map_layout_img->height * sizeof(int));
+		}
+	}
+	else if (key.key == MLX_KEY_R && key.action == 1)
+	{
+		data->map_ray_state = !data->map_ray_state;
+		draw_fov_lines(data);
 	}
 }
 
@@ -132,12 +142,16 @@ void	init(t_var *data)
 	data->ceiling = 42;
 	data->floor = 42;
 	data->map_visibility = 1;
-	data->_mlx = mlx_init(WIDTH, HEIGHT, "MAP", true); //minimap
+	data->map_ray_state = 1;
+	data->_mlx = mlx_init(WIDTH, HEIGHT, "MAP", true);
 	if (!data->_mlx)
 		exit (EXIT_FAILURE);
 	data->main_static_img = mlx_new_image(data->_mlx, WIDTH, HEIGHT);
 	data->main_render_img = mlx_new_image(data->_mlx, WIDTH, HEIGHT);
+	memset(data->main_static_img->pixels, 0, WIDTH * HEIGHT * sizeof(int));
 	memset(data->main_render_img->pixels, 0, WIDTH * HEIGHT * sizeof(int));
+	mlx_image_to_window(data->_mlx, data->main_static_img, 0, 0);
+	mlx_image_to_window(data->_mlx, data->main_render_img, 0, 0);
 }
 
 int	minimap(t_var *data)
@@ -145,10 +159,13 @@ int	minimap(t_var *data)
 	data->map_layout_img = mlx_new_image(data->_mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
 	data->map_render_img = mlx_new_image(data->_mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
 	filler(data);
-	draw_player_triangle(data);
 
 	mlx_image_to_window(data->_mlx, data->map_layout_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->map_render_img, 0, 0);
+	draw_fov_lines(data);
+	if (DEBUG == 1)
+		debug_fov(data);
+	draw_player_triangle(data);
 	return (0);
 }
 
@@ -164,8 +181,6 @@ int32_t	main(int argc, char **argv)
 	}
 	print_data(&data);
 
-	mlx_image_to_window(data._mlx, data.main_static_img, 0, 0);
-	mlx_image_to_window(data._mlx, data.main_render_img, 0, 0);
 	minimap(&data);
 	floor_ceiling(&data);
 
