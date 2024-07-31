@@ -1,13 +1,13 @@
 #include "parsing.h"
 
-int32_t	construct_map(t_var *data, t_list *text, int map_start)
+int32_t	construct_map(t_var *data, t_list *text, int map_start, int32_t i)
 {
-	int32_t	i;
 	int32_t	l;
 
 	i = 0;
 	while (i++ < map_start)
 		text = text->next;
+	update_map_width(data, text);
 	data->map_height = ft_lstsize(text) - map_start;
 	data->map = ft_calloc(data->map_height + 1, sizeof(char *));
 	if (!data->map)
@@ -38,7 +38,6 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 
 	while (text)
 	{
-		update_map_width(data, (char *)text->content);
 		line = ft_strtrim((char *)text->content, "\t\n\v\f\r ");
 		if (!line)
 			return (1);

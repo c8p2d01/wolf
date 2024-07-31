@@ -39,22 +39,22 @@ void	mini_filler(t_var *data, int x, int y, char c)
 
 	x_count = 0;
 	y_count = 0;
-	zoom_x = x * ZOOM;
-	zoom_y = y * ZOOM;
-	while (x_count < ZOOM)
+	zoom_x = x * data->config.zoom;
+	zoom_y = y * data->config.zoom;
+	while (x_count < data->config.zoom)
 	{
 		y_count = 0;
-		while (y_count < ZOOM)
+		while (y_count < data->config.zoom)
 		{
 			if (c == '1')
-				prot_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
-				x * ZOOM + x_count, create_rgba(255, 0, 0, 50));
+				prot_put_pixel(data->map_layout_img, zoom_y + y_count, \
+				zoom_x + x_count, MAP_WALL << 8 | MAP_OPACITY);
 			else if (c == '0' || c == 'N' || c == 'E' || c == 'S' || c == 'W')
-				prot_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
-				x * ZOOM + x_count, create_rgba( 0, 255, 255, 50));
+				prot_put_pixel(data->map_layout_img, zoom_y + y_count, \
+				zoom_x + x_count, MAP_GRND << 8 | MAP_OPACITY);
 			else
-				prot_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
-				x * ZOOM + x_count, create_rgba( 0, 0, 0, 50));
+				prot_put_pixel(data->map_layout_img, zoom_y + y_count, \
+				zoom_x + x_count,  MAP_OPACITY);
 			y_count++;
 		}
 		x_count++;

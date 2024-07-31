@@ -31,8 +31,8 @@
 void create_projection_reference(t_var	*data, double *plane)
 {
 	normalise_2d(&data->direct.x, &data->direct.y);
-	double	rotator = veclen_2d(data->direct.x, data->direct.y)
-				 * sin((FOV * PI /180) / 2) / cos((FOV * PI /180) / 2);
+	double	rotator = veclen_2d(data->direct.x, data->direct.y) * sin(( \
+	   data->config.fov * PI /180) / 2) / cos((data->config.fov * PI /180) / 2);
 	(plane)[0] = data->direct.x;
 	plane[1] = data->direct.y * -1;
 	normalise_2d(&(plane[0]), &(plane[1]));
@@ -57,13 +57,13 @@ t_ray	rayCreator(t_var *data, int num)
 	ray.number = num;
 	normalise2d(&data->direct);
 	orth = rotate2d(&data->direct, 90);
-	resize2d(&orth, 2 * tan(deg_2_rad(FOV / 2)));
+	resize2d(&orth, 2 * tan(deg_2_rad(data->config.fov / 2)));
 	ray.x = data->direct.x;
 	ray.y = data->direct.y;
 	ray.x -= orth.x / 2;
 	ray.y -= orth.y / 2;
-	ray.x += (orth.x / WIDTH) * num;
-	ray.y += (orth.y / WIDTH) * num;
+	ray.x += (orth.x / data->config.width) * num;
+	ray.y += (orth.y / data->config.width) * num;
 	normalise_2d(&ray.x, &ray.y);
 	return (ray);
 }

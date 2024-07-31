@@ -11,9 +11,24 @@
 # define RENDER 8
 # define WIDTH 620
 # define HEIGHT 500
-# define ZOOM 10
+# define ZOOM 20
 # define MOVEMENT_SPEED 0.5
 # define TURN_SPEED 3 //		in degree per frame
-# define MAP_OPACITY 128
+# define MAP_OPACITY 200
+
+# define MAP_WALL 16711680
+# define MAP_GRND 65535
+
+typedef struct s_config
+{
+	int		setting;
+	int		fov;
+	double	zoom;
+	int		height;
+	int		width;
+	double	color_offset;
+	bool	map_visibility;
+	int		ray_style;
+}	t_config;
 
 #endif

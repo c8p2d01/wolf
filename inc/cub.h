@@ -52,6 +52,8 @@ typedef struct s_var
 {
 	mlx_t			*_mlx;
 
+	t_config		config;
+
 	mlx_image_t		*map_layout_img;
 	mlx_image_t		*map_render_img;
 	mlx_image_t		*main_static_img;
@@ -78,10 +80,9 @@ typedef struct s_var
 	vec2d_t			direct;
 	vec2d_t			move;
 
-	t_ray			rays[WIDTH];
+	t_ray			*rays;
 
-	bool			map_visibility;
-	int				map_ray_state;
+	int				settings;
 }	t_var;
 
 void		putPixel(int color);
@@ -110,6 +111,18 @@ void	draw_ray(t_var *data, t_draw_ray *draw_r);
 // void	draw_line(mlx_image_t *img, int x0, int y0, int x1, int y1, int color);
 void	draw_line(mlx_image_t *img, vec2d_t a, vec2d_t b, int color);
 void	prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color);
+
+
+void	print_setting(t_var *data);
+void	test_setting(double xdelta, double ydelta, t_var *data);
+void	norm_setting(double xdelta, double ydelta, t_var *data);
+void	debug_setting(double xdelta, double ydelta, t_var *data);
+void	fov_setting(double xdelta, double ydelta, t_var *data);
+void	zoom_setting(double xdelta, double ydelta, t_var *data);
+void	style_setting(double xdelta, double ydelta, t_var *data);
+void	offset_setting(double xdelta, double ydelta, t_var *data);
+void	height_setting(double xdelta, double ydelta, t_var *data);
+void	width_setting(double xdelta, double ydelta, t_var *data);
 
 # ifndef PARSING_H
 #  include "../src/parsing/parsing.h"

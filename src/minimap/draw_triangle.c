@@ -78,18 +78,18 @@ void draw_player_triangle(t_var *data)
 	vec2d_t	back_right;
 	vec2d_t	front;
 
-	front.x = data->player.x + data->direct.x * (ZOOM / 4);
-	front.y = data->player.y + data->direct.y * (ZOOM / 4);
+	front.x = data->player.x + data->direct.x * (data->config.zoom / 4);
+	front.y = data->player.y + data->direct.y * (data->config.zoom / 4);
 	rad = deg_2_rad(140);
 	p[0] = data->direct.x * cos(rad) - data->direct.y * sin(rad);
 	p[1] = data->direct.x * sin(rad) + data->direct.y * cos(rad);
-	back_left.x = data->player.x + p[0] * (ZOOM / 4);
-	back_left.y = data->player.y + p[1] * (ZOOM / 4);
+	back_left.x = data->player.x + p[0] * (data->config.zoom / 4);
+	back_left.y = data->player.y + p[1] * (data->config.zoom / 4);
 	rad = deg_2_rad(220);
 	p[0] = data->direct.x * cos(rad) - data->direct.y * sin(rad);
 	p[1] = data->direct.x * sin(rad) + data->direct.y * cos(rad);
-	back_right.x = data->player.x + p[0] * (ZOOM / 4);
-	back_right.y = data->player.y + p[1] * (ZOOM / 4);
+	back_right.x = data->player.x + p[0] * (data->config.zoom / 4);
+	back_right.y = data->player.y + p[1] * (data->config.zoom / 4);
 	draw_line(data->map_render_img, front, back_left, \
 					create_rgba(0, 255, 255, 220)); // Front to Back Left
 	draw_line(data->map_render_img, front, back_right, \

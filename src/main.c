@@ -32,14 +32,36 @@
 	from there on iterate in steps
 */
 
-// void	debug_stick(t_var *data)
-// {
-// 	int	pos[2];
+void	debug_stick(t_var *data)
+{
+	int	pos[2];
 
-// 	mlx_get_mouse_pos(data->_mlx, pos, pos + 1);
-// 	printf("clicked window %s at position %i : %i\n",
-// 		"map", pos[0], pos[1]);
-// }
+	mlx_get_mouse_pos(data->_mlx, pos, pos + 1);
+	printf("clicked window %s at position %i : %i\n",
+		"map", pos[0], pos[1]);
+}
+
+void	scroll_hook(double xdelta, double ydelta, void* param)
+{
+	t_var	*data;
+	void	(*s[11])(double, double, t_var *) = {norm_setting, debug_setting,
+		fov_setting, zoom_setting, style_setting, offset_setting, height_setting,
+		width_setting, test_setting, test_setting, test_setting
+	};
+
+	data = param;
+	if (data->settings == 1)
+	{
+		if (mlx_is_key_down(data->_mlx, MLX_KEY_LEFT_SHIFT))
+		{
+			data->config.setting += (int)xdelta;
+			i_limit(&data->config.setting, 0, 7);
+			print_setting(data);
+			return ;
+		}
+		s[data->config.setting](xdelta, ydelta, data);
+	}
+}
 
 void	hold_hook(void *param)
 {
@@ -68,7 +90,7 @@ void	hold_hook(void *param)
 		memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
 								data->map_render_img->height * sizeof(int));
 		apply_movement(data);
-		if (data->map_visibility)
+		if (data->config.map_visibility)
 		{
 			draw_fov_lines(data);
 			draw_player_triangle(data);
@@ -99,8 +121,8 @@ void	press_hook(mlx_key_data_t key, void *param)
 	}
 	else if (key.key == MLX_KEY_M && key.action == 1)
 	{
-		data->map_visibility = !data->map_visibility;
-		if (data->map_visibility)
+		data->config.map_visibility = !data->config.map_visibility;
+		if (data->config.map_visibility)
 		{
 			filler(data);
 			draw_player_triangle(data);
@@ -113,10 +135,9 @@ void	press_hook(mlx_key_data_t key, void *param)
 								data->map_layout_img->height * sizeof(int));
 		}
 	}
-	else if (key.key == MLX_KEY_R && key.action == 1)
+	else if (key.key == MLX_KEY_S && key.action == 1)
 	{
-		data->map_ray_state = !data->map_ray_state;
-		draw_fov_lines(data);
+		data->settings = !data->settings;
 	}
 }
 
@@ -124,6 +145,20 @@ void	init(t_var *data)
 {
 	if (!data)
 		return ;
+	data->config.setting = 0;
+	data->config.fov = FOV;
+	i_limit(&data->config.fov, 1, 179);
+	data->config.width = WIDTH;
+	data->config.height = HEIGHT;
+	data->config.zoom = ZOOM;
+	data->config.color_offset = 0;
+	data->config.ray_style = 0;
+	data->config.map_visibility = 1;
+
+	data->settings = 1;
+
+	data->rays = ft_calloc(data->config.width, sizeof(t_ray));
+
 	data->path_north = NULL;
 	data->path_south = NULL;
 	data->path_westh = NULL;
@@ -141,30 +176,28 @@ void	init(t_var *data)
 	data->map = NULL;
 	data->ceiling = 42;
 	data->floor = 42;
-	data->map_visibility = 1;
-	data->map_ray_state = 1;
-	data->_mlx = mlx_init(WIDTH, HEIGHT, "MAP", true);
+	data->_mlx = mlx_init(data->config.width, data->config.height, "MAP", true);
 	if (!data->_mlx)
 		exit (EXIT_FAILURE);
-	data->main_static_img = mlx_new_image(data->_mlx, WIDTH, HEIGHT);
-	data->main_render_img = mlx_new_image(data->_mlx, WIDTH, HEIGHT);
-	memset(data->main_static_img->pixels, 0, WIDTH * HEIGHT * sizeof(int));
-	memset(data->main_render_img->pixels, 0, WIDTH * HEIGHT * sizeof(int));
+	data->main_static_img = mlx_new_image(data->_mlx, data->config.width, data->config.height);
+	data->main_render_img = mlx_new_image(data->_mlx, data->config.width, data->config.height);
+	memset(data->main_static_img->pixels, 0, data->config.width * data->config.height * sizeof(int));
+	memset(data->main_render_img->pixels, 0, data->config.width * data->config.height * sizeof(int));
 	mlx_image_to_window(data->_mlx, data->main_static_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->main_render_img, 0, 0);
 }
 
 int	minimap(t_var *data)
 {
-	data->map_layout_img = mlx_new_image(data->_mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
-	data->map_render_img = mlx_new_image(data->_mlx, (data->map_width * ZOOM), (data->map_height * ZOOM));
-	filler(data);
-
+	data->map_layout_img = mlx_new_image(data->_mlx, (data->map_width * \
+					data->config.zoom), (data->map_height * data->config.zoom));
+	data->map_render_img = mlx_new_image(data->_mlx, (data->map_width * \
+					data->config.zoom), (data->map_height * data->config.zoom));
 	mlx_image_to_window(data->_mlx, data->map_layout_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->map_render_img, 0, 0);
+	filler(data);
 	draw_fov_lines(data);
-	if (DEBUG == 1)
-		debug_fov(data);
+
 	draw_player_triangle(data);
 	return (0);
 }
@@ -183,8 +216,10 @@ int32_t	main(int argc, char **argv)
 
 	minimap(&data);
 	floor_ceiling(&data);
+	print_setting(&data);
 
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
+	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	// mlx_mouse_hook(data.main_mlx, )
 	mlx_key_hook(data._mlx, &press_hook, &data);
 	mlx_loop(data._mlx);
