@@ -2,17 +2,22 @@
 
 void	test_setting(double xdelta, double ydelta, t_var *data)
 {
-	printf("\e[3;1H\e[9J");
-	printf("\e[38;2;42;42;255mscrolled %lf\t%lf\e[0m\n", xdelta, ydelta);
+	(void)xdelta;
+	(void)ydelta;
+	(void)data;
 }
 
 void	norm_setting(double xdelta, double ydelta, t_var *data)
 {
-	
+	(void)xdelta;
+	(void)ydelta;
+	(void)data;
 }
 
 void	debug_setting(double xdelta, double ydelta, t_var *data)
 {
+	(void)xdelta;
+	(void)ydelta;
 	printf("\e[1;1H\n\n");
 	print_data(data);
 	debug_fov(data);
@@ -21,6 +26,7 @@ void	debug_setting(double xdelta, double ydelta, t_var *data)
 
 void	fov_setting(double xdelta, double ydelta, t_var *data)
 {
+	(void)xdelta;
 	printf("\e[3;1H\e[9J");
 	data->config.fov += (int) ydelta;
 	i_limit(&data->config.fov, 1, 179);
@@ -38,6 +44,7 @@ void	zoom_setting(double xdelta, double ydelta, t_var *data)
 {
 	double	old_zoom;
 
+	(void)xdelta;
 	old_zoom = data->config.zoom;
 	data->config.zoom += (int) ydelta;
 	lf_limit(&data->config.zoom, 1, data->_mlx->width / data->map_width);
@@ -50,7 +57,6 @@ void	zoom_setting(double xdelta, double ydelta, t_var *data)
 							data->map_render_img->height * sizeof(int));
 	memset(data->map_layout_img->pixels, 0, data->map_layout_img->width * \
 							data->map_layout_img->height * sizeof(int));
-
 	data->player.x = (int)((data->player.x / old_zoom) * data->config.zoom);
 	data->player.y = (int)((data->player.y / old_zoom) * data->config.zoom);
 	if (data->config.map_visibility)

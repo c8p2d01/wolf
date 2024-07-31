@@ -3,7 +3,8 @@
 void	print_setting(t_var *data)
 {
 	static const char	*settings[] = {
-		"NORMAL", "DEBUG", "FOV", "ZOOM", "RAY_STYLE", "OFFSET", "HEIGHT", "WIDTH", NULL
+		"NORMAL", "DEBUG", "FOV", "ZOOM", "RAY_STYLE", "OFFSET", \
+													"HEIGHT", "WIDTH", NULL
 	};
 	int					i;
 
@@ -37,9 +38,11 @@ void	print_map(t_var *data)
 		{
 			c = map_char(data, y, x);
 			if (c == '1')
-				printf("\e[38;2;%i;%i;%im", (MAP_WALL >> 16) % 256, (MAP_WALL >> 8) % 256, (MAP_WALL >> 0) % 256);
+				printf("\e[38;2;%i;%i;%im", (MAP_WALL >> 16) % 256, \
+								(MAP_WALL >> 8) % 256, (MAP_WALL >> 0) % 256);
 			else if (ft_strchr("0NESW", c))
-				printf("\e[38;2;%i;%i;%im", (MAP_GRND >> 16) % 256, (MAP_GRND >> 8) % 256, (MAP_GRND >> 0) % 256);
+				printf("\e[38;2;%i;%i;%im", (MAP_GRND >> 16) % 256, \
+								(MAP_GRND >> 8) % 256, (MAP_GRND >> 0) % 256);
 			printf("%c\e[0m", c);
 			y++;
 		}

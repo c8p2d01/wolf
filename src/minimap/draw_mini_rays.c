@@ -23,19 +23,21 @@ void	calc_distances(t_var *data, t_draw_ray *draw_r)
 	else
 		draw_r->d_dist.y = fabs(1 / data->rays[draw_r->i].y);
 	if (data->rays[draw_r->i].x < 0)
-	{
 		draw_r->step.x = -1;
-		draw_r->s_dist.x = (data->player.x / data->config.zoom - draw_r->map.x) * draw_r->d_dist.x;
-	}
+	if (data->rays[draw_r->i].x < 0)
+		draw_r->s_dist.x = (data->player.x / data->config.zoom - \
+											draw_r->map.x) * draw_r->d_dist.x;
 	else
-		draw_r->s_dist.x = (draw_r->map.x + 1.0 - data->player.x / data->config.zoom) * draw_r->d_dist.x;
+		draw_r->s_dist.x = (draw_r->map.x + 1.0 - data->player.x / \
+										data->config.zoom) * draw_r->d_dist.x;
 	if (data->rays[draw_r->i].y < 0)
-	{
 		draw_r->step.y = -1;
-		draw_r->s_dist.y = (data->player.y / data->config.zoom - draw_r->map.y) * draw_r->d_dist.y;
-	}
+	if (data->rays[draw_r->i].y < 0)
+		draw_r->s_dist.y = (data->player.y / data->config.zoom - \
+											draw_r->map.y) * draw_r->d_dist.y;
 	else
-		draw_r->s_dist.y = (draw_r->map.y + 1.0 - data->player.y / data->config.zoom) * draw_r->d_dist.y;
+		draw_r->s_dist.y = (draw_r->map.y + 1.0 - data->player.y / \
+										data->config.zoom) * draw_r->d_dist.y;
 }
 
 void	hit_wall(t_var *data, t_draw_ray *draw_r)
@@ -93,7 +95,7 @@ void	draw_fov_lines(t_var *data)
 		draw_r.step.y = 1;
 		draw_r.map.x = (int)(data->player.x / data->config.zoom);
 		draw_r.map.y = (int)(data->player.y / data->config.zoom);
-		data->rays[draw_r.i] = rayCreator(data, draw_r.i);
+		data->rays[draw_r.i] = ray_creator(data, draw_r.i);
 		calc_distances(data, &draw_r);
 		hit_wall(data, &draw_r);
 		draw_r.color = ray_color(data, &draw_r);

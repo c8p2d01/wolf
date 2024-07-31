@@ -11,36 +11,6 @@
 /* ************************************************************************** */
 
 #include "../inc/cub.h"
-/**
- * @brief Create a projection reference object
- * 
- * in rendering from a perspective it is important to spread out rendered pixels
- * over the FOv evenly - that is not achieved through having them be at the same
- * angle to each other (that would focus pixels in the center)
- * this is also why for each frame we will make these calcualtions, with fixed
- * angle offset one could easily reuse ray vectors...
- * 
- * therefore we need a reference through which we can construct rays per pixel
- * 
- * here in 2d this is simpy a vector the is perbendicular to the POV
- * in 3d one would construct a projection plane through which one casts each ray
- * 
- * @param data 
- * @param plane 
- */
-void create_projection_reference(t_var	*data, double *plane)
-{
-	normalise_2d(&data->direct.x, &data->direct.y);
-	double	rotator = veclen_2d(data->direct.x, data->direct.y) * sin(( \
-	   data->config.fov * PI /180) / 2) / cos((data->config.fov * PI /180) / 2);
-	(plane)[0] = data->direct.x;
-	plane[1] = data->direct.y * -1;
-	normalise_2d(&(plane[0]), &(plane[1]));
-
-	plane[0] *= rotator;
-	plane[1] *= rotator;
-	normalise_2d(&(plane[0]), &(plane[1]));
-}
 
 /**
  * @brief create a ray in relation to POV and window width
@@ -49,7 +19,7 @@ void create_projection_reference(t_var	*data, double *plane)
  * @param num 
  * @return t_ray* 
  */
-t_ray	rayCreator(t_var *data, int num)
+t_ray	ray_creator(t_var *data, int num)
 {
 	t_ray	ray;
 	vec2d_t	orth;

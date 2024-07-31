@@ -16,11 +16,12 @@ int	ray_color(t_var *data, t_draw_ray *draw_r)
 {
 	double	fraction;
 
-	fraction = (float)draw_r->i / (data->config.width) + data->config.color_offset;
+	fraction = (float)draw_r->i / (data->config.width) + \
+													data->config.color_offset;
 	if (data->config.ray_style == 0)
 		return (createMultiGradient(\
 			fmod(fraction, 1), \
-			7,			// number of color sets given as base for gradient ++?
+			7, \
 			0, 255, 255, \
 			0, 0, 255, \
 			255, 0, 255, \
@@ -28,7 +29,8 @@ int	ray_color(t_var *data, t_draw_ray *draw_r)
 			255, 255, 0, \
 			0, 255, 0, \
 			0, 255, 255) << 8 | MAP_OPACITY);
-	return (create_rgba(draw_r->i / 5, draw_r->i / 5, draw_r->i / 5, MAP_OPACITY));
+	return (create_rgba(draw_r->i / 5, draw_r->i / 5, draw_r->i / \
+															5, MAP_OPACITY));
 }
 
 void	debug_fov(t_var *data)
@@ -36,7 +38,6 @@ void	debug_fov(t_var *data)
 	vec2d_t	begin;
 	vec2d_t	end;
 
-printf("DEBUG\n");
 	begin.x = data->rays[0].x;
 	begin.y = data->rays[0].y;
 	end.x = data->rays[data->config.width - 1].x;

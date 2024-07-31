@@ -61,16 +61,16 @@ void	draw_line(mlx_image_t *img, vec2d_t zeroth, vec2d_t first, int color)
 	{
 		prot_put_pixel(img, (int)zeroth.y, (int)zeroth.x, color);
 		if (zeroth.x == first.x && zeroth.y == first.y)
-			break;
+			break ;
 		e2 = err;
-		if (e2 > -d.x) 
+		if (e2 > -d.x)
 			update_e2_y(&err, &d, &s, &zeroth);
 		if (e2 < d.y)
 			update_e2_x(&err, &d, &s, &zeroth);
 	}
 }
 
-void draw_player_triangle(t_var *data)
+void	draw_player_triangle(t_var *data)
 {
 	double	p[2];
 	double	rad;
@@ -91,9 +91,9 @@ void draw_player_triangle(t_var *data)
 	back_right.x = data->player.x + p[0] * (data->config.zoom / 4);
 	back_right.y = data->player.y + p[1] * (data->config.zoom / 4);
 	draw_line(data->map_render_img, front, back_left, \
-					create_rgba(0, 255, 255, 220)); // Front to Back Left
+					create_rgba(0, 255, 255, 220));
 	draw_line(data->map_render_img, front, back_right, \
-					create_rgba(0, 255, 255, 220)); // Front to Back Right
+					create_rgba(0, 255, 255, 220));
 	draw_line(data->map_render_img, back_left, back_right, \
-					create_rgba(0, 255, 255, 220)); // Back Left to Back Right
+					create_rgba(0, 255, 255, 220));
 }

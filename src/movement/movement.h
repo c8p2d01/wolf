@@ -9,18 +9,18 @@ typedef enum function_callsign
 {
 	LEFT	= 1,
 	RIGHT	= 0,
-}	function_callsign_t;
+}	t_function_callsign;
 
 typedef enum key_state
 {
 	UP		= 0,
 	PRESS	= 1,
 	MINUS	= 2,
-}	key_state_t;
+}	t_key_state;
 
 // move
-void	straight(t_var *data, key_state_t action);
-void	strafe(t_var *data, key_state_t action);
+void	straight(t_var *data, t_key_state action);
+void	strafe(t_var *data, t_key_state action);
 void	turn(t_var *data, int direction);
 void	apply_movement(t_var *data);
 void	display_movement(t_var *data);

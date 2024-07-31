@@ -19,6 +19,8 @@
 # define MAP_WALL 16711680
 # define MAP_GRND 65535
 
+# define N_SETTINGS 7
+
 typedef struct s_config
 {
 	int		setting;

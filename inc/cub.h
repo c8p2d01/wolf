@@ -30,7 +30,7 @@ typedef struct s_ray
 	char	*wall;
 }	t_ray;
 
-typedef struct	s_intvctr
+typedef struct s_intvctr
 {
 	int	y;
 	int	x;
@@ -39,7 +39,6 @@ typedef struct	s_intvctr
 typedef struct s_draw_ray
 {
 	int			i;
-	// t_ray		*ray;
 	vec2d_t		s_dist;
 	vec2d_t		d_dist;
 	vec2d_t		step;
@@ -100,29 +99,27 @@ void		mini_filler(t_var *data, int x, int y, char c);
 void		draw_player_triangle(t_var *data);
 double		deg_2_rad(float degree);
 
-t_ray	rayCreator(t_var *data, int num);
-void	draw_fov_lines(t_var *data);
-int		ray_color(t_var *data, t_draw_ray *draw_r);
-void	debug_fov(t_var *data);
-void	calc_distances(t_var *data, t_draw_ray *draw_r);
-void	print_map(t_var *data);
-void	hit_wall(t_var *data, t_draw_ray *draw_r);
-void	draw_ray(t_var *data, t_draw_ray *draw_r);
-// void	draw_line(mlx_image_t *img, int x0, int y0, int x1, int y1, int color);
-void	draw_line(mlx_image_t *img, vec2d_t a, vec2d_t b, int color);
-void	prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color);
+t_ray		ray_creator(t_var *data, int num);
+void		draw_fov_lines(t_var *data);
+int			ray_color(t_var *data, t_draw_ray *draw_r);
+void		debug_fov(t_var *data);
+void		calc_distances(t_var *data, t_draw_ray *draw_r);
+void		print_map(t_var *data);
+void		hit_wall(t_var *data, t_draw_ray *draw_r);
+void		draw_ray(t_var *data, t_draw_ray *draw_r);
+void		draw_line(mlx_image_t *img, vec2d_t a, vec2d_t b, int color);
+void		prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color);
 
-
-void	print_setting(t_var *data);
-void	test_setting(double xdelta, double ydelta, t_var *data);
-void	norm_setting(double xdelta, double ydelta, t_var *data);
-void	debug_setting(double xdelta, double ydelta, t_var *data);
-void	fov_setting(double xdelta, double ydelta, t_var *data);
-void	zoom_setting(double xdelta, double ydelta, t_var *data);
-void	style_setting(double xdelta, double ydelta, t_var *data);
-void	offset_setting(double xdelta, double ydelta, t_var *data);
-void	height_setting(double xdelta, double ydelta, t_var *data);
-void	width_setting(double xdelta, double ydelta, t_var *data);
+void		print_setting(t_var *data);
+void		test_setting(double xdelta, double ydelta, t_var *data);
+void		norm_setting(double xdelta, double ydelta, t_var *data);
+void		debug_setting(double xdelta, double ydelta, t_var *data);
+void		fov_setting(double xdelta, double ydelta, t_var *data);
+void		zoom_setting(double xdelta, double ydelta, t_var *data);
+void		style_setting(double xdelta, double ydelta, t_var *data);
+void		offset_setting(double xdelta, double ydelta, t_var *data);
+void		height_setting(double xdelta, double ydelta, t_var *data);
+void		width_setting(double xdelta, double ydelta, t_var *data);
 
 # ifndef PARSING_H
 #  include "../src/parsing/parsing.h"
