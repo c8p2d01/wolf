@@ -8,13 +8,15 @@ void	print_data(t_var *data)
 	ft_printf("SO %s\n", data->path_south);
 	ft_printf("WE %s\n", data->path_westh);
 	ft_printf("EA %s\n", data->path_easth);
-	ft_printf("Floor %d\n", data->floor);
-	ft_printf("Ceiling %d\n", data->ceiling);
-	i = -1;
+	printf("Ceiling\t%li\t\e[48;2;%i;%i;%im      \e[0m\n", \
+					data->ceiling, (data->ceiling >> 24) % 256, \
+					(data->ceiling >> 16) % 256, (data->ceiling >> 8) % 256);
+	printf("Floor\t%li\t\e[48;2;%i;%i;%im      \e[0m\n", \
+						data->floor, (uint8_t)data->floor, \
+						(data->floor >> 16) % 256, (data->floor >> 8) % 256);
 	ft_printf("map width %d\n", data->map_width * ZOOM);
 	ft_printf("map height %d\n", data->map_height * ZOOM);
-	while (data->map && data->map[++i])
-		ft_printf("%s\n", data->map[i]);
+	print_map(data);
 	printf("\nPlayer Position %lf, %lf\n", data->player.x, data->player.y);
 	printf("Player View %lf, %lf\n", data->direct.x, data->direct.y);
 }
@@ -99,13 +101,21 @@ int32_t	texture_init(char *file, mlx_texture_t *dest)
 	return (0);
 }
 
-void	update_map_width(t_var *data, char *line)
+void	update_map_width(t_var *data, t_list *map_text)
 {
 	int32_t	len;
+	char	*line;
+	t_list	*text;
 
 	if (!data || !line)
 		return ;
-	len = ft_strlen(line);
-	if (data->map_width < len)
-		data->map_width = len;
+	text = map_text;
+	while (text)
+	{
+		line = (char *)text->content;
+		len = ft_strlen(line);
+		if (data->map_width < len)
+			data->map_width = len;
+		text = text->next;
+	}
 }

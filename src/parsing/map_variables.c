@@ -1,13 +1,13 @@
 #include "parsing.h"
 
-int32_t	construct_map(t_var *data, t_list *text, int map_start)
+int32_t	construct_map(t_var *data, t_list *text, int map_start, int32_t i)
 {
-	int32_t	i;
 	int32_t	l;
 
 	i = 0;
 	while (i++ < map_start)
 		text = text->next;
+	update_map_width(data, text);
 	data->map_height = ft_lstsize(text) - map_start;
 	data->map = ft_calloc(data->map_height + 1, sizeof(char *));
 	if (!data->map)
@@ -38,7 +38,6 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 
 	while (text)
 	{
-		update_map_width(data, (char *)text->content);
 		line = ft_strtrim((char *)text->content, "\t\n\v\f\r ");
 		if (!line)
 			return (1);
@@ -132,37 +131,9 @@ int32_t	calculate_color(char *rgb)
 	{
 		color = (ft_atoi(values[0]) % 256) << 24 | \
 			(ft_atoi(values[1]) % 256) << 16 | \
-			(ft_atoi(values[2]) % 256) << 8 |
+			(ft_atoi(values[2]) % 256) << 8 | \
 								255;
 	}
 	free_2dstr(values);
 	return (color);
 }
-// int32_t	calculate_color(char *rgb)
-// {
-// 	char	**values;
-// 	int		color;
-
-// 	if (!rgb)
-// 		return (0);
-// 	values = ft_split(rgb, ',');
-// 	if (!values || ft_2d_array_size((void **)values) != 3)
-// 	{
-// 		ft_printf("Error\n");
-// 		if (DEBUG == 1)
-// 			ft_printf("Color Format Error\n");
-// 		return (-1);
-// 	}
-// 	else
-// 	{
-// 		color = create_rgba(
-// 			ft_atoi(values[0]) % 256,\
-// 			ft_atoi(values[1]) % 256,\
-// 			ft_atoi(values[2]) % 256, 128);
-// 	}
-// 	printf("color %s\t%s\t%s\n%s\t%u\n", values[0], values[1], values[2], rgb, color);
-// 	ft_putnbr_base_fd(color, "01", 1);
-// 	printf("\n");
-// 	free_2dstr(values);
-// 	return (color);
-// }

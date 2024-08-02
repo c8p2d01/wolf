@@ -19,7 +19,6 @@ SRCFILES:=\
 			minimap/map_plane.c \
 			minimap/draw_triangle.c \
 			minimap/draw_mini_rays.c \
-			minimap/debug_options.c \
 			\
 			parsing/player.c\
 			parsing/file_processing.c \
@@ -31,7 +30,12 @@ SRCFILES:=\
 			movement/move.c \
 			movement/wall_collision.c \
 			\
-			rendering/floor_ceiling.c
+			rendering/floor_ceiling.c \
+			\
+			settings/print_settings.c \
+			settings/settings_1.c \
+			settings/settings_2.c \
+			settings/settings_utils.c \
 
 # ------------------------------------------
 # Do not change anything beyond this point!

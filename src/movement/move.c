@@ -1,6 +1,6 @@
 #include "./movement.h"
 
-void	straight(t_var *data, key_state_t action)
+void	straight(t_var *data, t_key_state action)
 {
 	if (action == PRESS)
 	{
@@ -12,14 +12,9 @@ void	straight(t_var *data, key_state_t action)
 		data->move.x -= data->direct.x;
 		data->move.y -= data->direct.y;
 	}
-	// else
-	// {
-	// 	data->move.x = 0;
-	// 	data->move.y = 0;
-	// }
 }
 
-void	strafe(t_var *data, key_state_t action)
+void	strafe(t_var *data, t_key_state action)
 {
 	if (action == PRESS)
 	{
@@ -31,11 +26,6 @@ void	strafe(t_var *data, key_state_t action)
 		data->move.x -= data->direct.y;
 		data->move.y += data->direct.x;
 	}
-	// else
-	// {
-	// 	data->move.x = 0;
-	// 	data->move.y = 0;
-	// }
 }
 
 void	turn(t_var *data, int direction)
@@ -45,7 +35,7 @@ void	turn(t_var *data, int direction)
 		data->direct = rotate2d(&data->direct, TURN_SPEED);
 		data->move = rotate2d(&data->move, TURN_SPEED);
 	}
-	else //if (direction == RIGHT)
+	else
 	{
 		data->direct = rotate2d(&data->direct, -TURN_SPEED);
 		data->move = rotate2d(&data->move, -TURN_SPEED);
@@ -55,7 +45,6 @@ void	turn(t_var *data, int direction)
 void	apply_movement(t_var *data)
 {
 	normalise2d(&data->move);
-
 	wall_collision(data);
 	data->player.x += data->move.x * MOVEMENT_SPEED;
 	data->player.y += data->move.y * MOVEMENT_SPEED;

@@ -12,14 +12,14 @@
 
 #include "../inc/cub.h"
 
-int32_t	create_rgba(uint8_t r,uint8_t g,uint8_t b,uint8_t a)
+int32_t	create_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 {
 	return (r << 24 | g << 16 | b << 8 | a);
 }
 
-double deg_2_rad(float degree)
+double	deg_2_rad(float degree)
 {
-	return(degree * (PI / 180) );
+	return (degree * (PI / 180));
 }
 
 bool	close_enough(double a, double b, double closeness)
@@ -34,7 +34,7 @@ bool	close_enough(double a, double b, double closeness)
 
 char	map_char(t_var *data, int y, int x)
 {
-	if (0 > x || x >= data->map_height ||\
+	if (0 > x || x >= data->map_height || \
 		0 > y || y >= data->map_width)
 	{
 		return ('1');

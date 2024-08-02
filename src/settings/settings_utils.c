@@ -14,25 +14,33 @@
 
 int	ray_color(t_var *data, t_draw_ray *draw_r)
 {
-	if (data->map_ray_state == 1)
-		return (createMultiGradient( \
-			((float)draw_r->i / (WIDTH)), 6, \
-			0,   0, 255, \
-			255,   0, 255, \
-			255,   0,   0, \
-			255, 255,   0, \
-			0, 255,   0, \
-			0, 255, 255 ) << 8 | MAP_OPACITY);
-	return (create_rgba(draw_r->i, 255, 255, MAP_OPACITY));
+	double	fraction;
+
+	fraction = (float)draw_r->i / (data->config.width) + \
+													data->config.color_offset;
+	if (data->config.ray_style == 0)
+		return (createMultiGradient(\
+			fmod(fraction, 1), \
+			7, \
+			0, 255, 255, \
+			0, 0, 255, \
+			255, 0, 255, \
+			255, 0, 0, \
+			255, 255, 0, \
+			0, 255, 0, \
+			0, 255, 255) << 8 | MAP_OPACITY);
+	return (create_rgba(draw_r->i / 5, draw_r->i / 5, draw_r->i / \
+															5, MAP_OPACITY));
 }
 
 void	debug_fov(t_var *data)
 {
-	vec2d_t begin;
+	vec2d_t	begin;
+	vec2d_t	end;
+
 	begin.x = data->rays[0].x;
 	begin.y = data->rays[0].y;
-	vec2d_t end;
-	end.x = data->rays[WIDTH - 1].x;
-	end.y = data->rays[WIDTH - 1].y;
+	end.x = data->rays[data->config.width - 1].x;
+	end.y = data->rays[data->config.width - 1].y;
 	printf("FOV Angle %lf\n", (angle2d(begin, end) * 180) / PI);
 }

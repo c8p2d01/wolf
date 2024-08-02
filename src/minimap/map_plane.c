@@ -30,6 +30,19 @@ void	filler(t_var *data)
 	}
 }
 
+void	layout_color(t_var *data, int zoom_x, int zoom_y, char c)
+{
+	if (c == '1')
+		prot_put_pixel(data->map_layout_img, zoom_y, \
+		zoom_x, MAP_WALL << 8 | MAP_OPACITY);
+	else if (c == '0' || c == 'N' || c == 'E' || c == 'S' || c == 'W')
+		prot_put_pixel(data->map_layout_img, zoom_y, \
+		zoom_x, MAP_GRND << 8 | MAP_OPACITY);
+	else
+		prot_put_pixel(data->map_layout_img, zoom_y, \
+		zoom_x, 0);
+}
+
 void	mini_filler(t_var *data, int x, int y, char c)
 {
 	int	zoom_x;
@@ -39,22 +52,14 @@ void	mini_filler(t_var *data, int x, int y, char c)
 
 	x_count = 0;
 	y_count = 0;
-	zoom_x = x * ZOOM;
-	zoom_y = y * ZOOM;
-	while (x_count < ZOOM)
+	zoom_x = x * data->config.zoom;
+	zoom_y = y * data->config.zoom;
+	while (x_count < data->config.zoom)
 	{
 		y_count = 0;
-		while (y_count < ZOOM)
+		while (y_count < data->config.zoom)
 		{
-			if (c == '1')
-				prot_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
-				x * ZOOM + x_count, create_rgba(255, 0, 0, 50));
-			else if (c == '0' || c == 'N' || c == 'E' || c == 'S' || c == 'W')
-				prot_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
-				x * ZOOM + x_count, create_rgba( 0, 255, 255, 50));
-			else
-				prot_put_pixel(data->map_layout_img, y * ZOOM + y_count, \
-				x * ZOOM + x_count, create_rgba( 0, 0, 0, 50));
+			layout_color(data, zoom_x + x_count, zoom_y + y_count, c);
 			y_count++;
 		}
 		x_count++;
@@ -65,6 +70,4 @@ void	prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color)
 {
 	if (x < img->width && y < img->height && x >= 0 && y >= 0)
 		mlx_put_pixel(img, x, y, color);
-	// else
-	// 	printf("\e[38;2;255;42;42mpixel OOB Error\e[0m \tX %u\tY %u\n", x, y);
 }

@@ -17,7 +17,7 @@ int32_t	parse_input(int argc, char **argv, t_var *data)
 		return (1);
 	if (parse_values(text, data, &map_start))
 		return (ft_lstclear(&text, free), 1);
-	if (construct_map(data, text, map_start))
+	if (construct_map(data, text, map_start, 0))
 		return (ft_lstclear(&text, free), 1);
 	ft_lstclear(&text, NULL);
 	if (check_map(data))

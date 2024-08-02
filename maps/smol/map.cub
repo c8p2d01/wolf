@@ -2,8 +2,8 @@ NO maps/smol/textures/North.png
 SO maps/smol/textures/South.png
 WE maps/smol/textures/Westh.png
 EA maps/smol/textures/Easth.png
-F        0,42,30
-C        0,30,42
+C        3,12,96
+F        72,36,0
 
 
 1111111 1111111111
