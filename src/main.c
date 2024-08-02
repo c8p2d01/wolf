@@ -246,7 +246,7 @@ int32_t	main(int argc, char **argv)
 	print_data(&data);
 	minimap(&data);
 	floor_ceiling(&data);
-	render_view(data);
+	render_view(&data);
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
