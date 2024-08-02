@@ -58,7 +58,7 @@ void	height_setting(double xdelta, double ydelta, t_var *data)
 	memset(data->main_render_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
 	floor_ceiling(data);
-	// game render functions
+	render_view(data);
 	zoom_setting(0, 0, data);
 }
 
@@ -86,6 +86,6 @@ void	width_setting(double xdelta, double ydelta, t_var *data)
 	memset(data->main_render_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
 	floor_ceiling(data);
-	// game render functions
+	render_view(data);
 	zoom_setting(0, 0, data);
 }

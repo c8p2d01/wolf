@@ -81,6 +81,7 @@ void	handle_movement(t_var *data)
 	memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
 							data->map_render_img->height * sizeof(int));
 	apply_movement(data);
+	render_view(data);
 	if (data->config.map_visibility)
 	{
 		draw_fov_lines(data);
@@ -212,9 +213,9 @@ void	init(t_var *data)
 														data->config.height);
 	data->main_render_img = mlx_new_image(data->_mlx, data->config.width, \
 														data->config.height);
-	memset(data->main_static_img->pixels, 0, data->config.width * \
+	ft_memset(data->main_static_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
-	memset(data->main_render_img->pixels, 0, data->config.width * \
+	ft_memset(data->main_render_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
 	mlx_image_to_window(data->_mlx, data->main_static_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->main_render_img, 0, 0);
@@ -245,6 +246,7 @@ int32_t	main(int argc, char **argv)
 	print_data(&data);
 	minimap(&data);
 	floor_ceiling(&data);
+	render_view(data);
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
