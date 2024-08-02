@@ -226,11 +226,9 @@ int	minimap(t_var *data)
 					data->config.zoom), (data->map_height * data->config.zoom));
 	data->map_render_img = mlx_new_image(data->_mlx, (data->map_width * \
 					data->config.zoom), (data->map_height * data->config.zoom));
-	mlx_image_to_window(data->_mlx, data->map_layout_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->map_render_img, 0, 0);
-	filler(data);
-	draw_fov_lines(data);
-	draw_player_triangle(data);
+	mlx_image_to_window(data->_mlx, data->map_layout_img, 0, 0);
+	zoom_setting(0, 0, data);
 	return (0);
 }
 
