@@ -170,7 +170,7 @@ void	init_config(t_var *data)
 	data->config.height = HEIGHT;
 	data->config.zoom = ZOOM;
 	data->config.color_offset = 0;
-	data->config.ray_style = 0;
+	data->config.ray_style = 1;
 	data->config.map_visibility = 1;
 }
 
@@ -226,8 +226,8 @@ int	minimap(t_var *data)
 					data->config.zoom), (data->map_height * data->config.zoom));
 	data->map_render_img = mlx_new_image(data->_mlx, (data->map_width * \
 					data->config.zoom), (data->map_height * data->config.zoom));
-	mlx_image_to_window(data->_mlx, data->map_render_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->map_layout_img, 0, 0);
+	mlx_image_to_window(data->_mlx, data->map_render_img, 0, 0);
 	zoom_setting(0, 0, data);
 	return (0);
 }

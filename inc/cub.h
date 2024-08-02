@@ -101,11 +101,12 @@ double		deg_2_rad(float degree);
 
 t_ray		ray_creator(t_var *data, int num);
 void		draw_fov_lines(t_var *data);
-int			ray_color(t_var *data, t_draw_ray *draw_r);
+int			ray_color(t_var *data, int i);
 void		debug_fov(t_var *data);
 void		calc_distances(t_var *data, t_draw_ray *draw_r);
 void		print_map(t_var *data);
 void		hit_wall(t_var *data, t_draw_ray *draw_r);
+void		identify_wall(t_var *data, t_draw_ray *draw_r);
 void		draw_ray(t_var *data, t_draw_ray *draw_r);
 void		draw_line(mlx_image_t *img, vec2d_t a, vec2d_t b, int color);
 void		prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color);

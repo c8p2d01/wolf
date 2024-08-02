@@ -69,6 +69,24 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 		draw_r->s_dist.y -= draw_r->d_dist.y;
 }
 
+void	identify_wall(t_var *data, t_draw_ray *draw_r)
+{
+	if (draw_r->side)
+	{
+		if (data->rays[draw_r->i].x >= 0)
+			data->rays[draw_r->i].wall = data->path_south;
+		else
+			data->rays[draw_r->i].wall = data->path_north;
+	}
+	else
+	{
+		if (data->rays[draw_r->i].y >= 0)
+			data->rays[draw_r->i].wall = data->path_easth;
+		else
+			data->rays[draw_r->i].wall = data->path_westh;
+	}
+}
+
 void	draw_ray(t_var *data, t_draw_ray *draw_r)
 {
 	vec2d_t	wall;
@@ -98,7 +116,8 @@ void	draw_fov_lines(t_var *data)
 		data->rays[draw_r.i] = ray_creator(data, draw_r.i);
 		calc_distances(data, &draw_r);
 		hit_wall(data, &draw_r);
-		draw_r.color = ray_color(data, &draw_r);
+		identify_wall(data, &draw_r);
+		draw_r.color = ray_color(data, draw_r.i);
 		draw_ray(data, &draw_r);
 		draw_r.i += 1;
 	}

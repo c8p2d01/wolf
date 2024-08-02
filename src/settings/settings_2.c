@@ -2,7 +2,11 @@
 
 void	style_setting(double xdelta, double ydelta, t_var *data)
 {
-	data->config.ray_style = !data->config.ray_style;
+	printf("\e[3;1H\e[9J");
+	data->config.ray_style += 1;
+	i_limit(&data->config.ray_style, 0, 3);
+	data->config.ray_style %= 3;
+	printf("chosen Style %d", data->config.ray_style);
 	if (data->config.map_visibility)
 	{
 		memset(data->map_render_img->pixels, 0, data->map_render_img->width * \

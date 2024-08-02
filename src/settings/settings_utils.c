@@ -12,11 +12,11 @@
 
 #include "../../inc/cub.h"
 
-int	ray_color(t_var *data, t_draw_ray *draw_r)
+int	ray_color(t_var *data, int i)
 {
 	double	fraction;
 
-	fraction = (float)draw_r->i / (data->config.width) + \
+	fraction = (float)i / (data->config.width) + \
 													data->config.color_offset;
 	if (data->config.ray_style == 0)
 		return (createMultiGradient(\
@@ -29,8 +29,19 @@ int	ray_color(t_var *data, t_draw_ray *draw_r)
 			255, 255, 0, \
 			0, 255, 0, \
 			0, 255, 255) << 8 | MAP_OPACITY);
-	return (create_rgba(draw_r->i / 5, draw_r->i / 5, draw_r->i / \
-															5, MAP_OPACITY));
+	else if (data->config.ray_style == 1)
+	{
+		if (data->rays[i].wall == data->path_north)
+			return (create_rgba(42, 42, 255, MAP_OPACITY));
+		else if (data->rays[i].wall == data->path_south)
+			return (create_rgba(255, 255, 42, MAP_OPACITY));
+		else if (data->rays[i].wall == data->path_easth)
+			return (create_rgba(255, 42, 42, MAP_OPACITY));
+		else if (data->rays[i].wall == data->path_westh)
+			return (create_rgba(42,255,  42, MAP_OPACITY));
+	}
+	return (createGradientColor(fmod(fraction, 1), 0, 0, 0, \
+			255, 255, 255) << 8 | MAP_OPACITY);
 }
 
 void	debug_fov(t_var *data)
