@@ -1,4 +1,4 @@
-#include "./rendering.h"
+#include "../../inc/rendering.h"
 
 void	floor_ceiling(t_var *data)
 {

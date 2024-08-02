@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../../inc/parsing.h"
 
 int32_t	construct_map(t_var *data, t_list *text, int map_start, int32_t i)
 {

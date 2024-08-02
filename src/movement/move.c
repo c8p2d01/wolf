@@ -1,4 +1,4 @@
-#include "./movement.h"
+#include "../../inc/movement.h"
 
 void	straight(t_var *data, t_key_state action)
 {
