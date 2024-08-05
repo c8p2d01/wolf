@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../../inc/parsing.h"
 
 /**
  * Read the contents of the file into a list of lines

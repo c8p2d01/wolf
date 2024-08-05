@@ -1,9 +1,7 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-# ifndef CUB_H
-#  include "../../inc/cub.h"
-# endif
+# include "cub.h"
 
 // file processing
 

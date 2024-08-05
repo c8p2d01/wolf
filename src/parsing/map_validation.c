@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../../inc/parsing.h"
 
 int32_t	check_map(t_var *data)
 {
