@@ -34,6 +34,8 @@ t_ray	ray_creator(t_var *data, int num)
 	ray.y -= orth.y / 2;
 	ray.x += (orth.x / data->config.width) * num;
 	ray.y += (orth.y / data->config.width) * num;
+	ray.wall = NULL;
+	ray.wall_percent = 0;
 	normalise_2d(&ray.x, &ray.y);
 	return (ray);
 }

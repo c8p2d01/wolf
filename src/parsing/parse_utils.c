@@ -4,14 +4,14 @@ void	print_data(t_var *data)
 {
 	int	i;
 
-	ft_printf("NO %s\n", data->path_north);
-	ft_printf("SO %s\n", data->path_south);
-	ft_printf("WE %s\n", data->path_westh);
-	ft_printf("EA %s\n", data->path_easth);
-	printf("Ceiling\t%li\t\e[48;2;%i;%i;%im      \e[0m\n", \
+	ft_printf("NO %s\t%p\n", data->path_north, data->texture_north);
+	ft_printf("SO %s\t%p\n", data->path_south, data->texture_south);
+	ft_printf("WE %s\t%p\n", data->path_westh, data->texture_westh);
+	ft_printf("EA %s\t%p\n", data->path_easth, data->texture_easth);
+	printf("Ceiling\t%i\t\e[48;2;%i;%i;%im      \e[0m\n", \
 					data->ceiling, (data->ceiling >> 24) % 256, \
 					(data->ceiling >> 16) % 256, (data->ceiling >> 8) % 256);
-	printf("Floor\t%li\t\e[48;2;%i;%i;%im      \e[0m\n", \
+	printf("Floor\t%i\t\e[48;2;%i;%i;%im      \e[0m\n", \
 						data->floor, (uint8_t)data->floor, \
 						(data->floor >> 16) % 256, (data->floor >> 8) % 256);
 	ft_printf("map width %d\n", data->map_width * ZOOM);
@@ -29,13 +29,13 @@ int32_t	incomplete(t_var *data)
 	if (!data)
 		return (1);
 	if (data->path_north == NULL || \
-		texture_init(data->path_north, data->texture_north) || \
+		texture_init(data->path_north, &data->texture_north) || \
 		data->path_south == NULL || \
-		texture_init(data->path_south, data->texture_south) || \
+		texture_init(data->path_south, &data->texture_south) || \
 		data->path_westh == NULL || \
-		texture_init(data->path_westh, data->texture_westh) || \
+		texture_init(data->path_westh, &data->texture_westh) || \
 		data->path_easth == NULL || \
-		texture_init(data->path_easth, data->texture_easth) || \
+		texture_init(data->path_easth, &data->texture_easth) || \
 		data->player.x == 0 || \
 		data->player.y == 0 || \
 		(data->direct.x == 0 && \
@@ -75,7 +75,7 @@ int32_t	free_data(t_var *data)
 	return (1);
 }
 
-int32_t	texture_init(char *file, mlx_texture_t *dest)
+int32_t	texture_init(char *file, mlx_texture_t **dest)
 {
 	int		fd;
 	char	*end;
@@ -93,7 +93,7 @@ int32_t	texture_init(char *file, mlx_texture_t *dest)
 	close(fd);
 	end = ft_strrchr(file, '.');
 	if (!ft_strncmp(end, ".png", 4))
-		dest = mlx_load_png(file);
+		*dest = mlx_load_png(file);
 	else
 		return (1);
 	if (!dest)

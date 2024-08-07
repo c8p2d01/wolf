@@ -5,11 +5,12 @@
 
 typedef struct s_ray
 {
-	int		number;
-	double	x;
-	double	y;
-	double	wall_dst;
-	char	*wall;
+	int				number;
+	double			x;
+	double			y;
+	double			wall_dst;
+	double			wall_percent;
+	mlx_texture_t	*wall;
 }	t_ray;
 
 typedef struct s_intvctr
@@ -27,6 +28,7 @@ typedef struct s_draw_ray
 	vec2d_t		map;
 	int			side;
 	int			color;
+	char		hit;
 }	t_draw_ray;
 
 typedef struct s_var

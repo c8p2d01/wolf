@@ -34,10 +34,16 @@ void	layout_color(t_var *data, int zoom_x, int zoom_y, char c)
 {
 	if (c == '1')
 		prot_put_pixel(data->map_layout_img, zoom_y, \
-		zoom_x, MAP_WALL << 8 | MAP_OPACITY);
+		zoom_x, MAP_WALL << 8 | data->config.map_opacity);
+	else if (c == '2')
+		prot_put_pixel(data->map_layout_img, zoom_y, \
+		zoom_x, MAP_DOOR << 8 | data->config.map_opacity);
+	else if (c == '3')
+		prot_put_pixel(data->map_layout_img, zoom_y, \
+		zoom_x, MAP_OPEN << 8 | data->config.map_opacity);
 	else if (c == '0' || c == 'N' || c == 'E' || c == 'S' || c == 'W')
 		prot_put_pixel(data->map_layout_img, zoom_y, \
-		zoom_x, MAP_GRND << 8 | MAP_OPACITY);
+		zoom_x, MAP_GRND << 8 | data->config.map_opacity);
 	else
 		prot_put_pixel(data->map_layout_img, zoom_y, \
 		zoom_x, 0);

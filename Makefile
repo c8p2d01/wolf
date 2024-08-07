@@ -31,6 +31,8 @@ SRCFILES:=\
 			movement/wall_collision.c \
 			\
 			rendering/floor_ceiling.c \
+			rendering/slicer.c \
+			rendering/doors.c \
 			\
 			settings/print_settings.c \
 			settings/settings_1.c \

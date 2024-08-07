@@ -42,11 +42,8 @@ void	calc_distances(t_var *data, t_draw_ray *draw_r)
 
 void	hit_wall(t_var *data, t_draw_ray *draw_r)
 {
-	int	hit;
-
 	draw_r->side = 0;
-	hit = 0;
-	while (hit == 0)
+	while (ft_strchr("03NSWE", draw_r->hit))
 	{
 		if (draw_r->s_dist.x < draw_r->s_dist.y)
 		{
@@ -60,23 +57,70 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 			draw_r->map.y += draw_r->step.y;
 			draw_r->side = 0;
 		}
-		if (data->map[(int)draw_r->map.x][(int)draw_r->map.y] == '1')
-			hit = 1;
+		draw_r->hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
 	}
+	if (ft_strchr("2", draw_r->hit))
+		trace_door(data, draw_r);
+	if (ft_strchr("2", draw_r->hit))
+		return ;
 	if (draw_r->side)
 		draw_r->s_dist.x -= draw_r->d_dist.x;
 	else
 		draw_r->s_dist.y -= draw_r->d_dist.y;
 }
 
-void	draw_ray(t_var *data, t_draw_ray *draw_r)
+void	identify_wall(t_var *data, t_draw_ray *draw_r)
 {
-	vec2d_t	wall;
-
 	if (draw_r->s_dist.x < draw_r->s_dist.y)
 		data->rays[draw_r->i].wall_dst = draw_r->s_dist.x;
 	else
 		data->rays[draw_r->i].wall_dst = draw_r->s_dist.y;
+	if (draw_r->side && !data->rays[draw_r->i].wall)
+	{
+		if (data->rays[draw_r->i].x >= 0)
+			data->rays[draw_r->i].wall = data->texture_south;
+		else
+			data->rays[draw_r->i].wall = data->texture_north;
+	}
+	else if (!data->rays[draw_r->i].wall)
+	{
+		if (data->rays[draw_r->i].y >= 0)
+			data->rays[draw_r->i].wall = data->texture_easth;
+		else
+			data->rays[draw_r->i].wall = data->texture_westh;
+	}
+	identify_wall_fraction(data, draw_r);
+}
+
+void	identify_wall_fraction(t_var *data, t_draw_ray *draw_r)
+{
+	vec2d_t	wall;
+
+	wall.x = (uint32_t)data->player.x + (data->rays[draw_r->i].x * \
+		data->rays[draw_r->i].wall_dst * data->config.zoom);
+	wall.y = (uint32_t)data->player.y + (data->rays[draw_r->i].y * \
+		data->rays[draw_r->i].wall_dst * data->config.zoom);
+	prot_put_pixel(data->map_render_img,wall.y, wall.x, create_rgba(255, 255, 255, 255));
+	if (draw_r->side)
+	{
+		if (data->rays[draw_r->i].x >= 0)
+			data->rays[draw_r->i].wall_percent = 1 - fmod(wall.y / data->config.zoom, 1); // when textures wrong way left-right: switch position of the "1 - " in these lines
+		else
+			data->rays[draw_r->i].wall_percent = fmod(wall.y / data->config.zoom, 1);
+	}
+	else
+	{
+		if (data->rays[draw_r->i].y >= 0)
+			data->rays[draw_r->i].wall_percent = fmod(wall.x / data->config.zoom, 1);
+		else
+			data->rays[draw_r->i].wall_percent = 1 - fmod(wall.x / data->config.zoom, 1);
+	}
+}
+
+void	draw_ray(t_var *data, t_draw_ray *draw_r)
+{
+	vec2d_t	wall;
+
 	wall.x = (uint32_t)data->player.x + (data->rays[draw_r->i].x * \
 		data->rays[draw_r->i].wall_dst * data->config.zoom);
 	wall.y = (uint32_t)data->player.y + (data->rays[draw_r->i].y * \
@@ -97,9 +141,59 @@ void	draw_fov_lines(t_var *data)
 		draw_r.map.y = (int)(data->player.y / data->config.zoom);
 		data->rays[draw_r.i] = ray_creator(data, draw_r.i);
 		calc_distances(data, &draw_r);
+		draw_r.hit = '0';
 		hit_wall(data, &draw_r);
-		draw_r.color = ray_color(data, &draw_r);
+		identify_wall(data, &draw_r);
+		draw_r.color = ray_color(data, draw_r.i, data->config.map_opacity);
 		draw_ray(data, &draw_r);
 		draw_r.i += 1;
 	}
 }
+// void	hit_wall(t_var *data, t_draw_ray *draw_r)
+// {
+// 	int	hit;
+
+// 	draw_r->side = 0;
+// 	hit = 0;
+// 	while (hit <= 1)
+// 	{
+// 		if (draw_r->s_dist.x < draw_r->s_dist.y)
+// 		{
+// 			draw_r->s_dist.x += draw_r->d_dist.x;
+// 			draw_r->map.x += draw_r->step.x;
+// 			draw_r->side = 1;
+// 		}
+// 		else
+// 		{
+// 			draw_r->s_dist.y += draw_r->d_dist.y;
+// 			draw_r->map.y += draw_r->step.y;
+// 			draw_r->side = 0;
+// 		}
+// 		if (map_char(data, (int)draw_r->map.x, (int)draw_r->map.y) == '2')
+// 		{
+// 			if ((map_char(data, (int)draw_r->map.x + 1, (int)draw_r->map.y) == '1' &&
+// 					map_char(data, (int)draw_r->map.x - 1, (int)draw_r->map.y) == '1'))
+// 			{
+// 				hit = 1;
+// 				if (draw_r->side == 0)
+// 				{
+// 					continue ;
+// 				}
+// 				printf("side\t%i\n", draw_r->side);
+// 			}
+// 		}
+// 		if (map_char(data, (int)draw_r->map.x, (int)draw_r->map.y) == '1' || hit != 0)
+// 			hit += 2;
+// 	}
+// 	// if (draw_r->side)
+// 	// 	draw_r->s_dist.x -= draw_r->d_dist.x;
+// 	// else
+// 	// 	draw_r->s_dist.y -= draw_r->d_dist.y;
+// 	if (hit == 2)
+// 	{
+// 		if (draw_r->side)
+// 			draw_r->s_dist.x -= draw_r->d_dist.x;
+// 		else
+// 			draw_r->s_dist.y -= draw_r->d_dist.y;
+// 	}
+// }
