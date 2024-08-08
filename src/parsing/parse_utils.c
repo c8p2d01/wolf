@@ -9,10 +9,10 @@ void	print_data(t_var *data)
 	ft_printf("WE %s\n", data->path_westh);
 	ft_printf("EA %s\n", data->path_easth);
 	printf("Ceiling\t%li\t\e[48;2;%i;%i;%im      \e[0m\n", \
-					data->ceiling, (data->ceiling >> 24) % 256, \
+					(long)data->ceiling, (data->ceiling >> 24) % 256, \
 					(data->ceiling >> 16) % 256, (data->ceiling >> 8) % 256);
 	printf("Floor\t%li\t\e[48;2;%i;%i;%im      \e[0m\n", \
-						data->floor, (uint8_t)data->floor, \
+						(long)data->floor, (uint8_t)data->floor, \
 						(data->floor >> 16) % 256, (data->floor >> 8) % 256);
 	ft_printf("map width %d\n", data->map_width * ZOOM);
 	ft_printf("map height %d\n", data->map_height * ZOOM);

@@ -118,6 +118,7 @@ void	toggle_key_hook(mlx_key_data_t key, t_var *data)
 		{
 			filler(data);
 			draw_player_triangle(data);
+			// print_texture(data);
 		}
 		else
 		{
@@ -244,10 +245,13 @@ int32_t	main(int argc, char **argv)
 		exit (42);
 	}
 	print_data(&data);
+	load_image(&data);
 	minimap(&data);
+
 	floor_ceiling(&data);
 	render_view(&data);
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
+	// check_mlx_image(&data);
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
 	mlx_loop(data._mlx);

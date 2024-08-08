@@ -64,9 +64,17 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 			hit = 1;
 	}
 	if (draw_r->side)
+	{
 		draw_r->s_dist.x -= draw_r->d_dist.x;
+		data->rays[draw_r->i].hit = draw_r->s_dist.x + data->player.x;
+		// printf("draw_r->side: data->rays[%d].hit = %f\n", draw_r->i, data->rays[draw_r->i].hit);
+	}
 	else
+	{
 		draw_r->s_dist.y -= draw_r->d_dist.y;
+		data->rays[draw_r->i].hit = draw_r->s_dist.y + data->player.y;
+		// printf("data->rays[%d].hit = %f\n", draw_r->i, data->rays[draw_r->i].hit);
+	}
 }
 
 void	identify_wall(t_var *data, t_draw_ray *draw_r)

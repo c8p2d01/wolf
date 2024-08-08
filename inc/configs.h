@@ -9,9 +9,9 @@
 
 # define FOV 90
 # define RENDER 8
-# define WIDTH 620
-# define HEIGHT 500
-# define ZOOM 20
+# define WIDTH 1366
+# define HEIGHT 768
+# define ZOOM 2
 # define MOVEMENT_SPEED 0.5
 # define TURN_SPEED 3 //		in degree per frame
 # define MAP_OPACITY 200

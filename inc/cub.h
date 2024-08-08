@@ -28,6 +28,7 @@ typedef struct s_ray
 	double	y;
 	double	wall_dst;
 	char	*wall;
+	double	hit;
 }	t_ray;
 
 typedef struct s_intvctr
@@ -82,6 +83,9 @@ typedef struct s_var
 	t_ray			*rays;
 
 	int				settings;
+
+	mlx_texture_t	*wall;
+	int				*wall_pixels;
 }	t_var;
 
 void		putPixel(int color);
@@ -121,6 +125,9 @@ void		style_setting(double xdelta, double ydelta, t_var *data);
 void		offset_setting(double xdelta, double ydelta, t_var *data);
 void		height_setting(double xdelta, double ydelta, t_var *data);
 void		width_setting(double xdelta, double ydelta, t_var *data);
+
+// void	check_mlx_image(t_var *data);
+
 
 # ifndef PARSING_H
 #  include "../src/parsing/parsing.h"
