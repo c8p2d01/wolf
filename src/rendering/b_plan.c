@@ -28,7 +28,9 @@ void	draw_line_b(t_var *data, vec2d_t zeroth, vec2d_t first, int ray_i)
 	else
 		height = (first.x + zeroth.x);
 	double step;
+	// step = 1.0 * height / data->wall->height;
 	step = 1.0 * data->wall->height / height;
+
 	// double dir_wall = data->wall->width * fmod(data->rays->x, 1);
 	// int j = ((int)y * data->wall->width + dir_wall);
 	// i = ((int)data->rays[ray_i].hit) / (data->wall->width / 4);
@@ -61,8 +63,9 @@ x = temp * data->wall->width + i;
 		temp += step;
 		// i = ((int)temp * data->wall->width) + add;
 		// x = (int)(temp * data->wall->width) + i;
-		// x += (int)step;
-		x++;
+		x = (int)(temp * data->wall->width) + zeroth.x;
+		// x += (int)temp;
+		// x++;
 
 	}
 	// printf("Painted pixels for col %d is %d\n", i, tmp);
@@ -72,8 +75,8 @@ int	get_txtr_color(t_var *data, int i)
 {
 	int	txtr_color;
 
-	if (!data->wall->pixels ||!data->wall->pixels[i] || !data->wall->pixels[i + 1] || !data->wall->pixels[i + 2] || !data->wall->pixels[i + 3])
-			return (-1);
+	// if (!data->wall->pixels ||!data->wall->pixels[i] || !data->wall->pixels[i + 1] || !data->wall->pixels[i + 2] || !data->wall->pixels[i + 3])
+	// 		return (-1);
 	txtr_color = (data->wall->pixels[i] << 24) | 
 		(data->wall->pixels[i + 1] << 16) | 
 		(data->wall->pixels[i + 2] << 8) | 
@@ -126,9 +129,14 @@ int	get_txtr_color(t_var *data, int i)
 void	load_image(t_var *data)
 {
 	// data->wall = mlx_load_png("images/wall_resized_debug.png");
-	data->wall = mlx_load_png("images/wall_resized.png");
+	// data->wall = mlx_load_png("images/wall_resized.png");
+	data->wall = mlx_load_png("images/brick_debug.png");
 	// data->wall = mlx_load_png("images/exit.png");
 	// data->wall = mlx_load_png("images/wall.png");
+	// data->wall = mlx_load_png("images/DEBUG_IMG.png");
+	// data->wall = mlx_load_png("images/DEBUG_IMG_SPRAY.png");
+
+printf("data->wall->width = %i, data->wall->height = %i, data->wall->width * data->wall->height = %i\n", data->wall->width, data->wall->height, data->wall->width * data->wall->height);
 	int i = 0;
 	int j = 0;
 	// while (data->wall->pixels[j])
@@ -137,9 +145,10 @@ void	load_image(t_var *data)
 	// }
 	data->wall_pixels = ft_calloc(((data->wall->height * data->wall->width)) + 4, sizeof(int));
 	j = 0;
-	while (data->wall->pixels && data->wall->pixels[i])
+	// while (j * data->wall->width * data->wall->height) //data->wall->pixels && data->wall->pixels[i]
+	while (j < data->wall->width * data->wall->height) //data->wall->pixels && data->wall->pixels[i]
 	{
-		int color= get_txtr_color(data, i);
+		int color = get_txtr_color(data, i);
 		if (color == -1)
 			break;
 		data->wall_pixels[j] = color;
