@@ -67,12 +67,14 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 	{
 		draw_r->s_dist.x -= draw_r->d_dist.x;
 		data->rays[draw_r->i].hit = draw_r->s_dist.x + data->player.x;
+		// printf("X\n");
 		// printf("draw_r->side: data->rays[%d].hit = %f\n", draw_r->i, data->rays[draw_r->i].hit);
 	}
 	else
 	{
 		draw_r->s_dist.y -= draw_r->d_dist.y;
 		data->rays[draw_r->i].hit = draw_r->s_dist.y + data->player.y;
+		// printf("Y\n");
 		// printf("data->rays[%d].hit = %f\n", draw_r->i, data->rays[draw_r->i].hit);
 	}
 }
@@ -107,7 +109,12 @@ void	draw_ray(t_var *data, t_draw_ray *draw_r)
 		data->rays[draw_r->i].wall_dst * data->config.zoom);
 	wall.y = (uint32_t)data->player.y + (data->rays[draw_r->i].y * \
 		data->rays[draw_r->i].wall_dst * data->config.zoom);
-	draw_line(data->map_render_img, data->player, wall, draw_r->color);
+	// if (draw_r->i == 0) // || draw_r->i == 1
+	// if (draw_r->i == 0 || draw_r->i == 1 || draw_r->i == 2 || draw_r->i == 3) // || draw_r->i == 1
+	if (draw_r->i < 50) // || draw_r->i == 1
+		draw_line(data->map_render_img, data->player, wall, create_rgba(0, 0, 0, 255));
+	else
+		draw_line(data->map_render_img, data->player, wall, draw_r->color);
 }
 
 void	draw_fov_lines(t_var *data)

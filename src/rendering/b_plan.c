@@ -28,31 +28,37 @@ void	draw_line_b(t_var *data, vec2d_t zeroth, vec2d_t first, int ray_i)
 	else
 		height = (first.x + zeroth.x);
 	double step;
-	// step = 1.0 * height / data->wall->height;
 	step = 1.0 * data->wall->height / height;
-
-	// double dir_wall = data->wall->width * fmod(data->rays->x, 1);
-	// int j = ((int)y * data->wall->width + dir_wall);
 	// i = ((int)data->rays[ray_i].hit) / (data->wall->width / 4);
 	// printf("Hit: %f\n", data->rays[ray_i].hit);
-	// add = data->wall->width * fmod(data->rays[ray_i].hit, 1);
 double temp;
 temp = 0;
-int tmp = 0;
-x = temp * data->wall->width + i;
+// x = (int)(temp * data->wall->width); // + zeroth.x
+// x = (int)(temp * data->wall->width) * fmod(data->rays[ray_i].hit, 1); // + zeroth.x
+// x = (int)(temp * data->wall->width * fmod(data->rays[ray_i].hit, 1) + zeroth.x);
+// printf("%i\n", x);
 	// i = data->wall->width * fmod(data->rays[ray_i].hit, 1); //NOOOOOOOOOO
+// int	vertical = (data->wall->width) * fmod(data->rays[ray_i].hit, 1);
+// double magnitude;
+// magnitude = sqrt((data->rays[ray_i].x * data->rays[ray_i].x) + (data->rays[ray_i].y * data->rays[ray_i].y));
+// double x_dir;
+// x_dir = data->rays[ray_i].x / magnitude;
+// double y_dir;
+// y_dir = data->rays[ray_i].y / magnitude;
+
+int	vertical = (data->wall->width) * fmod(data->rays[ray_i].hit, 1); // + (x_dir * y_dir)
+// printf("data->wall->width: %i\n", data->wall->width);
+// printf("fmod(data->rays[ray_i].hit, 1): %f\n", fmod(data->rays[ray_i].hit, 1));
+// printf("(x_dir * y_dir): %f\n", (x_dir * y_dir));
+// printf("vertical: %i\n", vertical);
+x = ((int)temp * data->wall->width) + vertical; // + zeroth.x
 	while (zeroth.x <= first.x)
 	{
-		// txtr_color = get_txtr_color(data, i);
-		// if (txtr_color == -1)
-		// 	break ;
-		// printf("%i\n", i);
 		if (x > (data->wall->height * data->wall->width) - 4)
 		{
 			// printf("X: %i\n", x);
 			break;
 		}
-		tmp++;
 		// printf("X: %d\n", data->wall_pixels[(int)x]);
 		prot_put_pixel(data->main_render_img, (int)zeroth.y, (int)zeroth.x, data->wall_pixels[(int)x]);
 		// printf("Y is X: %d | Y: %d\n", (int)zeroth.x, (int)zeroth.y);
@@ -61,12 +67,11 @@ x = temp * data->wall->width + i;
 		// j = ((int)y * data->wall->width + dir_wall);
 		// i++;
 		temp += step;
-		// i = ((int)temp * data->wall->width) + add;
-		// x = (int)(temp * data->wall->width) + i;
-		x = (int)(temp * data->wall->width) + zeroth.x;
+		// x = (int)(temp * data->wall->width) + zeroth.x;
+		// x = ((int)temp * data->wall->width) + vertical;
+		// x = (int)(temp * data->wall->width) + vertical;
 		// x += (int)temp;
-		// x++;
-
+		x = ((int)temp * data->wall->width) + vertical;
 	}
 	// printf("Painted pixels for col %d is %d\n", i, tmp);
 }
@@ -135,6 +140,9 @@ void	load_image(t_var *data)
 	// data->wall = mlx_load_png("images/wall.png");
 	// data->wall = mlx_load_png("images/DEBUG_IMG.png");
 	// data->wall = mlx_load_png("images/DEBUG_IMG_SPRAY.png");
+	// data->wall = mlx_load_png("images/prison.png");
+	// data->wall = mlx_load_png("images/colors.png");
+
 
 printf("data->wall->width = %i, data->wall->height = %i, data->wall->width * data->wall->height = %i\n", data->wall->width, data->wall->height, data->wall->width * data->wall->height);
 	int i = 0;
