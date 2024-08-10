@@ -5,11 +5,11 @@
 
 typedef struct s_ray
 {
-	int		number;
-	double	x;
-	double	y;
-	double	wall_dst;
-	char	*wall;
+	int				number;
+	double			x;
+	double			y;
+	double			wall_dst;
+	mlx_texture_t	*wall;
 }	t_ray;
 
 typedef struct s_intvctr
