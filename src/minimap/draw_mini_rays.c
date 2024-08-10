@@ -63,19 +63,38 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 		if (data->map[(int)draw_r->map.x][(int)draw_r->map.y] == '1')
 			hit = 1;
 	}
+
 	if (draw_r->side)
 	{
 		draw_r->s_dist.x -= draw_r->d_dist.x;
-		data->rays[draw_r->i].hit = draw_r->s_dist.x + data->player.x;
-		// printf("X\n");
-		// printf("draw_r->side: data->rays[%d].hit = %f\n", draw_r->i, data->rays[draw_r->i].hit);
 	}
 	else
 	{
 		draw_r->s_dist.y -= draw_r->d_dist.y;
-		data->rays[draw_r->i].hit = draw_r->s_dist.y + data->player.y;
-		// printf("Y\n");
-		// printf("data->rays[%d].hit = %f\n", draw_r->i, data->rays[draw_r->i].hit);
+	}
+
+	if (draw_r->s_dist.x < draw_r->s_dist.y)
+		data->rays[draw_r->i].wall_dst = draw_r->s_dist.x;
+	else
+		data->rays[draw_r->i].wall_dst = draw_r->s_dist.y;
+	vec2d_t	wall;
+	wall.x = data->player.x + (data->rays[draw_r->i].x * \
+		data->rays[draw_r->i].wall_dst * data->config.zoom);
+	wall.y = data->player.y + (data->rays[draw_r->i].y * \
+		data->rays[draw_r->i].wall_dst * data->config.zoom);
+	if (draw_r->side)
+	{
+		if (data->rays[draw_r->i].x >= 0)
+			data->rays[draw_r->i].hit = 1 - fmod(wall.y / ZOOM, 1);
+		else
+			data->rays[draw_r->i].hit = fmod(wall.y / ZOOM, 1);
+	}
+	else
+	{
+		if (data->rays[draw_r->i].y >= 0)
+			data->rays[draw_r->i].hit = fmod(wall.x / ZOOM, 1); // easth
+		else
+			data->rays[draw_r->i].hit = 1 - fmod(wall.x / ZOOM, 1);
 	}
 }
 
@@ -101,10 +120,7 @@ void	draw_ray(t_var *data, t_draw_ray *draw_r)
 {
 	vec2d_t	wall;
 
-	if (draw_r->s_dist.x < draw_r->s_dist.y)
-		data->rays[draw_r->i].wall_dst = draw_r->s_dist.x;
-	else
-		data->rays[draw_r->i].wall_dst = draw_r->s_dist.y;
+
 	wall.x = (uint32_t)data->player.x + (data->rays[draw_r->i].x * \
 		data->rays[draw_r->i].wall_dst * data->config.zoom);
 	wall.y = (uint32_t)data->player.y + (data->rays[draw_r->i].y * \
