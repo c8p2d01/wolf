@@ -38,7 +38,7 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 
 	while (text)
 	{
-		line = ft_strtrim((char *)text->content, "\t\n\v\f\r ");
+		line = ft_strtrim((char *)text->content, "\t\v\f\r ");
 		if (!line)
 			return (1);
 		if (ft_strlen(line) == 0)
