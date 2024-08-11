@@ -13,7 +13,7 @@
 # define HEIGHT 768
 # define ZOOM 7
 # define MOVEMENT_SPEED 0.5
-# define TURN_SPEED 3 //		in degree per frame
+# define TURN_SPEED 1 //		in degree per frame
 # define MAP_OPACITY 200
 
 # define MAP_WALL 16711680

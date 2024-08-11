@@ -57,13 +57,15 @@ void	load_image(t_var *data)
 	// data->wall = mlx_load_png("images/wall_resized_debug.png");
 	// data->wall = mlx_load_png("images/wall_resized.png");
 	// data->wall = mlx_load_png("images/brick_debug.png");
-	data->wall = mlx_load_png("images/exit.png");
+	data->wall = mlx_load_png("images/kermit.png");
+	// data->wall = mlx_load_png("images/kermit_crop.png");
+	// data->wall = mlx_load_png("images/exit.png");
 	// data->wall = mlx_load_png("images/wall.png");
 	// data->wall = mlx_load_png("images/DEBUG_IMG.png");
 	// data->wall = mlx_load_png("images/DEBUG_IMG_SPRAY.png");
 	// data->wall = mlx_load_png("images/prison.png");
 	// data->wall = mlx_load_png("images/colors.png");
-
+	// data->wall = mlx_load_png("images/Easth_elmo.png");
 
 printf("data->wall->width = %i, data->wall->height = %i, data->wall->width * data->wall->height = %i\n", data->wall->width, data->wall->height, data->wall->width * data->wall->height);
 	int i = 0;
@@ -73,8 +75,6 @@ printf("data->wall->width = %i, data->wall->height = %i, data->wall->width * dat
 	while (j < data->wall->width * data->wall->height)
 	{
 		int color = get_txtr_color(data, i);
-		if (color == -1)
-			break;
 		data->wall_pixels[j] = color;
 		i+=4;
 		j++;
