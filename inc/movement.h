@@ -1,9 +1,7 @@
 #ifndef MOVEMENT_H
 # define MOVEMENT_H
 
-# ifndef CUB_H
-#  include "../../inc/cub.h"
-# endif
+# include "cub.h"
 
 typedef enum function_callsign
 {

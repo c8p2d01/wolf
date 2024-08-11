@@ -1,4 +1,4 @@
-#include "./movement.h"
+#include "../../inc/movement.h"
 
 bool	wall_collision(t_var *data)
 {

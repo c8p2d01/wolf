@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../../inc/parsing.h"
 
 void	print_data(t_var *data)
 {

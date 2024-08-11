@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../../inc/parsing.h"
 
 int32_t	parse_input(int argc, char **argv, t_var *data)
 {

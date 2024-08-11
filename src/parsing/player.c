@@ -1,4 +1,4 @@
-#include "parsing.h"
+#include "../../inc/parsing.h"
 
 int32_t	find_player(t_var *data)
 {
@@ -55,13 +55,13 @@ int32_t	init_player(t_var *data, char pov)
 	data->direct.x = 0;
 	printf("facing %c \n", pov);
 	if (pov == 'N')
-		data->direct.x = -1;
+		data->direct.x = -1.001;
 	else if (pov == 'S')
-		data->direct.x = 1;
+		data->direct.x = 1.001;
 	else if (pov == 'W')
-		data->direct.y = -1;
+		data->direct.y = -1.001;
 	else if (pov == 'E')
-		data->direct.y = 1;
+		data->direct.y = 1.001;
 	else
 	{
 		if (DEBUG == 1)
