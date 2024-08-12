@@ -32,9 +32,9 @@ int	non_space_character(t_var *data, char **map)
 	int	y;
 
 	x = 0;
-	y = 0;
 	while (map && map[x])
 	{
+		y = 0;
 		while (map[x][y])
 		{
 			if (map[x][y] != ' ')

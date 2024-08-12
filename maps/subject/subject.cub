@@ -2,7 +2,7 @@ NO maps/subject/textures/North.png
 C        0,30,42
 SO maps/subject/textures/South.png
 
-F        0,42,30
+F        0,42,256
 
 WE maps/subject/textures/Westh.png
 
@@ -16,7 +16,7 @@ EA maps/subject/textures/Easth.png
  111111111011011  1111110000000000001
  1000000000110111  111110111111111111
  111111111111111  1111111111111111111
-          111      1 
+          111      1          1
      1111111111111111   111111111111111111111
      11110111111111111      100000010001
      11110111111111011111    1111110011
