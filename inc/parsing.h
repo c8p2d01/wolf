@@ -38,4 +38,12 @@ int32_t	free_data(t_var *data);
 int32_t	texture_init(char *file, mlx_texture_t *dest);
 void	update_map_width(t_var *data, t_list *map_text);
 
+
+// map separation
+int	check_space_separation(t_var *data);
+
+
+// map line validation
+int	map_horizontally_invalid(char *read_line, int fd, t_list **text);
+
 #endif
