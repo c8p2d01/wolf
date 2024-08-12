@@ -80,6 +80,23 @@ int32_t	check_variable(t_var *data, char *line)
 	return (set_variable(data, elmnts));
 }
 
+int	color_unacceptable(t_var *data, char **elmnts)
+{
+	if (!ft_strncmp(elmnts[0], "F", 2))
+	{
+		data->floor = calculate_color(elmnts[1]);
+		if (data->floor == -1)
+			return (1);
+	}
+	else if (!ft_strncmp(elmnts[0], "C", 2))
+	{
+		data->ceiling = calculate_color(elmnts[1]);
+		if (data->ceiling == -1)
+			return (1);
+	}
+	return (0);
+}
+
 /**
  * assign values to the placeholders in 'data' according to indicators parsed
  */
@@ -95,16 +112,29 @@ int32_t	set_variable(t_var *data, char **elmnts)
 			data->path_easth = ft_strdup(elmnts[1]);
 		else if (!ft_strncmp(elmnts[0], "WE", 3))
 			data->path_westh = ft_strdup(elmnts[1]);
-		else if (!ft_strncmp(elmnts[0], "F", 2))
+		else if (!ft_strncmp(elmnts[0], "F", 2) || \
+		!ft_strncmp(elmnts[0], "C", 2))
+		{
+			if (color_unacceptable(data, elmnts))
 			data->floor = calculate_color(elmnts[1]);
-		else if (!ft_strncmp(elmnts[0], "C", 2))
-			data->ceiling = calculate_color(elmnts[1]);
+			if (data->floor == -1)
+				return (free_2dstr(elmnts), 1);
+		}
 		else
 			return (free_2dstr(elmnts), 1);
 	}
 	else
 		return (free_2dstr(elmnts), 1);
 	free_2dstr(elmnts);
+	return (0);
+}
+
+int	nbr_out_of_bounds(char **values)
+{
+	if ((ft_atoi(values[0]) < 0 || ft_atoi(values[0]) > 255) || \
+	(ft_atoi(values[1]) < 0 || ft_atoi(values[1]) > 255) || \
+	(ft_atoi(values[2]) < 0 || ft_atoi(values[2]) > 255))
+		return (1);
 	return (0);
 }
 
@@ -117,6 +147,7 @@ int32_t	calculate_color(char *rgb)
 	char	**values;
 	int		color;
 
+printf("RGB = %s\n", rgb);
 	if (!rgb)
 		return (0);
 	values = ft_split(rgb, ',');
@@ -125,6 +156,12 @@ int32_t	calculate_color(char *rgb)
 		ft_printf("Error\n");
 		if (DEBUG == 1)
 			ft_printf("Color Format Error\n");
+		return (-1);
+	}
+	else if (nbr_out_of_bounds(values))
+	{
+printf("nbr_out_of_bounds\n");
+		free_2dstr(values);
 		return (-1);
 	}
 	else
