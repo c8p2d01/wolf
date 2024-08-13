@@ -75,6 +75,48 @@ int32_t	free_data(t_var *data)
 	return (1);
 }
 
+int	get_texure_pos(t_var *data, mlx_texture_t *tex)
+{
+	mlx_texture_t	*texs[4];
+	int				i;
+
+	printf("getTex %p   %p\n", data, tex);
+	texs[0] = data->texture_north;
+	texs[1] = data->texture_south;
+	texs[2] = data->texture_westh;
+	texs[3] = data->texture_easth;
+	i = 0;
+	while (i < 4)
+	{
+		if (texs[i] == tex)
+			break ;
+		i++;
+	}
+	if (i < 4)
+		return (i);
+	return (0);
+}
+
+int32_t	gif_init(char *file, mlx_texture_t **dest)
+{
+	t_var	*data;
+	int		gif_i;
+
+	data = *proto_global();
+	gif_i = get_texure_pos(data, *dest);
+	data->gif[gif_i] =  gd_open_gif(file);
+	if (!data->gif[gif_i])
+		printf("gif error\n");
+	printf("gif debug\n");
+	*dest = ft_calloc(1, sizeof(mlx_texture_t));
+	(*dest)->height = data->gif[gif_i]->height;
+	(*dest)->width = data->gif[gif_i]->width;
+	(*dest)->bytes_per_pixel = 3;
+	(*dest)->pixels = ft_calloc((*dest)->height * (*dest)->width, (*dest)->bytes_per_pixel + 1);
+	ft_memset((*dest)->pixels, 128, (*dest)->height * (*dest)->width * (*dest)->bytes_per_pixel + 1);
+	gif_next_frame(data->gif[gif_i], *dest);
+}
+
 int32_t	texture_init(char *file, mlx_texture_t **dest)
 {
 	int		fd;
@@ -85,15 +127,15 @@ int32_t	texture_init(char *file, mlx_texture_t **dest)
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-		{
 			ft_printf("File not found\n");
-		}
 		return (1);
 	}
 	close(fd);
 	end = ft_strrchr(file, '.');
 	if (!ft_strncmp(end, ".png", 4))
 		*dest = mlx_load_png(file);
+	else if (!ft_strncmp(end, ".gif", 4))
+		gif_init(file, dest);
 	else
 		return (1);
 	if (!dest)

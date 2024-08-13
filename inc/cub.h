@@ -7,6 +7,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <sys/time.h>
 # include <stdarg.h>
 # include <fcntl.h>
 # include <memory.h>
@@ -30,6 +31,7 @@
 int32_t		create_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 char		map_char(t_var *data, int x, int y);
 double		deg_2_rad(float degree);
+t_var		**proto_global();
 
 void		init(t_var *var);
 int32_t		parse_input(int argc, char **argv, t_var *data);

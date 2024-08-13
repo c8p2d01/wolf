@@ -2,6 +2,7 @@
 # define STRUCTS_H
 
 # include "cub.h"
+# include "../gifdec/gifdec.h"
 
 typedef struct s_ray
 {
@@ -66,6 +67,11 @@ typedef struct s_var
 	t_ray			*rays;
 
 	int				settings;
+
+	struct timeval	time;
+
+	gd_GIF			*gif[5];
+	mlx_texture_t	*gif_tex;
 }	t_var;
 
 #endif

@@ -96,11 +96,11 @@ void	identify_wall_fraction(t_var *data, t_draw_ray *draw_r)
 {
 	vec2d_t	wall;
 
-	wall.x = (uint32_t)data->player.x + (data->rays[draw_r->i].x * \
+	wall.x = data->player.x + (data->rays[draw_r->i].x * \
 		data->rays[draw_r->i].wall_dst * data->config.zoom);
-	wall.y = (uint32_t)data->player.y + (data->rays[draw_r->i].y * \
+	wall.y = data->player.y + (data->rays[draw_r->i].y * \
 		data->rays[draw_r->i].wall_dst * data->config.zoom);
-	prot_put_pixel(data->map_render_img,wall.y, wall.x, create_rgba(255, 255, 255, 255));
+	// prot_put_pixel(data->map_render_img,wall.y, wall.x, create_rgba(255, 255, 255, 255));
 	if (draw_r->side)
 	{
 		if (data->rays[draw_r->i].x >= 0)
@@ -132,6 +132,9 @@ void	draw_fov_lines(t_var *data)
 {
 	t_draw_ray	draw_r;
 
+	ft_memset(data->map_render_img->pixels, 0, \
+				data->map_render_img->width * \
+				data->map_render_img->height * sizeof(int));
 	draw_r.i = 0;
 	while (draw_r.i < data->config.width)
 	{
@@ -149,51 +152,3 @@ void	draw_fov_lines(t_var *data)
 		draw_r.i += 1;
 	}
 }
-// void	hit_wall(t_var *data, t_draw_ray *draw_r)
-// {
-// 	int	hit;
-
-// 	draw_r->side = 0;
-// 	hit = 0;
-// 	while (hit <= 1)
-// 	{
-// 		if (draw_r->s_dist.x < draw_r->s_dist.y)
-// 		{
-// 			draw_r->s_dist.x += draw_r->d_dist.x;
-// 			draw_r->map.x += draw_r->step.x;
-// 			draw_r->side = 1;
-// 		}
-// 		else
-// 		{
-// 			draw_r->s_dist.y += draw_r->d_dist.y;
-// 			draw_r->map.y += draw_r->step.y;
-// 			draw_r->side = 0;
-// 		}
-// 		if (map_char(data, (int)draw_r->map.x, (int)draw_r->map.y) == '2')
-// 		{
-// 			if ((map_char(data, (int)draw_r->map.x + 1, (int)draw_r->map.y) == '1' &&
-// 					map_char(data, (int)draw_r->map.x - 1, (int)draw_r->map.y) == '1'))
-// 			{
-// 				hit = 1;
-// 				if (draw_r->side == 0)
-// 				{
-// 					continue ;
-// 				}
-// 				printf("side\t%i\n", draw_r->side);
-// 			}
-// 		}
-// 		if (map_char(data, (int)draw_r->map.x, (int)draw_r->map.y) == '1' || hit != 0)
-// 			hit += 2;
-// 	}
-// 	// if (draw_r->side)
-// 	// 	draw_r->s_dist.x -= draw_r->d_dist.x;
-// 	// else
-// 	// 	draw_r->s_dist.y -= draw_r->d_dist.y;
-// 	if (hit == 2)
-// 	{
-// 		if (draw_r->side)
-// 			draw_r->s_dist.x -= draw_r->d_dist.x;
-// 		else
-// 			draw_r->s_dist.y -= draw_r->d_dist.y;
-// 	}
-// }

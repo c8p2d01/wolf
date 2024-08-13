@@ -10,15 +10,12 @@ void	toggle_doors(mlx_key_data_t key, t_var *data)
 		data->map[(int)(data->player.x / data->config.zoom + data->direct.x)][(int)(data->player.y / data->config.zoom + data->direct.y)] = '3';
 	if (c == '3')
 		data->map[(int)(data->player.x / data->config.zoom + data->direct.x)][(int)(data->player.y / data->config.zoom + data->direct.y)] = '2';
-	ft_memset(data->map_layout_img->pixels, 0, \
-				data->map_layout_img->width * \
-				data->map_layout_img->height * sizeof(int));
 	ft_memset(data->map_render_img->pixels, 0, \
 				data->map_render_img->width * \
 				data->map_render_img->height * sizeof(int));
-	filler(data);
-	draw_fov_lines(data);
-	render_view(data);
+	// filler(data);
+	// draw_fov_lines(data);
+	// render_view(data);
 }
 
 void	trace_step(t_var *data, t_draw_ray *draw_r)
@@ -92,6 +89,7 @@ void	trace_door(t_var *data, t_draw_ray *draw_r)
 		draw_r->s_dist.x -= draw_r->d_dist.x;
 	else
 		draw_r->s_dist.y -= draw_r->d_dist.y;
+	// draw_r->s_dist.x += 0.5;
 	identify_door(data, draw_r, door_axis);
 }
 
@@ -104,7 +102,7 @@ void	identify_door(t_var *data, t_draw_ray *draw_r, bool door_axis)
 	if (draw_r->side && !data->rays[draw_r->i].wall)
 	{
 		if (door_axis)
-			data->rays[draw_r->i].wall = data->texture_north; // door texture
+			data->rays[draw_r->i].wall = data->gif_tex; // door texture
 		else if (data->rays[draw_r->i].x >= 0)
 			data->rays[draw_r->i].wall = data->texture_south; // maybe door side
 		else
@@ -113,7 +111,7 @@ void	identify_door(t_var *data, t_draw_ray *draw_r, bool door_axis)
 	else if (!data->rays[draw_r->i].wall)
 	{
 		if (!door_axis)
-			data->rays[draw_r->i].wall = data->texture_north; // door texture
+			data->rays[draw_r->i].wall = data->gif_tex; // door texture
 		else if (data->rays[draw_r->i].y >= 0)
 			data->rays[draw_r->i].wall = data->texture_easth; // maybe door side textures
 		else
@@ -144,5 +142,42 @@ int	check_door(int i, t_var *data)
 	{
 		printf("bad door at %i\t%i\n", i, pos);
 		return (42);
+	}
+}
+
+void	draw_colorful_line(t_var *data, int height, int raynum)
+{
+	uint8_t			*pixel;
+	mlx_texture_t	*tex;
+	int				x = raynum;
+	int				y;
+	double			perc_x;
+	double			perc_y;
+	int				midpoint;
+
+	if (!data || !data->rays || !(&(data->rays[raynum])))
+		return ;
+	tex = data->rays[raynum].wall;
+	if (!tex || !tex->pixels || !tex->width || !tex->height || !tex->bytes_per_pixel)
+	{
+		return ;
+	}
+	midpoint = (data->main_render_img->height / 2) - (height / 2);
+	for(int y = 0; y < height; y++)
+	{
+		if (!data || !data->rays || midpoint + y < 0 || midpoint + y > data->main_render_img->height)
+			continue ;
+		
+		perc_y = (double)y / (double)height;
+		perc_x = data->rays[raynum].wall_percent;
+		lf_limit(&perc_x, 0, 1);
+		lf_limit(&perc_y, 0, 1);
+		pixel = &tex->pixels[((int)(perc_x * (int)tex->width) + 
+				(int)(perc_y * tex->height) * (int)tex->width) 
+				* (int)tex->bytes_per_pixel];
+		prot_put_pixel(data->main_render_img,
+			x,
+			midpoint + y,
+			create_rgba(pixel[0], pixel[1], pixel[2], 255));
 	}
 }

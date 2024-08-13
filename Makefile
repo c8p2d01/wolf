@@ -38,6 +38,10 @@ SRCFILES:=\
 			settings/settings_1.c \
 			settings/settings_2.c \
 			settings/settings_utils.c \
+			\
+			\
+			../gifdec/gifdec.c \
+
 
 # ------------------------------------------
 # Do not change anything beyond this point!
@@ -65,7 +69,7 @@ CLEAR = "\033[0m"
 ifeq ($(SUBM_STATE),)
 SUBM_FLAG	= submodule
 else 
-SUBM_FLAG	= 
+SUBM_FLAG	=
 endif
 
 all: $(SUBM_FLAG) lib
@@ -122,3 +126,4 @@ clear:
 
 .PHONY: all clean fclean re e red clear green
 .SILENT: red clear green
+# export DISPLAY=:99 && Xvfb :99 -screen 0 1024x768x16 & vgf ./cub3D test.cub & sleep 1 && xdotool search --name "cub3D" key w && sleep 1 && xdotool search --name "cub3D" key right && sleep 1 && xdotool search --name "cub3D" key escape
