@@ -156,10 +156,10 @@ void	draw_loop(t_var *data, mlx_texture_t *tex, int height, int raynum)
 	int				midpoint;
 
 	midpoint = (data->main_render_img->height / 2) - (height / 2);
-	y = 0;
-	while (y < height)
+	y = -1;
+	while (++y < height)
 	{
-		if (midpoint + y < 0 || midpoint + y > data->main_render_img->height)
+		if (!data || !data->rays || midpoint + y < 0 || midpoint + y > data->main_render_img->height)
 			continue ;
 		perc_y = (double)y / (double)height;
 		perc_x = data->rays[raynum].wall_percent;
@@ -172,7 +172,6 @@ void	draw_loop(t_var *data, mlx_texture_t *tex, int height, int raynum)
 			raynum,
 			midpoint + y,
 			create_rgba(pixel[0], pixel[1], pixel[2], 255));
-		y++;
 	}
 }
 

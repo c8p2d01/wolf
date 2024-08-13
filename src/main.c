@@ -226,7 +226,6 @@ void	init_game_bulk(t_var *data)
 	data->gif[2] = NULL;
 	data->gif[3] = NULL;
 	data->gif[4] = NULL;
-	data->gif_tex = NULL;
 	gettimeofday(&data->time, NULL);
 }
 
