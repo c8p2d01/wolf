@@ -159,7 +159,8 @@ void	draw_loop(t_var *data, mlx_texture_t *tex, int height, int raynum)
 	y = -1;
 	while (++y < height)
 	{
-		if (!data || !data->rays || midpoint + y < 0 || midpoint + y > data->main_render_img->height)
+		if (!data || !data->rays || midpoint + y < 0 || midpoint + y > \
+												data->main_render_img->height)
 			continue ;
 		perc_y = (double)y / (double)height;
 		perc_x = data->rays[raynum].wall_percent;
