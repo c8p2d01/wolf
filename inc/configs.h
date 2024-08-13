@@ -29,7 +29,7 @@ typedef struct s_config
 	int		height;
 	int		width;
 	double	color_offset;
-	bool	map_visibility;
+	uint8_t	map_opacity;
 	int		ray_style;
 }	t_config;
 

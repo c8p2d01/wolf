@@ -7,13 +7,11 @@ void	style_setting(double xdelta, double ydelta, t_var *data)
 	i_limit(&data->config.ray_style, 0, 3);
 	data->config.ray_style %= 3;
 	printf("chosen Style %d", data->config.ray_style);
-	if (data->config.map_visibility)
-	{
-		memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
-								data->map_render_img->height * sizeof(int));
-		draw_fov_lines(data);
-		draw_player_triangle(data);
-	}
+	memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
+							data->map_render_img->height * sizeof(int));
+	// draw_fov_lines(data);
+	// draw_player_triangle(data);
+	// render_view(data);
 }
 
 void	offset_setting(double xdelta, double ydelta, t_var *data)
@@ -25,18 +23,16 @@ void	offset_setting(double xdelta, double ydelta, t_var *data)
 		while (data->config.color_offset < 0)
 			data->config.color_offset += 1;
 		data->config.color_offset = fmod(data->config.color_offset, 1);
-		if (data->config.map_visibility)
-		{
-			memset(data->map_render_img->pixels, 0, \
-				data->map_render_img->width * \
-				data->map_render_img->height * sizeof(int));
-			draw_fov_lines(data);
-			draw_player_triangle(data);
-		}
+		memset(data->map_render_img->pixels, 0, \
+			data->map_render_img->width * \
+			data->map_render_img->height * sizeof(int));
+		// draw_fov_lines(data);
+		// draw_player_triangle(data);
 	}
 	else
 		printf("Setting only adjustable, whn RAY_STYLE is set \
 															to rainbow mode\n");
+	// render_view(data);
 }
 
 void	height_setting(double xdelta, double ydelta, t_var *data)
@@ -55,10 +51,8 @@ void	height_setting(double xdelta, double ydelta, t_var *data)
 														data->config.height);
 	memset(data->main_static_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
-	memset(data->main_render_img->pixels, 0, data->config.width * \
-											data->config.height * sizeof(int));
-	floor_ceiling(data);
-	render_view(data);
+	// floor_ceiling(data);
+	// render_view(data);
 	zoom_setting(0, 0, data);
 }
 
@@ -85,7 +79,7 @@ void	width_setting(double xdelta, double ydelta, t_var *data)
 											data->config.height * sizeof(int));
 	memset(data->main_render_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
-	floor_ceiling(data);
-	render_view(data);
+	// floor_ceiling(data);
+	// render_view(data);
 	zoom_setting(0, 0, data);
 }

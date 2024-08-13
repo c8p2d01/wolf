@@ -36,7 +36,7 @@ int32_t		parse_input(int argc, char **argv, t_var *data);
 
 
 t_ray		ray_creator(t_var *data, int num);
-int			ray_color(t_var *data, t_draw_ray *draw_r);
+int			ray_color(t_var *data, int raynum, uint8_t opacity);
 void		debug_fov(t_var *data);
 void		print_map(t_var *data);
 

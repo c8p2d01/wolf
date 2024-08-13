@@ -7,6 +7,8 @@
 
 void		calc_distances(t_var *data, t_draw_ray *draw_r);
 void		hit_wall(t_var *data, t_draw_ray *draw_r);
+void		identify_wall(t_var *data, t_draw_ray *draw_r);
+void		identify_wall_fraction(t_var *data, t_draw_ray *draw_r);
 void		draw_ray(t_var *data, t_draw_ray *draw_r);
 void		draw_fov_lines(t_var *data);
 

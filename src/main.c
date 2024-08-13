@@ -81,12 +81,10 @@ void	handle_movement(t_var *data)
 	memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
 							data->map_render_img->height * sizeof(int));
 	apply_movement(data);
+	draw_fov_lines(data);
+	draw_player_triangle(data);
 	render_view(data);
-	if (data->config.map_visibility)
-	{
-		draw_fov_lines(data);
-		draw_player_triangle(data);
-	}
+
 	data->move.x = 0;
 	data->move.y = 0;
 }
@@ -109,32 +107,39 @@ void	hold_hook(void *param)
 	}
 }
 
+void	toggle_map(mlx_key_data_t key, t_var *data)
+{
+	if (data->config.map_opacity == 0)
+	{
+		data->config.map_opacity = MAP_OPACITY % 256;
+		filler(data);
+		draw_player_triangle(data);
+		draw_fov_lines(data);
+	}
+	else
+	{
+		data->config.map_opacity = 0;
+		ft_memset(data->map_render_img->pixels, 0, \
+			data->map_render_img->width * \
+			data->map_render_img->height * sizeof(int));
+		ft_memset(data->map_layout_img->pixels, 0, \
+			data->map_layout_img->width * \
+			data->map_layout_img->height * sizeof(int));
+	}
+}
+
 void	toggle_key_hook(mlx_key_data_t key, t_var *data)
 {
-	if (key.key == MLX_KEY_M && key.action == 1)
+	if (key.action == 1)
 	{
-		data->config.map_visibility = !data->config.map_visibility;
-		if (data->config.map_visibility)
+		if (key.key == MLX_KEY_M)
+			toggle_map(key, data);
+		else if (key.key == MLX_KEY_G)
 		{
-			filler(data);
-			draw_player_triangle(data);
-			// print_texture(data);
+			data->settings = !data->settings;
+			if (data->settings)
+				print_setting(data);
 		}
-		else
-		{
-			memset(data->map_render_img->pixels, 0, \
-				data->map_render_img->width * \
-				data->map_render_img->height * sizeof(int));
-			memset(data->map_layout_img->pixels, 0, \
-				data->map_layout_img->width * \
-				data->map_layout_img->height * sizeof(int));
-		}
-	}
-	else if (key.key == MLX_KEY_G && key.action == 1)
-	{
-		data->settings = !data->settings;
-		if (data->settings)
-			print_setting(data);
 	}
 }
 
@@ -173,7 +178,7 @@ void	init_config(t_var *data)
 	data->config.zoom = ZOOM;
 	data->config.color_offset = 0;
 	data->config.ray_style = 1;
-	data->config.map_visibility = 1;
+	data->config.map_opacity = MAP_OPACITY;
 }
 
 void	init_game_bulk(t_var *data)
@@ -245,13 +250,11 @@ int32_t	main(int argc, char **argv)
 		exit (42);
 	}
 	print_data(&data);
-	load_image(&data);
 	minimap(&data);
 
 	floor_ceiling(&data);
-	render_view(&data);
+	// render_view(&data);
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
-	// check_mlx_image(&data);
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
 	mlx_loop(data._mlx);

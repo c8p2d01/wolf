@@ -10,74 +10,41 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./rendering.h"
+#include "../../inc/rendering.h"
 
-void	draw_line_b(t_var *data, vec2d_t zeroth, vec2d_t first, int ray_i)
+void	draw_line_b(t_var *data, int height, int raynum)
 {
-	int	txtr_color;
-	int	i = 0;
-	int	height;
-	int x;
+	uint8_t			*pixel;
+	mlx_texture_t	*tex;
+	int				x = raynum;
+	int				y;
+	double			perc_x;
+	double			perc_y;
+	int				midpoint;
 
-	first.x = (int)first.x;
-	zeroth.x = (int)zeroth.x;
-	first.y = (int)first.y;
-	zeroth.y = (int)zeroth.y;
-	height = (first.x - zeroth.x);
-	double step;
-	step = 1.0 * data->wall->height / height;
-double temp;
-temp = 0;
-int	vertical = (data->wall->width) * data->rays[ray_i].hit; // + (x_dir * y_dir)
-x = ((int)temp * data->wall->width) + vertical; // + zeroth.x
-	while (zeroth.x <= first.x)
+	if (!data || !data->rays || !(&(data->rays[raynum])))
+		return ;
+	tex = data->rays[raynum].wall;
+	if (!tex || !tex->pixels || !tex->width || !tex->height || !tex->bytes_per_pixel)
 	{
-		if (x > (data->wall->height * data->wall->width) - 4)
-			break;
-		prot_put_pixel(data->main_render_img, (int)zeroth.y, (int)zeroth.x, data->wall_pixels[(int)x]);
-		zeroth.x++;
-		temp += step;
-		x = ((int)temp * data->wall->width) + vertical;
+		return ;
 	}
-}
-
-int	get_txtr_color(t_var *data, int i)
-{
-	int	txtr_color;
-
-	txtr_color = (data->wall->pixels[i] << 24) | 
-		(data->wall->pixels[i + 1] << 16) | 
-		(data->wall->pixels[i + 2] << 8) | 
-		255;
-	return (txtr_color);
-}
-
-void	load_image(t_var *data)
-{
-	// data->wall = mlx_load_png("images/wall_resized_debug.png");
-	// data->wall = mlx_load_png("images/wall_resized.png");
-	// data->wall = mlx_load_png("images/brick_debug.png");
-	data->wall = mlx_load_png("images/kermit.png");
-	// data->wall = mlx_load_png("images/kermit_crop.png");
-	// data->wall = mlx_load_png("images/exit.png");
-	// data->wall = mlx_load_png("images/wall.png");
-	// data->wall = mlx_load_png("images/DEBUG_IMG.png");
-	// data->wall = mlx_load_png("images/DEBUG_IMG_SPRAY.png");
-	// data->wall = mlx_load_png("images/prison.png");
-	// data->wall = mlx_load_png("images/colors.png");
-	// data->wall = mlx_load_png("images/Easth_elmo.png");
-
-printf("data->wall->width = %i, data->wall->height = %i, data->wall->width * data->wall->height = %i\n", data->wall->width, data->wall->height, data->wall->width * data->wall->height);
-	int i = 0;
-	int j = 0;
-	data->wall_pixels = ft_calloc(((data->wall->height * data->wall->width)) + 4, sizeof(int));
-	j = 0;
-	while (j < data->wall->width * data->wall->height)
+	midpoint = (data->main_render_img->height / 2) - (height / 2);
+	for(int y = 0; y < height; y++)
 	{
-		int color = get_txtr_color(data, i);
-		data->wall_pixels[j] = color;
-		i+=4;
-		j++;
+		if (!data || !data->rays || midpoint + y < 0 || midpoint + y > data->main_render_img->height)
+			continue ;
+		
+		perc_y = (double)y / (double)height;
+		perc_x = data->rays[raynum].wall_percent;
+		lf_limit(&perc_x, 0, 1);
+		lf_limit(&perc_y, 0, 1);
+		pixel = &tex->pixels[((int)(perc_x * (int)tex->width) + 
+				(int)(perc_y * tex->height) * (int)tex->width) 
+				* (int)tex->bytes_per_pixel];
+		prot_put_pixel(data->main_render_img,
+			x,
+			midpoint + y,
+			create_rgba(pixel[0], pixel[1], pixel[2], 255));
 	}
-	printf("Loaded png\n");
 }

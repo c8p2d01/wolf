@@ -12,11 +12,11 @@
 
 #include "../../inc/cub.h"
 
-int	ray_color(t_var *data, int i)
+int	ray_color(t_var *data, int raynum, uint8_t opacity)
 {
 	double	fraction;
 
-	fraction = (float)i / (data->config.width) + \
+	fraction = (float)raynum / (data->config.width) + \
 													data->config.color_offset;
 	if (data->config.ray_style == 0)
 		return (createMultiGradient(\
@@ -28,20 +28,20 @@ int	ray_color(t_var *data, int i)
 			255, 0, 0, \
 			255, 255, 0, \
 			0, 255, 0, \
-			0, 255, 255) << 8 | MAP_OPACITY);
+			0, 255, 255) << 8 | opacity);
 	else if (data->config.ray_style == 1)
 	{
-		if (data->rays[i].wall == data->path_north)
-			return (create_rgba(42, 42, 255, MAP_OPACITY));
-		else if (data->rays[i].wall == data->path_south)
-			return (create_rgba(255, 255, 42, MAP_OPACITY));
-		else if (data->rays[i].wall == data->path_easth)
-			return (create_rgba(255, 42, 42, MAP_OPACITY));
-		else if (data->rays[i].wall == data->path_westh)
-			return (create_rgba(42,255,  42, MAP_OPACITY));
+		if (data->rays[raynum].wall == data->texture_north)
+			return (create_rgba(42, 42, 255, opacity));
+		else if (data->rays[raynum].wall == data->texture_south)
+			return (create_rgba(255, 255, 42, opacity));
+		else if (data->rays[raynum].wall == data->texture_easth)
+			return (create_rgba(255, 42, 42, opacity));
+		else if (data->rays[raynum].wall == data->texture_westh)
+			return (create_rgba(42,255,  42, opacity));
 	}
 	return (createGradientColor(fmod(fraction, 1), 0, 0, 0, \
-			255, 255, 255) << 8 | MAP_OPACITY);
+			255, 255, 255) << 8 | opacity);
 }
 
 void	debug_fov(t_var *data)
