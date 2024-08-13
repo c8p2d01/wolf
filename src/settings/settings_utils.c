@@ -22,12 +22,8 @@ int	ray_color(t_var *data, int raynum, uint8_t opacity)
 		return (createMultiGradient(\
 			fmod(fraction, 1), \
 			7, \
-			0, 255, 255, \
-			0, 0, 255, \
-			255, 0, 255, \
-			255, 0, 0, \
-			255, 255, 0, \
-			0, 255, 0, \
+			0, 255, 255, 0, 0, 255, 255, 0, 255, \
+			255, 0, 0, 255, 255, 0, 0, 255, 0, \
 			0, 255, 255) << 8 | opacity);
 	else if (data->config.ray_style == 1)
 	{
@@ -38,7 +34,7 @@ int	ray_color(t_var *data, int raynum, uint8_t opacity)
 		else if (data->rays[raynum].wall == data->texture_easth)
 			return (create_rgba(255, 42, 42, opacity));
 		else if (data->rays[raynum].wall == data->texture_westh)
-			return (create_rgba(42,255,  42, opacity));
+			return (create_rgba(42, 255, 42, opacity));
 	}
 	return (createGradientColor(fmod(fraction, 1), 0, 0, 0, \
 			255, 255, 255) << 8 | opacity);

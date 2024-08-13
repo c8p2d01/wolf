@@ -14,13 +14,14 @@
 
 # define PI 3.14159265359
 
-# define FOV 90
+# define FPS 30
+# define FOV 75
 # define RENDER 8
-# define WIDTH 1366
-# define HEIGHT 768
-# define ZOOM 7
-# define MOVEMENT_SPEED 0.5
-# define TURN_SPEED 1 //		in degree per frame
+# define WIDTH 1100
+# define HEIGHT 600
+# define ZOOM 20
+# define MOVEMENT_SPEED 1
+# define TURN_SPEED 3 //		in degree per frame
 # define MAP_OPACITY 200
 
 # define MAP_WALL 16711680

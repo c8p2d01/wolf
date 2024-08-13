@@ -2,22 +2,33 @@
 
 void	put_slice(t_var *data, int i)
 {
-	vec2d_t	start;
-	vec2d_t	end;
-	vec2d_t temp;
+	vec2d_t	temp;
+	double	actual_dist;
+	double	angle;
 
-	if (data->rays[i].wall_dst < 0.05)
+	if (data->rays[i].wall_dst < 0.0005)
 		return ;
 	temp.x = data->rays[i].x;
 	temp.y = data->rays[i].y;
-	double angle = angle2d(data->direct, temp);
+	actual_dist = data->rays[i].wall_dst;
+	angle = angle2d(data->direct, temp);
 	if (angle == angle)
-		data->rays[i].wall_dst = cos(angle) * data->rays[i].wall_dst;
-	start.x = (int)((data->config.height / 2) + (data->config.height / data->rays[i].wall_dst));
-	start.y = data->config.width - i;
-	end.x = (int)((data->config.height / 2) - (data->config.height / data->rays[i].wall_dst));
-	end.y = data->config.width - i;
-	draw_line_b(data->main_render_img, (data->config.height / data->rays[i].wall_dst), i);
+		actual_dist = cos(angle) * data->rays[i].wall_dst;
+	draw_line_b(data, (data->config.height / actual_dist), i);
+}
+
+void	gif_next_frame(gd_GIF *gif, mlx_texture_t *tex)
+{
+	int	ret;
+
+	if (!gif || !tex)
+		return ;
+	ret = gd_get_frame(gif);
+	if (ret == -1)
+		return ;
+	if (ret == 0)
+		gd_rewind(gif);
+	gd_render_frame(gif, tex->pixels);
 }
 
 void	render_view(t_var *data)

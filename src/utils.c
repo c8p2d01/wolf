@@ -41,3 +41,10 @@ char	map_char(t_var *data, int y, int x)
 	}
 	return (data->map[x][y]);
 }
+
+t_var	**proto_global(void)
+{
+	static t_var	*data;
+
+	return (&data);
+}

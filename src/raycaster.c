@@ -27,7 +27,7 @@ t_ray	ray_creator(t_var *data, int num)
 	ray.number = num;
 	normalise2d(&data->direct);
 	orth = rotate2d(&data->direct, 90);
-	resize2d(&orth, 2 * tan(deg_2_rad(data->config.fov / 2)));
+	resize2d(&orth, -2 * tan(deg_2_rad(data->config.fov / 2)));
 	ray.x = data->direct.x;
 	ray.y = data->direct.y;
 	ray.x -= orth.x / 2;
@@ -35,7 +35,7 @@ t_ray	ray_creator(t_var *data, int num)
 	ray.x += (orth.x / data->config.width) * num;
 	ray.y += (orth.y / data->config.width) * num;
 	ray.wall = NULL;
-	ray.wall_percent = 0;
+	ray.wall_percent = 0.5;
 	normalise_2d(&ray.x, &ray.y);
 	return (ray);
 }
