@@ -33,6 +33,7 @@ SRCFILES:=\
 			rendering/floor_ceiling.c \
 			rendering/slicer.c \
 			rendering/b_plan.c \
+			rendering/doors.c \
 			\
 			settings/print_settings.c \
 			settings/settings_1.c \

@@ -12,18 +12,20 @@ int32_t	find_player(t_var *data)
 		return (1);
 	while (i < data->map_height)
 	{
-		line = ft_strtrim(data->map[i], " 01234\n");
+		line = ft_strtrim(data->map[i], CHARSET);
 		if (ft_strlen(line))
 		{
 			c = line[0];
 			data->player.x = i;
 			data->direct.x += 42 * ft_strlen(line);
 		}
+		if (ft_strchr(data->map[i], '2') || ft_strchr(data->map[i], '3'))
+			data->direct.x += check_door(i, data);
 		free(line);
 		i -= -1;
 	}
 	if (data->direct.x != 42 || !ft_strchr("WSNE", c))
-		return (ft_printf("Error\nErroneus char in map\n") * 0 + 1);
+		return (ft_printf("Error\nErroneous char in map\n") * 0 + 1);
 	return (extract_player(data));
 }
 
@@ -47,6 +49,8 @@ int32_t	extract_player(t_var *data)
 	data->player.y *= ZOOM;
 	data->player.x += ZOOM / 2;
 	data->player.y += ZOOM / 2;
+	data->player.x += 0.0001;
+	data->player.y += 0.0001;
 	return (init_player(data, c));
 }
 
@@ -55,13 +59,13 @@ int32_t	init_player(t_var *data, char pov)
 	data->direct.x = 0;
 	printf("facing %c \n", pov);
 	if (pov == 'N')
-		data->direct.x = -1.001;
+		data->direct.x = -1.01;
 	else if (pov == 'S')
-		data->direct.x = 1.001;
+		data->direct.x = 1.01;
 	else if (pov == 'W')
-		data->direct.y = -1.001;
+		data->direct.y = -1.01;
 	else if (pov == 'E')
-		data->direct.y = 1.001;
+		data->direct.y = 1.01;
 	else
 	{
 		if (DEBUG == 1)

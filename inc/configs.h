@@ -5,6 +5,13 @@
 #  define DEBUG 1
 # endif
 
+// swap meaning and modify makefile before submitting
+# ifndef BONUS
+#  define CHARSET " 0123"
+# else
+#  define CHARSET " 01"
+# endif
+
 # define PI 3.14159265359
 
 # define FOV 90
@@ -18,6 +25,8 @@
 
 # define MAP_WALL 16711680
 # define MAP_GRND 65535
+# define MAP_DOOR 16777215
+# define MAP_OPEN 2763306
 
 # define N_SETTINGS 7
 

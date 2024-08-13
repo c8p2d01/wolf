@@ -32,10 +32,10 @@ void	fov_setting(double xdelta, double ydelta, t_var *data)
 	i_limit(&data->config.fov, 1, 179);
 	ft_memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
 							data->map_render_img->height * sizeof(int));
-	// draw_fov_lines(data);
-	// draw_player_triangle(data);
+	draw_fov_lines(data);
+	draw_player_triangle(data);
 	debug_fov(data);
-	// render_view(data);
+	render_view(data);
 }
 
 void	zoom_setting(double xdelta, double ydelta, t_var *data)

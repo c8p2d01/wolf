@@ -32,13 +32,18 @@
 	from there on iterate in steps
 */
 
-// void	debug_stick(t_var *data)
+// void	debug_stick(mouse_key_t button, action_t action, modifier_key_t mods, void* param)
 // {
+// 	t_var	*data;
 // 	int	pos[2];
 
-// 	mlx_get_mouse_pos(data->_mlx, pos, pos + 1);
-// 	printf("clicked window %s at position %i : %i\n",
-// 		"map", pos[0], pos[1]);
+// 	data = (t_var *)param;
+// 	if (action == 1)
+// 	{
+// 		mlx_get_mouse_pos(data->_mlx, pos, pos + 1);
+// 		printf("clicked window %s at position %i : %i\n",
+// 			"map", pos[0], pos[1]);
+// 	}
 // }
 
 void	scroll_hook(double xdelta, double ydelta, void *param)
@@ -81,10 +86,9 @@ void	handle_movement(t_var *data)
 	memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
 							data->map_render_img->height * sizeof(int));
 	apply_movement(data);
+	render_view(data);
 	draw_fov_lines(data);
 	draw_player_triangle(data);
-	render_view(data);
-
 	data->move.x = 0;
 	data->move.y = 0;
 }
@@ -140,6 +144,8 @@ void	toggle_key_hook(mlx_key_data_t key, t_var *data)
 			if (data->settings)
 				print_setting(data);
 		}
+		else if (key.key == MLX_KEY_SPACE)
+			toggle_doors(key, data);
 	}
 }
 
@@ -178,7 +184,7 @@ void	init_config(t_var *data)
 	data->config.zoom = ZOOM;
 	data->config.color_offset = 0;
 	data->config.ray_style = 1;
-	data->config.map_opacity = MAP_OPACITY;
+	data->config.map_opacity = MAP_OPACITY % 256;
 }
 
 void	init_game_bulk(t_var *data)
@@ -223,7 +229,7 @@ void	init(t_var *data)
 											data->config.height * sizeof(int));
 	ft_memset(data->main_render_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
-	mlx_image_to_window(data->_mlx, data->main_static_img, 0, 0);
+	// mlx_image_to_window(data->_mlx, data->main_static_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->main_render_img, 0, 0);
 }
 
@@ -251,12 +257,12 @@ int32_t	main(int argc, char **argv)
 	}
 	print_data(&data);
 	minimap(&data);
-
 	floor_ceiling(&data);
-	// render_view(&data);
+	render_view(&data);
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
+	// mlx_mouse_hook(data._mlx, &debug_stick, &data);
 	mlx_loop(data._mlx);
 	mlx_terminate(data._mlx);
 	return (EXIT_SUCCESS);
