@@ -1,8 +1,8 @@
-NO maps/smol/textures/North.png
-SO maps/smol/textures/South.png
-WE maps/smol/textures/Westh.png
-EA maps/smol/textures/Easth.png
-DO images/congaparrot.gif
+NO images/congaparrot.gif
+SO images/congaparrot.gif
+WE images/congaparrot.gif
+EA images/congaparrot.gif
+DO images/shrok.gif
 C        3,12,96
 F        72,36,0
 

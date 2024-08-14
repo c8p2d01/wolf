@@ -14,6 +14,8 @@
 
 # include "../MLX42/include/MLX42/MLX42.h"
 
+# include "../src/gifdec/gifdec.h"
+
 # include "../ft_libft/inc/libft.h"
 
 # include "configs.h"

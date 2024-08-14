@@ -7,7 +7,7 @@ SOURCE	= ./src
 
 # Other Variables:
 COMPILER:=	cc
-COMPFLAGS:=	-g -fsanitize=address #-Wall -Werror -Wextra -Wno-unused-variable 
+COMPFLAGS:=	-g #-fsanitize=address #-Wall -Werror -Wextra -Wno-unused-variable 
 DEFINES = -D DEBUG=1
 
 # Source Files:
@@ -40,7 +40,7 @@ SRCFILES:=\
 			settings/settings_utils.c \
 			\
 			\
-			../gifdec/gifdec.c \
+			gifdec/gifdec.c \
 
 
 # ------------------------------------------
@@ -58,19 +58,22 @@ OS:=		$(shell uname -s)
 .PHONY: all clean fclean re e red clear green
 
 LFT = ./ft_libft
-MLX = ./MLX42
-#-L "/Users/$$USER/.brew/opt/glfw/lib/"
-LIBRARYS = -lm -I include -lglfw  $(LFT)/libft.a $(MLX)/libmlx42.a
-
+LIBMLX = ./MLX42
+LIBRARYS	:= $(LFT)/libft.a
+ifeq ($(shell uname),Darwin)
+	LIBRARYS += $(LIBMLX)/libmlx42.a -framework OpenGL -framework IOKit -lglfw
+else ifeq ($(shell uname),Linux)
+	LIBRARYS += $(LIBMLX)/libmlx42.a -Iinc -Ilib/libft -ldl -lglfw3 -pthread -lm
+endif
 RED = "\033[38;2;255;51;51m"
 GRN = "\033[38;2;170;255;170m"
 CLEAR = "\033[0m"
 
-ifeq ($(SUBM_STATE),)
-SUBM_FLAG	= submodule
-else 
-SUBM_FLAG	=
-endif
+# ifeq ($(SUBM_STATE),)
+# SUBM_FLAG	= submodule
+# else 
+# SUBM_FLAG	=
+# endif
 
 all: $(SUBM_FLAG) lib
 	make -j $(nproc) $(NAME)
@@ -81,7 +84,7 @@ submodule:
 
 lib:
 	make bonus -C $(LFT)
-	make -C $(MLX)
+	make -C $(LIBMLX)
 
 # Compile .cpp files to .o Files
 $(OBJS): $(BUILD)%.o : $(SOURCE)%.c
@@ -97,7 +100,7 @@ clean:
 	@make -s red
 	rm -rdf $(BUILD)
 	make clean -C $(LFT)
-	make clean -C $(MLX)
+	make clean -C $(LIBMLX)
 	@make -s clear
 
 fclean:
@@ -105,7 +108,7 @@ fclean:
 	rm -rdf $(NAME)
 	rm -rdf $(BUILD)
 	make fclean -C $(LFT)
-	make fclean -C $(MLX)
+	make fclean -C $(LIBMLX)
 	@make -s clear
 
 re: fclean all

@@ -129,6 +129,7 @@ int32_t	gif_init(char *file, mlx_texture_t **dest)
 	ft_memset((*dest)->pixels, 128, (*dest)->height * (*dest)->width * \
 												(*dest)->bytes_per_pixel + 1);
 	gif_next_frame(data->gif[gif_i], *dest);
+	return (0);
 }
 
 int32_t	texture_init(char *file, mlx_texture_t **dest)
