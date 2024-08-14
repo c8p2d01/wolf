@@ -2,7 +2,6 @@
 # define STRUCTS_H
 
 # include "cub.h"
-# include "../gifdec/gifdec.h"
 
 typedef struct s_ray
 {

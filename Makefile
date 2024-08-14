@@ -69,18 +69,19 @@ RED = "\033[38;2;255;51;51m"
 GRN = "\033[38;2;170;255;170m"
 CLEAR = "\033[0m"
 
-# ifeq ($(SUBM_STATE),)
-# SUBM_FLAG	= submodule
-# else 
-# SUBM_FLAG	=
-# endif
+ifeq ($(SUBM_STATE),)
+SUBM_FLAG	= submodule
+else 
+SUBM_FLAG	=
+endif
 
 all: $(SUBM_FLAG) lib
 	make -j $(nproc) $(NAME)
 
 submodule: 
-	@git submodule init 
-	@git submodule update --remote
+	@git submodule init
+	@git submodule update --remote --init --recursive
+	@cmake -S $(LIBMLX) -B $(LIBMLX)
 
 lib:
 	make bonus -C $(LFT)
@@ -108,7 +109,7 @@ fclean:
 	rm -rdf $(NAME)
 	rm -rdf $(BUILD)
 	make fclean -C $(LFT)
-	make fclean -C $(LIBMLX)
+	make clean -C $(LIBMLX)
 	@make -s clear
 
 re: fclean all
