@@ -23,7 +23,6 @@
 # define MOVEMENT_SPEED 1
 # define TURN_SPEED 3 //		in degree per frame
 # define MAP_OPACITY 200
-# define WALL_DISTANCE 19
 
 # define MAP_WALL 16711680
 # define MAP_GRND 65535
