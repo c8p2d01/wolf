@@ -49,20 +49,3 @@ void	apply_movement(t_var *data)
 	data->player.x += data->move.x * MOVEMENT_SPEED;
 	data->player.y += data->move.y * MOVEMENT_SPEED;
 }
-
-// void	apply_movement(t_var *data)
-// {
-// 	double	step_len;
-// 	double	tmp;
-
-// 	normalise2d(&data->move);
-// 	tmp = trace_movement(data);
-// 	step_len = MOVEMENT_SPEED;
-// 	if (tmp < MOVEMENT_SPEED)
-// 		step_len = tmp;
-// 		printf("%lf\n", step_len);
-// 	wall_collision(data, step_len);
-// 	data->player.x += data->move.x * step_len;
-// 	data->player.y += data->move.y * step_len;
-// }
-

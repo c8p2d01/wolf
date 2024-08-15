@@ -28,7 +28,6 @@ typedef struct s_draw_ray
 	vec2d_t		map;
 	int			side;
 	int			color;
-	t_ray		*ray;
 	char		hit;
 }	t_draw_ray;
 
