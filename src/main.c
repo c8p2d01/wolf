@@ -32,15 +32,6 @@
 	from there on iterate in steps
 */
 
-// void	debug_stick(t_var *data)
-// {
-// 	int	pos[2];
-
-// 	mlx_get_mouse_pos(data->_mlx, pos, pos + 1);
-// 	printf("clicked window %s at position %i : %i\n",
-// 		"map", pos[0], pos[1]);
-// }
-
 void	scroll_hook(double xdelta, double ydelta, void *param)
 {
 	t_var		*data;
@@ -62,6 +53,20 @@ void	scroll_hook(double xdelta, double ydelta, void *param)
 	}
 }
 
+bool	movement_keys(t_var *data)
+{
+	if (mlx_is_key_down(data->_mlx, MLX_KEY_UP) || \
+		mlx_is_key_down(data->_mlx, MLX_KEY_W) || \
+		mlx_is_key_down(data->_mlx, MLX_KEY_A) || \
+		mlx_is_key_down(data->_mlx, MLX_KEY_DOWN) || \
+		mlx_is_key_down(data->_mlx, MLX_KEY_S) || \
+		mlx_is_key_down(data->_mlx, MLX_KEY_D) || \
+		mlx_is_key_down(data->_mlx, MLX_KEY_LEFT) || \
+		mlx_is_key_down(data->_mlx, MLX_KEY_RIGHT))
+		return (1);
+	return (0);
+}
+
 void	handle_movement(t_var *data)
 {
 	if (mlx_is_key_down(data->_mlx, MLX_KEY_UP) \
@@ -78,61 +83,85 @@ void	handle_movement(t_var *data)
 		turn(data, LEFT);
 	if (mlx_is_key_down(data->_mlx, MLX_KEY_RIGHT))
 		turn(data, RIGHT);
-	memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
-							data->map_render_img->height * sizeof(int));
 	apply_movement(data);
-	if (data->config.map_visibility)
-	{
-		draw_fov_lines(data);
-		draw_player_triangle(data);
-	}
 	data->move.x = 0;
 	data->move.y = 0;
 }
 
+void	update_gifs(t_var *data)
+{
+	if (data->gif[0])
+		gif_next_frame(data->gif[0], data->texture_north);
+	if (data->gif[1])
+		gif_next_frame(data->gif[1], data->texture_south);
+	if (data->gif[2])
+		gif_next_frame(data->gif[2], data->texture_westh);
+	if (data->gif[3])
+		gif_next_frame(data->gif[3], data->texture_easth);
+	if (data->gif[4])
+		gif_next_frame(data->gif[4], data->texture_door);
+}
+
 void	hold_hook(void *param)
 {
-	t_var	*data;
+	t_var			*data;
+	struct timeval	now;
+	static long		last_frame;
 
 	data = param;
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_UP) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_W) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_A) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_DOWN) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_S) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_D) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_LEFT) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_RIGHT))
+	gettimeofday(&now, NULL);
+	if (now.tv_sec > data->time.tv_sec)
 	{
+		data->time.tv_sec = now.tv_sec;
+		last_frame = 0;
+	}
+	if ((now.tv_usec - last_frame) > 10000 * data->gif[4]->gce.delay)
+	{
+		last_frame = now.tv_usec;
+		update_gifs(data);
+		render_view(data);
+		draw_fov_lines(data);
+		draw_player_triangle(data);
+	}
+	if (movement_keys(data))
 		handle_movement(data);
+}
+
+void	toggle_map(mlx_key_data_t key, t_var *data)
+{
+	if (data->config.map_opacity == 0)
+	{
+		data->config.map_opacity = MAP_OPACITY % 256;
+		filler(data);
+		draw_player_triangle(data);
+		draw_fov_lines(data);
+	}
+	else
+	{
+		data->config.map_opacity = 0;
+		ft_memset(data->map_render_img->pixels, 0, \
+			data->map_render_img->width * \
+			data->map_render_img->height * sizeof(int));
+		ft_memset(data->map_layout_img->pixels, 0, \
+			data->map_layout_img->width * \
+			data->map_layout_img->height * sizeof(int));
 	}
 }
 
 void	toggle_key_hook(mlx_key_data_t key, t_var *data)
 {
-	if (key.key == MLX_KEY_M && key.action == 1)
+	if (key.action == 1)
 	{
-		data->config.map_visibility = !data->config.map_visibility;
-		if (data->config.map_visibility)
+		if (key.key == MLX_KEY_M)
+			toggle_map(key, data);
+		else if (key.key == MLX_KEY_G)
 		{
-			filler(data);
-			draw_player_triangle(data);
+			data->settings = !data->settings;
+			if (data->settings)
+				print_setting(data);
 		}
-		else
-		{
-			memset(data->map_render_img->pixels, 0, \
-				data->map_render_img->width * \
-				data->map_render_img->height * sizeof(int));
-			memset(data->map_layout_img->pixels, 0, \
-				data->map_layout_img->width * \
-				data->map_layout_img->height * sizeof(int));
-		}
-	}
-	else if (key.key == MLX_KEY_G && key.action == 1)
-	{
-		data->settings = !data->settings;
-		if (data->settings)
-			print_setting(data);
+		else if (key.key == MLX_KEY_SPACE)
+			toggle_doors(key, data);
 	}
 }
 
@@ -170,8 +199,8 @@ void	init_config(t_var *data)
 	data->config.height = HEIGHT;
 	data->config.zoom = ZOOM;
 	data->config.color_offset = 0;
-	data->config.ray_style = 0;
-	data->config.map_visibility = 1;
+	data->config.ray_style = 1;
+	data->config.map_opacity = MAP_OPACITY % 256;
 }
 
 void	init_game_bulk(t_var *data)
@@ -182,14 +211,22 @@ void	init_game_bulk(t_var *data)
 	data->path_south = NULL;
 	data->path_westh = NULL;
 	data->path_easth = NULL;
+	data->path_door = NULL;
 	data->texture_north = NULL;
 	data->texture_south = NULL;
 	data->texture_westh = NULL;
 	data->texture_easth = NULL;
+	data->texture_door = NULL;
 	data->player.x = 0;
 	data->player.y = 0;
 	data->direct.x = 0;
 	data->direct.y = 0;
+	data->gif[0] = NULL;
+	data->gif[1] = NULL;
+	data->gif[2] = NULL;
+	data->gif[3] = NULL;
+	data->gif[4] = NULL;
+	gettimeofday(&data->time, NULL);
 }
 
 void	init(t_var *data)
@@ -212,9 +249,9 @@ void	init(t_var *data)
 														data->config.height);
 	data->main_render_img = mlx_new_image(data->_mlx, data->config.width, \
 														data->config.height);
-	memset(data->main_static_img->pixels, 0, data->config.width * \
+	ft_memset(data->main_static_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
-	memset(data->main_render_img->pixels, 0, data->config.width * \
+	ft_memset(data->main_render_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
 	mlx_image_to_window(data->_mlx, data->main_static_img, 0, 0);
 	mlx_image_to_window(data->_mlx, data->main_render_img, 0, 0);
@@ -237,6 +274,7 @@ int32_t	main(int argc, char **argv)
 	t_var	data;
 
 	init(&data);
+	*proto_global() = &data;
 	if (parse_input(argc, argv, &data))
 	{
 		ft_printf("parsing issues\n");
