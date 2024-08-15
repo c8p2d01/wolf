@@ -83,13 +83,23 @@ double	wall_collision(t_var *data)
 
 	double	wall_xy = trace_xy(data);
 
-	if (wall_x < 0)
+	if (wall_y <= 0.05 && wall_x > 0.05)
 	{
+		if (data->move.x > 0)
+			data->move.x = 1;
+		else
+			data->move.x = -1;
 		data->move.y = 0;
+		wall_y = 1;
 	}
-	if (wall_y < 0)
+	if (wall_x <= 0.05 && wall_y > 0.05)
 	{
 		data->move.x = 0;
+		if (data->move.y > 0)
+			data->move.y = 1;
+		else
+			data->move.y = -1;
+		wall_x = 1;
 	}
 	if (wall_x < wall_y && wall_x < wall_xy)
 		return (wall_x);
@@ -97,7 +107,7 @@ double	wall_collision(t_var *data)
 		return (wall_y);
 	if (wall_xy > 0)
 		return (wall_xy);
-	return (0);
+	return (1);
 }
 
 // void	approach_wall(t_var *data, t_draw_ray *draw_r, double o_x, double o_y);
