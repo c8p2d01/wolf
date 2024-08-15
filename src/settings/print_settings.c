@@ -24,6 +24,22 @@ void	print_setting(t_var *data)
 	printf("\n");
 }
 
+void	print_map_chars(char c)
+{
+	if (c == '1')
+		printf("\e[38;2;%i;%i;%im", (MAP_WALL >> 16) % 256, \
+						(MAP_WALL >> 8) % 256, (MAP_WALL >> 0) % 256);
+	if (c == '2')
+		printf("\e[38;2;%i;%i;%im", (MAP_DOOR >> 16) % 256, \
+						(MAP_DOOR >> 8) % 256, (MAP_DOOR >> 0) % 256);
+	if (c == '3')
+		printf("\e[38;2;%i;%i;%im", (MAP_OPEN >> 16) % 256, \
+						(MAP_OPEN >> 8) % 256, (MAP_OPEN >> 0) % 256);
+	else if (ft_strchr("0NESW", c))
+		printf("\e[38;2;%i;%i;%im", (MAP_GRND >> 16) % 256, \
+						(MAP_GRND >> 8) % 256, (MAP_GRND >> 0) % 256);
+}
+
 void	print_map(t_var *data)
 {
 	int		x;
@@ -37,12 +53,7 @@ void	print_map(t_var *data)
 		while (y < data->map_width)
 		{
 			c = map_char(data, y, x);
-			if (c == '1')
-				printf("\e[38;2;%i;%i;%im", (MAP_WALL >> 16) % 256, \
-								(MAP_WALL >> 8) % 256, (MAP_WALL >> 0) % 256);
-			else if (ft_strchr("0NESW", c))
-				printf("\e[38;2;%i;%i;%im", (MAP_GRND >> 16) % 256, \
-								(MAP_GRND >> 8) % 256, (MAP_GRND >> 0) % 256);
+			print_map_chars(c);
 			printf("%c\e[0m", c);
 			y++;
 		}

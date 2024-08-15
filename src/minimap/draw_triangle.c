@@ -91,9 +91,9 @@ void	draw_player_triangle(t_var *data)
 	back_right.x = data->player.x + p[0] * (data->config.zoom / 4);
 	back_right.y = data->player.y + p[1] * (data->config.zoom / 4);
 	draw_line(data->map_render_img, front, back_left, \
-					create_rgba(0, 255, 255, 220));
+					create_rgba(0, 255, 255, data->config.map_opacity));
 	draw_line(data->map_render_img, front, back_right, \
-					create_rgba(0, 255, 255, 220));
+					create_rgba(0, 255, 255, data->config.map_opacity));
 	draw_line(data->map_render_img, back_left, back_right, \
-					create_rgba(0, 255, 255, 220));
+					create_rgba(0, 255, 255, data->config.map_opacity));
 }
