@@ -1,24 +1,113 @@
 #include "../../inc/movement.h"
 
-bool	wall_collision(t_var *data, double step_len)
+double	trace_x(t_var *data)
 {
-	vec2d_t	step;
+	t_draw_ray	move_x;
+	t_ray		ray;
 
-	step.x = (int)((data->player.x + data->move.x * step_len) / \
-															data->config.zoom);
-	step.y = (int)((data->player.y + data->move.y * step_len) / \
-															data->config.zoom);
-	if (ft_strchr("12", map_char(data, \
-						(int)step.y, (int)data->player.x / data->config.zoom)))
+	if (data->move.x == 0)
+		return (0);
+	move_x.step.x = 1;
+	move_x.step.y = 1;
+	move_x.map.x = (int)(data->player.x / data->config.zoom);
+	move_x.map.y = (int)(data->player.y / data->config.zoom);
+	ray = ray_creator(data, 0);
+	move_x.ray = &ray;
+	move_x.ray->x = data->move.x;
+	move_x.ray->y = 0;
+	normalise_2d(&move_x.ray->x, &move_x.ray->y);
+	move_x.color = create_rgba(255,0,0,255);
+	calc_distances(data, &move_x);
+	hit_wall(data, &move_x);
+	identify_wall(data, &move_x);
+	draw_ray(data, &move_x);
+	return (ray.wall_dst - WALL_DISTANCE);
+}
+
+double	trace_y(t_var *data)
+{
+	t_draw_ray	move_y;
+	t_ray		ray;
+
+	if (data->move.x == 0)
+		return (0);
+	move_y.step.x = 1;
+	move_y.step.y = 1;
+	move_y.map.x = (int)(data->player.x / data->config.zoom);
+	move_y.map.y = (int)(data->player.y / data->config.zoom);
+	ray = ray_creator(data, 0);
+	move_y.ray = &ray;
+	move_y.ray->x = 0;
+	move_y.ray->y = data->move.y;
+	normalise_2d(&move_y.ray->x, &move_y.ray->y);
+	move_y.color = create_rgba(0,255,0,255);
+	calc_distances(data, &move_y);
+	hit_wall(data, &move_y);
+	identify_wall(data, &move_y);
+	draw_ray(data, &move_y);
+	return (ray.wall_dst - WALL_DISTANCE);
+}
+
+double	trace_xy(t_var *data)
+{
+	t_draw_ray	move_xy;
+	t_ray		ray;
+
+	if (data->move.x == 0)
+		return (0);
+	move_xy.step.x = 1;
+	move_xy.step.y = 1;
+	move_xy.map.x = (int)(data->player.x / data->config.zoom);
+	move_xy.map.y = (int)(data->player.y / data->config.zoom);
+	ray = ray_creator(data, 0);
+	move_xy.ray = &ray;
+	move_xy.ray->x = data->move.x;
+	move_xy.ray->y = data->move.y;
+	normalise_2d(&move_xy.ray->x, &move_xy.ray->y);
+	move_xy.color = create_rgba(0,0,255,255);
+	calc_distances(data, &move_xy);
+	hit_wall(data, &move_xy);
+	identify_wall(data, &move_xy);
+	draw_ray(data, &move_xy);
+	return (ray.wall_dst - WALL_DISTANCE);
+}
+
+double	wall_collision(t_var *data)
+{
+	if (data->move.x == 0 && data->move.y == 0)
+		return (0);
+
+	double	wall_x = trace_x(data);
+
+	double	wall_y = trace_y(data);
+
+	double	wall_xy = trace_xy(data);
+
+	if (wall_y <= 0.05 && wall_x > 0.05)
 	{
+		if (data->move.x > 0)
+			data->move.x = 1;
+		else
+			data->move.x = -1;
 		data->move.y = 0;
+		wall_y = 1;
 	}
-	if (ft_strchr("12", map_char(data, \
-						(int)data->player.y / data->config.zoom, (int)step.x)))
+	if (wall_x <= 0.05 && wall_y > 0.05)
 	{
 		data->move.x = 0;
+		if (data->move.y > 0)
+			data->move.y = 1;
+		else
+			data->move.y = -1;
+		wall_x = 1;
 	}
-	return (0);
+	if (wall_x < wall_y && wall_x < wall_xy)
+		return (wall_x);
+	if (wall_y < wall_xy)
+		return (wall_y);
+	if (wall_xy > 0)
+		return (wall_xy);
+	return (1);
 }
 
 // void	approach_wall(t_var *data, t_draw_ray *draw_r, double o_x, double o_y);

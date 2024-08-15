@@ -44,10 +44,18 @@ void	turn(t_var *data, int direction)
 
 void	apply_movement(t_var *data)
 {
+	double	max;
+	vec2d_t	step;
+
 	normalise2d(&data->move);
-	wall_collision(data);
-	data->player.x += data->move.x * MOVEMENT_SPEED;
-	data->player.y += data->move.y * MOVEMENT_SPEED;
+	max = wall_collision(data);
+	normalise2d(&data->move);
+	step.x = data->move.x * MOVEMENT_SPEED;
+	step.y = data->move.y * MOVEMENT_SPEED;
+	lf_limit(&step.x, -max, max);
+	lf_limit(&step.y, -max, max);
+	data->player.x += step.x;
+	data->player.y += step.y;
 }
 
 // void	apply_movement(t_var *data)
