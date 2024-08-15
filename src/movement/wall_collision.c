@@ -1,6 +1,6 @@
 #include "../../inc/movement.h"
 
-double	trace_x(t_var *data)
+bool	wall_collision(t_var *data, double step_len)
 {
 // <<<<<<< HEAD
 	vec2d_t	step;
