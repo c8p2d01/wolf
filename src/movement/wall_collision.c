@@ -1,13 +1,12 @@
 #include "../../inc/movement.h"
 
-double	wall_collision(t_var *data)
+double	trace_x(t_var *data)
 {
 	t_draw_ray	move_x;
 	t_ray		ray;
-	
-	if (data->move.x == 0 && data->move.y == 0)
-		return (0);
 
+	if (data->move.x == 0)
+		return (0);
 	move_x.step.x = 1;
 	move_x.step.y = 1;
 	move_x.map.x = (int)(data->player.x / data->config.zoom);
@@ -22,18 +21,22 @@ double	wall_collision(t_var *data)
 	hit_wall(data, &move_x);
 	identify_wall(data, &move_x);
 	draw_ray(data, &move_x);
+	return (ray.wall_dst - WALL_DISTANCE);
+}
 
-	double	wall_x = move_x.ray->wall_dst - WALL_DISTANCE;
-	
+double	trace_y(t_var *data)
+{
 	t_draw_ray	move_y;
-	t_ray		ray2;
-	
+	t_ray		ray;
+
+	if (data->move.x == 0)
+		return (0);
 	move_y.step.x = 1;
 	move_y.step.y = 1;
 	move_y.map.x = (int)(data->player.x / data->config.zoom);
 	move_y.map.y = (int)(data->player.y / data->config.zoom);
-	ray2 = ray_creator(data, 42);
-	move_y.ray = &ray2;
+	ray = ray_creator(data, 0);
+	move_y.ray = &ray;
 	move_y.ray->x = 0;
 	move_y.ray->y = data->move.y;
 	normalise_2d(&move_y.ray->x, &move_y.ray->y);
@@ -42,18 +45,22 @@ double	wall_collision(t_var *data)
 	hit_wall(data, &move_y);
 	identify_wall(data, &move_y);
 	draw_ray(data, &move_y);
+	return (ray.wall_dst - WALL_DISTANCE);
+}
 
-	double	wall_y = move_y.ray->wall_dst - WALL_DISTANCE;
-
+double	trace_xy(t_var *data)
+{
 	t_draw_ray	move_xy;
-	t_ray		ray3;
-	
+	t_ray		ray;
+
+	if (data->move.x == 0)
+		return (0);
 	move_xy.step.x = 1;
 	move_xy.step.y = 1;
 	move_xy.map.x = (int)(data->player.x / data->config.zoom);
 	move_xy.map.y = (int)(data->player.y / data->config.zoom);
-	ray3 = ray_creator(data, 42);
-	move_xy.ray = &ray3;
+	ray = ray_creator(data, 0);
+	move_xy.ray = &ray;
 	move_xy.ray->x = data->move.x;
 	move_xy.ray->y = data->move.y;
 	normalise_2d(&move_xy.ray->x, &move_xy.ray->y);
@@ -62,16 +69,27 @@ double	wall_collision(t_var *data)
 	hit_wall(data, &move_xy);
 	identify_wall(data, &move_xy);
 	draw_ray(data, &move_xy);
+	return (ray.wall_dst - WALL_DISTANCE);
+}
 
-	double	wall_xy = move_xy.ray->wall_dst - WALL_DISTANCE;
+double	wall_collision(t_var *data)
+{
+	if (data->move.x == 0 && data->move.y == 0)
+		return (0);
+
+	double	wall_x = trace_x(data);
+
+	double	wall_y = trace_y(data);
+
+	double	wall_xy = trace_xy(data);
 
 	if (wall_x < 0)
 	{
-		data->move.y = wall_y;
+		data->move.y = 0;
 	}
 	if (wall_y < 0)
 	{
-		data->move.x = wall_x;
+		data->move.x = 0;
 	}
 	if (wall_x < wall_y && wall_x < wall_xy)
 		return (wall_x);
