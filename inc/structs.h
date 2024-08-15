@@ -5,11 +5,12 @@
 
 typedef struct s_ray
 {
-	int		number;
-	double	x;
-	double	y;
-	double	wall_dst;
-	char	*wall;
+	int				number;
+	double			x;
+	double			y;
+	double			wall_dst;
+	double			wall_percent;
+	mlx_texture_t	*wall;
 }	t_ray;
 
 typedef struct s_intvctr
@@ -28,6 +29,7 @@ typedef struct s_draw_ray
 	int			side;
 	int			color;
 	t_ray		*ray;
+	char		hit;
 }	t_draw_ray;
 
 typedef struct s_var
@@ -45,11 +47,13 @@ typedef struct s_var
 	char			*path_south;
 	char			*path_westh;
 	char			*path_easth;
+	char			*path_door;
 
 	mlx_texture_t	*texture_north;
 	mlx_texture_t	*texture_south;
 	mlx_texture_t	*texture_westh;
 	mlx_texture_t	*texture_easth;
+	mlx_texture_t	*texture_door;
 
 	int32_t			floor;
 	int32_t			ceiling;
@@ -65,6 +69,11 @@ typedef struct s_var
 	t_ray			*rays;
 
 	int				settings;
+
+	struct timeval	time;
+
+	gd_GIF			*gif[5];
+	mlx_texture_t	*gif_tex;
 }	t_var;
 
 #endif
