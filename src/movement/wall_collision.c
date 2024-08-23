@@ -5,9 +5,9 @@ double	wall_collision(t_var *data)
 // <<<<<<< HEAD
 	vec2d_t	step;
 
-	step.x = (int)((data->player.x + data->move.x * step_len) / \
+	step.x = (int)((data->player.x + data->move.x) / \
 															data->config.zoom);
-	step.y = (int)((data->player.y + data->move.y * step_len) / \
+	step.y = (int)((data->player.y + data->move.y) / \
 															data->config.zoom);
 	if (ft_strchr("12", map_char(data, \
 						(int)step.y, (int)data->player.x / data->config.zoom)))
