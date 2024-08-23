@@ -102,6 +102,29 @@ void	update_gifs(t_var *data)
 		gif_next_frame(data->gif[4], data->texture_door);
 }
 
+void	cursor_hook(double xpos, double ypos, void* param)
+{
+	t_var			*data;
+	mouse_mode_t	mouse;
+
+	data = (t_var *)param;
+	if (0 < xpos && xpos < WIDTH && 0 < ypos && ypos < HEIGHT && data->mouse == 1)
+	{
+		mlx_set_cursor_mode(data->_mlx, MLX_MOUSE_HIDDEN);
+		mlx_set_mouse_pos(data->_mlx, WIDTH / 2, HEIGHT / 2);
+		if (xpos < WIDTH / 2)
+		{
+			data->direct = rotate2d(&data->direct, TURN_MOUSE_SPEED);
+			data->move = rotate2d(&data->move, TURN_MOUSE_SPEED);
+		}
+		else if (xpos > WIDTH / 2)
+		{
+			data->direct = rotate2d(&data->direct, -TURN_MOUSE_SPEED);
+			data->move = rotate2d(&data->move, -TURN_MOUSE_SPEED);
+		}
+	}
+}
+
 void	hold_hook(void *param)
 {
 	t_var			*data;
@@ -184,6 +207,8 @@ void	press_hook(mlx_key_data_t key, void *param)
 		if (key.key == MLX_KEY_RIGHT)
 			turn(data, RIGHT);
 	}
+	else if (key.action && key.key == MLX_KEY_V)
+		mouse_action(data);
 	else
 		toggle_key_hook(key, data);
 }
@@ -235,6 +260,7 @@ void	init(t_var *data)
 		return ;
 	init_config(data);
 	init_game_bulk(data);
+	data->mouse = 0;
 	data->settings = 0;
 	data->rays = ft_calloc(data->config.width, sizeof(t_ray));
 	data->map_width = -1;
@@ -286,6 +312,7 @@ int32_t	main(int argc, char **argv)
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
+	mlx_cursor_hook(data._mlx, &cursor_hook, &data);
 	mlx_loop(data._mlx);
 	mlx_terminate(data._mlx);
 	return (EXIT_SUCCESS);

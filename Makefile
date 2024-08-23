@@ -29,6 +29,7 @@ SRCFILES:=\
 			parsing/parse_utils.c \
 			parsing/parsing.c \
 			\
+			movement/mouse.c \
 			movement/move.c \
 			movement/wall_collision.c \
 			\

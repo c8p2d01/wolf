@@ -74,6 +74,8 @@ typedef struct s_var
 
 	gd_GIF			*gif[5];
 	mlx_texture_t	*gif_tex;
+
+	int				mouse;
 }	t_var;
 
 #endif
