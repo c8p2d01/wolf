@@ -7,7 +7,7 @@ SOURCE	= ./src
 
 # Other Variables:
 COMPILER:=	cc
-COMPFLAGS:=	-g #-fsanitize=address #-Wall -Werror -Wextra -Wno-unused-variable 
+COMPFLAGS:=	-g -fsanitize=address #-Wall -Werror -Wextra -Wno-unused-variable 
 DEFINES = -D DEBUG=1
 
 # Source Files:

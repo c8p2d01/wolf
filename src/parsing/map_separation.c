@@ -4,8 +4,7 @@ void	fill(char **map, t_intvctr size, int x, int y)
 {
 	if (x < 0 || x >= size.x || y < 0 || y >= size.y || map[x][y] == ' ')
 		return ;
-	if (map[x][y] == ' ')
-		return ;
+
 	map[x][y] = ' ';
 	fill(map, size, x - 1, y);
 	fill(map, size, x, y - 1);

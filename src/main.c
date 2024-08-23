@@ -310,7 +310,7 @@ int32_t	main(int argc, char **argv)
 		ft_printf("parsing issues\n");
 		exit (42);
 	}
-	// print_data(&data);
+	print_data(&data);
 	minimap(&data);
 	floor_ceiling(&data);
 	mlx_loop_hook(data._mlx, &hold_hook, &data);
