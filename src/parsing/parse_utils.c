@@ -91,7 +91,6 @@ int	get_texure_pos(t_var *data, char *tex)
 	char	*paths[5];
 	int		i;
 
-	printf("getTex %p   %p\n", data, tex);
 	paths[0] = data->path_north;
 	paths[1] = data->path_south;
 	paths[2] = data->path_westh;
@@ -119,7 +118,6 @@ int32_t	gif_init(char *file, mlx_texture_t **dest)
 	data->gif[gif_i] = gd_open_gif(file);
 	if (!data->gif[gif_i])
 		printf("gif error\n");
-	printf("gif debug %p\n", *dest);
 	*dest = ft_calloc(1, sizeof(mlx_texture_t));
 	(*dest)->height = data->gif[gif_i]->height;
 	(*dest)->width = data->gif[gif_i]->width;

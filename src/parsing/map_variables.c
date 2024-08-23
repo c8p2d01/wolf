@@ -153,7 +153,6 @@ int32_t	calculate_color(char *rgb)
 	char	**values;
 	int		color;
 
-printf("RGB = %s\n", rgb);
 	if (!rgb)
 		return (0);
 	values = ft_split(rgb, ',');
@@ -166,7 +165,6 @@ printf("RGB = %s\n", rgb);
 	}
 	else if (nbr_out_of_bounds(values))
 	{
-printf("nbr_out_of_bounds\n");
 		free_2dstr(values);
 		return (-1);
 	}

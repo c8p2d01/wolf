@@ -25,7 +25,7 @@ void	offset_setting(double xdelta, double ydelta, t_var *data)
 			data->map_render_img->height * sizeof(int));
 	}
 	else
-		printf("Setting only adjustable, whn RAY_STYLE is set \
+		printf("Setting only adjustable, when RAY_STYLE is set \
 															to rainbow mode\n");
 }
 

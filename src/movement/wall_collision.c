@@ -19,7 +19,7 @@ double	wall_collision(t_var *data)
 	{
 		data->move.x = 0;
 	}
-	return (MOVEMENT_SPEED);
+	return (data->config.movement_speed);
 	// =======
 	// t_draw_ray	move_x;
 	// t_ray		ray;

@@ -37,7 +37,8 @@ void	scroll_hook(double xdelta, double ydelta, void *param)
 	t_var		*data;
 	static void	(*s[11])(double, double, t_var *) = {norm_setting, \
 	debug_setting, fov_setting, zoom_setting, style_setting, offset_setting, \
-	height_setting, width_setting, test_setting, test_setting, test_setting};
+	height_setting, width_setting, move_setting, turn_setting, \
+	turn_mouse_setting};
 
 	data = param;
 	if (data->settings == 1)
@@ -114,13 +115,13 @@ void	cursor_hook(double xpos, double ypos, void* param)
 		mlx_set_mouse_pos(data->_mlx, WIDTH / 2, HEIGHT / 2);
 		if (xpos < WIDTH / 2)
 		{
-			data->direct = rotate2d(&data->direct, TURN_MOUSE_SPEED);
-			data->move = rotate2d(&data->move, TURN_MOUSE_SPEED);
+			data->direct = rotate2d(&data->direct, data->config.turn_mouse_speed);
+			data->move = rotate2d(&data->move, data->config.turn_mouse_speed);
 		}
 		else if (xpos > WIDTH / 2)
 		{
-			data->direct = rotate2d(&data->direct, -TURN_MOUSE_SPEED);
-			data->move = rotate2d(&data->move, -TURN_MOUSE_SPEED);
+			data->direct = rotate2d(&data->direct, -data->config.turn_mouse_speed);
+			data->move = rotate2d(&data->move, -data->config.turn_mouse_speed);
 		}
 	}
 }
@@ -226,6 +227,9 @@ void	init_config(t_var *data)
 	data->config.color_offset = 0;
 	data->config.ray_style = 1;
 	data->config.map_opacity = MAP_OPACITY % 256;
+	data->config.movement_speed = MOVEMENT_SPEED;
+	data->config.turn_speed = TURN_SPEED;
+	data->config.turn_mouse_speed = TURN_MOUSE_SPEED;
 }
 
 void	init_game_bulk(t_var *data)
@@ -306,7 +310,7 @@ int32_t	main(int argc, char **argv)
 		ft_printf("parsing issues\n");
 		exit (42);
 	}
-	print_data(&data);
+	// print_data(&data);
 	minimap(&data);
 	floor_ceiling(&data);
 	mlx_loop_hook(data._mlx, &hold_hook, &data);

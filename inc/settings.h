@@ -14,5 +14,8 @@ void		style_setting(double xdelta, double ydelta, t_var *data);
 void		offset_setting(double xdelta, double ydelta, t_var *data);
 void		height_setting(double xdelta, double ydelta, t_var *data);
 void		width_setting(double xdelta, double ydelta, t_var *data);
+void		move_setting(double xdelta, double ydelta, t_var *data);
+void		turn_setting(double xdelta, double ydelta, t_var *data);
+void		turn_mouse_setting(double xdelta, double ydelta, t_var *data);
 
 #endif

@@ -32,13 +32,13 @@ void	turn(t_var *data, int direction)
 {
 	if (direction == LEFT)
 	{
-		data->direct = rotate2d(&data->direct, TURN_SPEED);
-		data->move = rotate2d(&data->move, TURN_SPEED);
+		data->direct = rotate2d(&data->direct, data->config.turn_speed);
+		data->move = rotate2d(&data->move, data->config.turn_speed);
 	}
 	else
 	{
-		data->direct = rotate2d(&data->direct, -TURN_SPEED);
-		data->move = rotate2d(&data->move, -TURN_SPEED);
+		data->direct = rotate2d(&data->direct, -data->config.turn_speed);
+		data->move = rotate2d(&data->move, -data->config.turn_speed);
 	}
 }
 
@@ -50,8 +50,8 @@ void	apply_movement(t_var *data)
 	normalise2d(&data->move);
 	max = wall_collision(data);
 	normalise2d(&data->move);
-	step.x = data->move.x * MOVEMENT_SPEED;
-	step.y = data->move.y * MOVEMENT_SPEED;
+	step.x = data->move.x * data->config.movement_speed;
+	step.y = data->move.y * data->config.movement_speed;
 	lf_limit(&step.x, -max, max);
 	lf_limit(&step.y, -max, max);
 	data->player.x += step.x;

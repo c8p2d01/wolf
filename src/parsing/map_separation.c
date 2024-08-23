@@ -8,8 +8,8 @@ void	fill(char **map, t_intvctr size, int x, int y)
 		return ;
 	map[x][y] = ' ';
 	fill(map, size, x - 1, y);
-	fill(map, size, x + 1, y);
 	fill(map, size, x, y - 1);
+	fill(map, size, x + 1, y);
 	fill(map, size, x, y + 1);
 }
 

@@ -3,8 +3,8 @@
 void	print_setting(t_var *data)
 {
 	static const char	*settings[] = {
-		"NORMAL", "DEBUG", "FOV", "ZOOM", "RAY_STYLE", "OFFSET", \
-													"HEIGHT", "WIDTH", NULL
+		"NORMAL", "DEBUG", "FOV", "ZOOM", "RAY_STYLE", "OFFSET", "HEIGHT", \
+		"WIDTH", "MOVEMENT_SPEED", "TURN_SPEED", "TURN_MOUSE_SPEED", NULL
 	};
 	int					i;
 

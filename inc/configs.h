@@ -31,7 +31,7 @@
 # define MAP_DOOR 16777215
 # define MAP_OPEN 2763306
 
-# define N_SETTINGS 7
+# define N_SETTINGS 10
 
 typedef struct s_config
 {
@@ -43,6 +43,9 @@ typedef struct s_config
 	double	color_offset;
 	uint8_t	map_opacity;
 	int		ray_style;
+	float	movement_speed;
+	float	turn_speed;
+	float	turn_mouse_speed;
 }	t_config;
 
 #endif
