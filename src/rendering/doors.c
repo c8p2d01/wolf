@@ -105,20 +105,20 @@ void	identify_door(t_var *data, t_draw_ray *draw_r, bool door_axis)
 	if (draw_r->side && !data->rays[draw_r->i].wall)
 	{
 		if (door_axis)
-			data->rays[draw_r->i].wall = data->texture_door;
+			data->rays[draw_r->i].wall = data->textures[door];
 		else if (data->rays[draw_r->i].x >= 0)
-			data->rays[draw_r->i].wall = data->texture_south;
+			data->rays[draw_r->i].wall = data->textures[south];
 		else
-			data->rays[draw_r->i].wall = data->texture_north;
+			data->rays[draw_r->i].wall = data->textures[north];
 	}
 	else if (!data->rays[draw_r->i].wall)
 	{
 		if (!door_axis)
-			data->rays[draw_r->i].wall = data->texture_door;
+			data->rays[draw_r->i].wall = data->textures[door];
 		else if (data->rays[draw_r->i].y >= 0)
-			data->rays[draw_r->i].wall = data->texture_easth;
+			data->rays[draw_r->i].wall = data->textures[east];
 		else
-			data->rays[draw_r->i].wall = data->texture_westh;
+			data->rays[draw_r->i].wall = data->textures[west];
 	}
 	identify_wall_fraction(data, draw_r);
 }

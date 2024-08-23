@@ -4,10 +4,10 @@ void	print_data(t_var *data)
 {
 	int	i;
 
-	ft_printf("NO %s\t%p\n", data->path_north, data->texture_north);
-	ft_printf("SO %s\t%p\n", data->path_south, data->texture_south);
-	ft_printf("WE %s\t%p\n", data->path_westh, data->texture_westh);
-	ft_printf("EA %s\t%p\n", data->path_easth, data->texture_easth);
+	// ft_printf("NO %s\t%p\n", data->path_north, data->texture_north);
+	// ft_printf("SO %s\t%p\n", data->path_south, data->texture_south);
+	// ft_printf("WE %s\t%p\n", data->path_westh, data->texture_westh);
+	// ft_printf("EA %s\t%p\n", data->path_easth, data->texture_easth);
 	printf("Ceiling\t%i\t\e[48;2;%i;%i;%im      \e[0m\n", \
 					data->ceiling, (data->ceiling >> 24) % 256, \
 					(data->ceiling >> 16) % 256, (data->ceiling >> 8) % 256);
@@ -27,15 +27,15 @@ void	print_data(t_var *data)
 bool	checks(t_var *data)
 {
 	if (data->path_north == NULL || \
-		texture_init(data->path_north, &data->texture_north) || \
+		texture_init(data->path_north, &data->textures[north]) || \
 		data->path_south == NULL || \
-		texture_init(data->path_south, &data->texture_south) || \
+		texture_init(data->path_south, &data->textures[south]) || \
 		data->path_westh == NULL || \
-		texture_init(data->path_westh, &data->texture_westh) || \
+		texture_init(data->path_westh, &data->textures[west]) || \
 		data->path_easth == NULL || \
-		texture_init(data->path_easth, &data->texture_easth) || \
+		texture_init(data->path_easth, &data->textures[east]) || \
 		data->path_door == NULL || \
-		texture_init(data->path_door, &data->texture_door) || \
+		texture_init(data->path_door, &data->textures[door]) || \
 		data->player.x == 0 || \
 		data->player.y == 0 || \
 		(data->direct.x == 0 && \
@@ -73,34 +73,34 @@ int32_t	free_data(t_var *data)
 		free(data->path_easth);
 	if (data->path_westh)
 		free(data->path_westh);
-	if (data->texture_north)
-		mlx_delete_texture(data->texture_north);
-	if (data->texture_south)
-		mlx_delete_texture(data->texture_south);
-	if (data->texture_easth)
-		mlx_delete_texture(data->texture_easth);
-	if (data->texture_westh)
-		mlx_delete_texture(data->texture_westh);
-	if (data->texture_door)
-		mlx_delete_texture(data->texture_door);
+	if (data->textures[north])
+		mlx_delete_texture(data->textures[north]);
+	if (data->textures[south])
+		mlx_delete_texture(data->textures[south]);
+	if (data->textures[east])
+		mlx_delete_texture(data->textures[east]);
+	if (data->textures[west])
+		mlx_delete_texture(data->textures[west]);
+	if (data->textures[door])
+		mlx_delete_texture(data->textures[door]);
 	return (1);
 }
 
-int	get_texure_pos(t_var *data, mlx_texture_t *tex)
+int	get_texure_pos(t_var *data, char *tex)
 {
-	mlx_texture_t	*texs[5];
-	int				i;
+	char	*paths[5];
+	int		i;
 
 	printf("getTex %p   %p\n", data, tex);
-	texs[0] = data->texture_north;
-	texs[1] = data->texture_south;
-	texs[2] = data->texture_westh;
-	texs[3] = data->texture_easth;
-	texs[4] = data->texture_door;
+	paths[0] = data->path_north;
+	paths[1] = data->path_south;
+	paths[2] = data->path_westh;
+	paths[3] = data->path_easth;
+	paths[4] = data->path_door;
 	i = 0;
 	while (i < 5)
 	{
-		if (texs[i] == tex)
+		if (paths[i] == tex)
 			break ;
 		i++;
 	}
@@ -115,7 +115,7 @@ int32_t	gif_init(char *file, mlx_texture_t **dest)
 	int		gif_i;
 
 	data = *proto_global();
-	gif_i = get_texure_pos(data, *dest);
+	gif_i = get_texure_pos(data, file);
 	data->gif[gif_i] = gd_open_gif(file);
 	if (!data->gif[gif_i])
 		printf("gif error\n");

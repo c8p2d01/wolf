@@ -27,13 +27,13 @@ int	ray_color(t_var *data, int raynum, uint8_t opacity)
 			0, 255, 255) << 8 | opacity);
 	else if (data->config.ray_style == 1)
 	{
-		if (data->rays[raynum].wall == data->texture_north)
+		if (data->rays[raynum].wall == data->textures[north])
 			return (create_rgba(42, 42, 255, opacity));
-		else if (data->rays[raynum].wall == data->texture_south)
+		else if (data->rays[raynum].wall == data->textures[south])
 			return (create_rgba(255, 255, 42, opacity));
-		else if (data->rays[raynum].wall == data->texture_easth)
+		else if (data->rays[raynum].wall == data->textures[east])
 			return (create_rgba(255, 42, 42, opacity));
-		else if (data->rays[raynum].wall == data->texture_westh)
+		else if (data->rays[raynum].wall == data->textures[west])
 			return (create_rgba(42, 255, 42, opacity));
 	}
 	return (createGradientColor(fmod(fraction, 1), 0, 0, 0, \

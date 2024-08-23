@@ -3,6 +3,14 @@
 
 # include "cub.h"
 
+enum e_textures {
+	north,
+	south,
+	west,
+	east,
+	door
+};
+
 typedef struct s_ray
 {
 	int				number;
@@ -49,6 +57,8 @@ typedef struct s_var
 	char			*path_easth;
 	char			*path_door;
 
+	mlx_texture_t	*textures[5];
+	gd_GIF			*gif[5];
 	mlx_texture_t	*texture_north;
 	mlx_texture_t	*texture_south;
 	mlx_texture_t	*texture_westh;
@@ -72,8 +82,6 @@ typedef struct s_var
 
 	struct timeval	time;
 
-	gd_GIF			*gif[5];
-	mlx_texture_t	*gif_tex;
 }	t_var;
 
 #endif

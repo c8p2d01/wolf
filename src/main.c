@@ -90,16 +90,16 @@ void	handle_movement(t_var *data)
 
 void	update_gifs(t_var *data)
 {
-	if (data->gif[0])
-		gif_next_frame(data->gif[0], data->texture_north);
-	if (data->gif[1])
-		gif_next_frame(data->gif[1], data->texture_south);
-	if (data->gif[2])
-		gif_next_frame(data->gif[2], data->texture_westh);
-	if (data->gif[3])
-		gif_next_frame(data->gif[3], data->texture_easth);
-	if (data->gif[4])
-		gif_next_frame(data->gif[4], data->texture_door);
+	if (data->gif[north])
+		gif_next_frame(data->gif[north], data->textures[north]);
+	if (data->gif[south])
+		gif_next_frame(data->gif[south], data->textures[south]);
+	if (data->gif[west])
+		gif_next_frame(data->gif[west], data->textures[west]);
+	if (data->gif[east])
+		gif_next_frame(data->gif[east], data->textures[east]);
+	if (data->gif[door])
+		gif_next_frame(data->gif[door], data->textures[door]);
 }
 
 void	hold_hook(void *param)
@@ -115,7 +115,7 @@ void	hold_hook(void *param)
 		data->time.tv_sec = now.tv_sec;
 		last_frame = 0;
 	}
-	if ((now.tv_usec - last_frame) > 10000 * data->gif[4]->gce.delay)
+	if ((now.tv_usec - last_frame) > 50000)
 	{
 		last_frame = now.tv_usec;
 		update_gifs(data);
@@ -221,11 +221,11 @@ void	init_game_bulk(t_var *data)
 	data->player.y = 0;
 	data->direct.x = 0;
 	data->direct.y = 0;
-	data->gif[0] = NULL;
-	data->gif[1] = NULL;
-	data->gif[2] = NULL;
-	data->gif[3] = NULL;
-	data->gif[4] = NULL;
+	data->gif[north] = NULL;
+	data->gif[south] = NULL;
+	data->gif[west] = NULL;
+	data->gif[east] = NULL;
+	data->gif[door] = NULL;
 	gettimeofday(&data->time, NULL);
 }
 

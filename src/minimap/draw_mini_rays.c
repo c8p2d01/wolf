@@ -82,16 +82,16 @@ void	identify_wall(t_var *data, t_draw_ray *draw_r)
 	if (draw_r->side && !draw_r->ray->wall)
 	{
 		if (draw_r->ray->x >= 0)
-			draw_r->ray->wall = data->texture_south;
+			draw_r->ray->wall = data->textures[south];
 		else
-			draw_r->ray->wall = data->texture_north;
+			draw_r->ray->wall = data->textures[north];
 	}
 	else if (!draw_r->ray->wall)
 	{
 		if (draw_r->ray->y >= 0)
-			draw_r->ray->wall = data->texture_easth;
+			draw_r->ray->wall = data->textures[east];
 		else
-			draw_r->ray->wall = data->texture_westh;
+			draw_r->ray->wall = data->textures[west];
 	}
 	identify_wall_fraction(data, draw_r);
 }
