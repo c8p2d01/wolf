@@ -112,13 +112,19 @@ int32_t	set_variable(t_var *data, char **elmnts)
 			data->path_easth = ft_strdup(elmnts[1]);
 		else if (!ft_strncmp(elmnts[0], "WE", 3))
 			data->path_westh = ft_strdup(elmnts[1]);
+		else if (!ft_strncmp(elmnts[0], "DO", 3))
+			data->path_door = ft_strdup(elmnts[1]);
 		else if (!ft_strncmp(elmnts[0], "F", 2) || \
 		!ft_strncmp(elmnts[0], "C", 2))
 		{
 			if (color_unacceptable(data, elmnts))
-			data->floor = calculate_color(elmnts[1]);
-			if (data->floor == -1)
-				return (free_2dstr(elmnts), 1);
+        return (1);
+		  else if (!ft_strncmp(elmnts[0], "F", 2))
+			  data->floor = calculate_color(elmnts[1]);
+      else
+			  data->ceiling = calculate_color(elmnts[1]);
+			//if (data->floor == -1)
+			//	return (free_2dstr(elmnts), 1);
 		}
 		else
 			return (free_2dstr(elmnts), 1);

@@ -30,13 +30,8 @@ void	fov_setting(double xdelta, double ydelta, t_var *data)
 	printf("\e[3;1H\e[9J");
 	data->config.fov += (int) ydelta;
 	i_limit(&data->config.fov, 1, 179);
-	if (data->config.map_visibility)
-	{
-		memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
-								data->map_render_img->height * sizeof(int));
-		draw_fov_lines(data);
-		draw_player_triangle(data);
-	}
+	ft_memset(data->map_render_img->pixels, 0, data->map_render_img->width * \
+							data->map_render_img->height * sizeof(int));
 	debug_fov(data);
 }
 
@@ -59,10 +54,7 @@ void	zoom_setting(double xdelta, double ydelta, t_var *data)
 							data->map_layout_img->height * sizeof(int));
 	data->player.x = (int)((data->player.x / old_zoom) * data->config.zoom);
 	data->player.y = (int)((data->player.y / old_zoom) * data->config.zoom);
-	if (data->config.map_visibility)
-	{
-		filler(data);
-		draw_fov_lines(data);
-		draw_player_triangle(data);
-	}
+	filler(data);
+	draw_fov_lines(data);
+	draw_player_triangle(data);
 }
