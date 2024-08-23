@@ -14,25 +14,25 @@
 
 void	calc_distances(t_var *data, t_draw_ray *draw_r)
 {
-	if (data->rays[draw_r->i].x == 0)
+	if (draw_r->ray->x == 0)
 		draw_r->d_dist.x = 1000;
 	else
-		draw_r->d_dist.x = fabs(1 / data->rays[draw_r->i].x);
-	if (data->rays[draw_r->i].y == 0)
+		draw_r->d_dist.x = fabs(1 / draw_r->ray->x);
+	if (draw_r->ray->y == 0)
 		draw_r->d_dist.y = 1000;
 	else
-		draw_r->d_dist.y = fabs(1 / data->rays[draw_r->i].y);
-	if (data->rays[draw_r->i].x < 0)
+		draw_r->d_dist.y = fabs(1 / draw_r->ray->y);
+	if (draw_r->ray->x < 0)
 		draw_r->step.x = -1;
-	if (data->rays[draw_r->i].x < 0)
+	if (draw_r->ray->x < 0)
 		draw_r->s_dist.x = (data->player.x / data->config.zoom - \
 											draw_r->map.x) * draw_r->d_dist.x;
 	else
 		draw_r->s_dist.x = (draw_r->map.x + 1.0 - data->player.x / \
 										data->config.zoom) * draw_r->d_dist.x;
-	if (data->rays[draw_r->i].y < 0)
+	if (draw_r->ray->y < 0)
 		draw_r->step.y = -1;
-	if (data->rays[draw_r->i].y < 0)
+	if (draw_r->ray->y < 0)
 		draw_r->s_dist.y = (data->player.y / data->config.zoom - \
 											draw_r->map.y) * draw_r->d_dist.y;
 	else
@@ -67,27 +67,31 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 		draw_r->s_dist.x -= draw_r->d_dist.x;
 	else
 		draw_r->s_dist.y -= draw_r->d_dist.y;
+	if (draw_r->s_dist.x < draw_r->s_dist.y)
+		draw_r->ray->wall_dst = draw_r->s_dist.x;
+	else
+		draw_r->ray->wall_dst = draw_r->s_dist.y;
 }
 
 void	identify_wall(t_var *data, t_draw_ray *draw_r)
 {
 	if (draw_r->s_dist.x < draw_r->s_dist.y)
-		data->rays[draw_r->i].wall_dst = draw_r->s_dist.x;
+		draw_r->ray->wall_dst = draw_r->s_dist.x;
 	else
-		data->rays[draw_r->i].wall_dst = draw_r->s_dist.y;
-	if (draw_r->side && !data->rays[draw_r->i].wall)
+		draw_r->ray->wall_dst = draw_r->s_dist.y;
+	if (draw_r->side && !draw_r->ray->wall)
 	{
-		if (data->rays[draw_r->i].x >= 0)
-			data->rays[draw_r->i].wall = data->texture_south;
+		if (draw_r->ray->x >= 0)
+			draw_r->ray->wall = data->texture_south;
 		else
-			data->rays[draw_r->i].wall = data->texture_north;
+			draw_r->ray->wall = data->texture_north;
 	}
-	else if (!data->rays[draw_r->i].wall)
+	else if (!draw_r->ray->wall)
 	{
-		if (data->rays[draw_r->i].y >= 0)
-			data->rays[draw_r->i].wall = data->texture_easth;
+		if (draw_r->ray->y >= 0)
+			draw_r->ray->wall = data->texture_easth;
 		else
-			data->rays[draw_r->i].wall = data->texture_westh;
+			draw_r->ray->wall = data->texture_westh;
 	}
 	identify_wall_fraction(data, draw_r);
 }
@@ -96,26 +100,26 @@ void	identify_wall_fraction(t_var *data, t_draw_ray *draw_r)
 {
 	vec2d_t	wall;
 
-	wall.x = data->player.x + (data->rays[draw_r->i].x * \
-		data->rays[draw_r->i].wall_dst * data->config.zoom);
-	wall.y = data->player.y + (data->rays[draw_r->i].y * \
-		data->rays[draw_r->i].wall_dst * data->config.zoom);
+	wall.x = data->player.x + (draw_r->ray->x * \
+		draw_r->ray->wall_dst * data->config.zoom);
+	wall.y = data->player.y + (draw_r->ray->y * \
+		draw_r->ray->wall_dst * data->config.zoom);
 	if (draw_r->side)
 	{
-		if (data->rays[draw_r->i].x >= 0)
-			data->rays[draw_r->i].wall_percent = 1 - fmod(wall.y / \
+		if (draw_r->ray->x >= 0)
+			draw_r->ray->wall_percent = 1 - fmod(wall.y / \
 														data->config.zoom, 1);
 		else
-			data->rays[draw_r->i].wall_percent = fmod(wall.y / \
+			draw_r->ray->wall_percent = fmod(wall.y / \
 														data->config.zoom, 1);
 	}
 	else
 	{
-		if (data->rays[draw_r->i].y >= 0)
-			data->rays[draw_r->i].wall_percent = fmod(wall.x / \
+		if (draw_r->ray->y >= 0)
+			draw_r->ray->wall_percent = fmod(wall.x / \
 														data->config.zoom, 1);
 		else
-			data->rays[draw_r->i].wall_percent = 1 - fmod(wall.x / \
+			draw_r->ray->wall_percent = 1 - fmod(wall.x / \
 														data->config.zoom, 1);
 	}
 }
@@ -124,10 +128,10 @@ void	draw_ray(t_var *data, t_draw_ray *draw_r)
 {
 	vec2d_t	wall;
 
-	wall.x = (uint32_t)data->player.x + (data->rays[draw_r->i].x * \
-		data->rays[draw_r->i].wall_dst * data->config.zoom);
-	wall.y = (uint32_t)data->player.y + (data->rays[draw_r->i].y * \
-		data->rays[draw_r->i].wall_dst * data->config.zoom);
+	wall.x = (uint32_t)data->player.x + (draw_r->ray->x * \
+		draw_r->ray->wall_dst * data->config.zoom);
+	wall.y = (uint32_t)data->player.y + (draw_r->ray->y * \
+		draw_r->ray->wall_dst * data->config.zoom);
 	draw_line(data->map_render_img, data->player, wall, draw_r->color);
 }
 
@@ -146,6 +150,7 @@ void	draw_fov_lines(t_var *data)
 		draw_r.map.x = (int)(data->player.x / data->config.zoom);
 		draw_r.map.y = (int)(data->player.y / data->config.zoom);
 		data->rays[draw_r.i] = ray_creator(data, draw_r.i);
+		draw_r.ray = &data->rays[draw_r.i];
 		calc_distances(data, &draw_r);
 		draw_r.hit = '0';
 		hit_wall(data, &draw_r);
