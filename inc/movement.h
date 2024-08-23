@@ -3,6 +3,14 @@
 
 # include "cub.h"
 
+// orange to purple color variations
+# define R1 "\033[38;5;178m"
+# define R2 "\033[38;5;173m"
+# define R3 "\033[38;5;168m"
+# define R4 "\033[38;5;163m"
+
+# define QUIT_COLOR "\033[0m"
+
 typedef enum function_callsign
 {
 	LEFT	= 1,
@@ -26,5 +34,10 @@ void	display_movement(t_var *data);
 // wall_collision
 double	wall_collision(t_var *data);
 double	trace_movement(t_var *data);
+
+// mouse
+void	enable_file(t_var *data);
+void	disable_file(t_var *data);
+void	mouse_action(t_var *data);
 
 #endif

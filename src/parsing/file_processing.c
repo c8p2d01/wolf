@@ -7,7 +7,6 @@ int32_t	file_read(char *file, t_list **text)
 {
 	int		fd;
 	char	*read_line;
-	char	*line;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -20,13 +19,8 @@ int32_t	file_read(char *file, t_list **text)
 		return (1);
 	}
 	read_line = get_next_line(fd);
-	while (read_line)
-	{
-		line = ft_strtrim(read_line, "\n");
-		free(read_line);
-		ft_lstadd_back(text, ft_lstnew(line));
-		read_line = get_next_line(fd);
-	}
+	if (map_horizontally_invalid(read_line, fd, text))
+		return (1);
 	close(fd);
 	return (0);
 }

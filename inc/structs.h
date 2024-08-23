@@ -82,6 +82,7 @@ typedef struct s_var
 
 	struct timeval	time;
 
+	int				mouse;
 }	t_var;
 
 #endif
