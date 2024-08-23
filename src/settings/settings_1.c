@@ -6,7 +6,10 @@ void	move_setting(double xdelta, double ydelta, t_var *data)
 	printf("\e[3;1H\n\n");
 	temp = data->config.movement_speed + ydelta;
 	if (temp > 0 && temp <= 1)
+	{
+		printf("movement speed = %f\n", temp);
 		data->config.movement_speed += ydelta;
+	}
 }
 
 void	turn_setting(double xdelta, double ydelta, t_var *data)

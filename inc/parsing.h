@@ -40,6 +40,7 @@ void	update_map_width(t_var *data, t_list *map_text);
 
 // map separation
 int	check_space_separation(t_var *data);
+void	fill_iter(char **map, t_intvctr size, int startX, int startY);
 
 // map line validation
 int	map_horizontally_invalid(char *read_line, int fd, t_list **text);

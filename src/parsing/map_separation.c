@@ -1,16 +1,16 @@
 #include "../../inc/parsing.h"
 
-void	fill(char **map, t_intvctr size, int x, int y)
-{
-	if (x < 0 || x >= size.x || y < 0 || y >= size.y || map[x][y] == ' ')
-		return ;
+// void	fill(char **map, t_intvctr size, int x, int y)
+// {
+// 	if (x < 0 || x >= size.x || y < 0 || y >= size.y || map[x][y] == ' ')
+// 		return ;
 
-	map[x][y] = ' ';
-	fill(map, size, x - 1, y);
-	fill(map, size, x, y - 1);
-	fill(map, size, x + 1, y);
-	fill(map, size, x, y + 1);
-}
+// 	map[x][y] = ' ';
+// 	fill(map, size, x - 1, y);
+// 	fill(map, size, x, y - 1);
+// 	fill(map, size, x + 1, y);
+// 	fill(map, size, x, y + 1);
+// }
 
 void	free_split(char **str)
 {
@@ -66,7 +66,7 @@ int	check_space_separation(t_var *data)
 		i++;
 	map_size.x = data->map_height;
 	map_size.y = data->map_width;
-	fill(map_cpy, map_size, 0, i);
+	fill_iter(map_cpy, map_size, 0, i);
 	if (non_space_character(data, map_cpy))
 		return (free_split(map_cpy), 1);
 	return (free_split(map_cpy), 0);

@@ -23,6 +23,7 @@ SRCFILES:=\
 			parsing/player.c\
 			parsing/file_processing.c \
 			parsing/map_validation.c \
+			parsing/flood_iterative.c \
 			parsing/map_separation.c \
 			parsing/map_line_validation.c \
 			parsing/map_variables.c \
