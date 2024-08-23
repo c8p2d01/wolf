@@ -24,7 +24,7 @@ void	apply_movement(t_var *data);
 void	display_movement(t_var *data);
 
 // wall_collision
-double	wall_collision(t_var *data);
+bool	wall_collision(t_var *data, double step_len);
 double	trace_movement(t_var *data);
 
 #endif
