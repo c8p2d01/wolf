@@ -33,6 +33,7 @@ void	display_movement(t_var *data);
 
 // wall_collision
 double	wall_collision(t_var *data);
+double	max_step(t_var *data, double side);
 double	trace_movement(t_var *data);
 
 // mouse

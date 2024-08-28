@@ -52,8 +52,10 @@ void	apply_movement(t_var *data)
 	normalise2d(&data->move);
 	step.x = data->move.x * data->config.movement_speed;
 	step.y = data->move.y * data->config.movement_speed;
-	lf_limit(&step.x, -max, max);
-	lf_limit(&step.y, -max, max);
+	if (data->move.x)
+		lf_limit(&step.x, -max, max);
+	if (data->move.y)
+		lf_limit(&step.y, -max, max);
 	data->player.x += step.x;
 	data->player.y += step.y;
 }

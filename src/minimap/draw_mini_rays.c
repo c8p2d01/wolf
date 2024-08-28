@@ -59,10 +59,6 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 		}
 		draw_r->hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
 	}
-	if (ft_strchr("2", draw_r->hit))
-		trace_door(data, draw_r);
-	if (ft_strchr("2", draw_r->hit))
-		return ;
 	if (draw_r->side)
 		draw_r->s_dist.x -= draw_r->d_dist.x;
 	else
