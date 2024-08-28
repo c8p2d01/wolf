@@ -72,6 +72,14 @@ void	mini_filler(t_var *data, int x, int y, char c)
 	}
 }
 
+void	redraw_minimap(t_var *data)
+{
+	data->config.map_opacity = MAP_OPACITY % 256;
+	filler(data);
+	draw_player_triangle(data);
+	draw_fov_lines(data);
+}
+
 void	prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color)
 {
 	if (x < img->width && y < img->height && x >= 0 && y >= 0)

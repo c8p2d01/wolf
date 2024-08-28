@@ -24,6 +24,7 @@ void	draw_player_triangle(t_var *data);
 void	filler(t_var *data);
 void	layout_color(t_var *data, int zoom_x, int zoom_y, char c);
 void	mini_filler(t_var *data, int x, int y, char c);
+void	redraw_minimap(t_var *data);
 void	prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color);
 
 #endif

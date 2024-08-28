@@ -61,6 +61,4 @@ void		offset_setting(double xdelta, double ydelta, t_var *data);
 void		height_setting(double xdelta, double ydelta, t_var *data);
 void		width_setting(double xdelta, double ydelta, t_var *data);
 
-void	redraw_minimap(t_var *data);
-
 #endif

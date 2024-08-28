@@ -151,14 +151,6 @@ void	hold_hook(void *param)
 		handle_movement(data);
 }
 
-void	redraw_minimap(t_var *data)
-{
-	data->config.map_opacity = MAP_OPACITY % 256;
-	filler(data);
-	draw_player_triangle(data);
-	draw_fov_lines(data);
-}
-
 void	toggle_map(mlx_key_data_t key, t_var *data)
 {
 	if (data->config.map_opacity == 0)
