@@ -25,7 +25,7 @@ int32_t	find_player(t_var *data)
 		i -= -1;
 	}
 	if (data->direct.x != 42 || !ft_strchr("WSNE", c))
-		return (ft_printf("Error\nErroneous char in map\n") * 0 + 1);
+		return (ft_printf("Error\nErroneous char in map or no player found\n"));
 	return (extract_player(data));
 }
 

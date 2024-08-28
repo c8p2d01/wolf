@@ -62,6 +62,20 @@ int32_t	incomplete(t_var *data)
 	return (0);
 }
 
+int32_t	free_half_data(t_var *data)
+{
+	free_2dstr(data->map);
+	if (data->path_north)
+		free(data->path_north);
+	if (data->path_south)
+		free(data->path_south);
+	if (data->path_easth)
+		free(data->path_easth);
+	if (data->path_westh)
+		free(data->path_westh);
+	return (1);
+}
+
 int32_t	free_data(t_var *data)
 {
 	free_2dstr(data->map);
@@ -162,7 +176,7 @@ void	update_map_width(t_var *data, t_list *map_text)
 	char	*line;
 	t_list	*text;
 
-	if (!data || !line)
+	if (!data || !map_text)
 		return ;
 	text = map_text;
 	while (text)
