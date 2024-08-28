@@ -10,9 +10,15 @@ void	toggle_doors(mlx_key_data_t key, t_var *data)
 	char_y = (int)(data->player.y / data->config.zoom + data->direct.y);
 	c = map_char(data, char_y, char_x);
 	if (c == '2')
+	{
 		data->map[char_x][char_y] = '3';
+		redraw_minimap(data);
+	}
 	if (c == '3')
+	{
 		data->map[char_x][char_y] = '2';
+		redraw_minimap(data);
+	}
 	ft_memset(data->map_render_img->pixels, 0, \
 				data->map_render_img->width * \
 				data->map_render_img->height * sizeof(int));
@@ -32,95 +38,6 @@ void	trace_step(t_var *data, t_draw_ray *draw_r)
 		draw_r->map.y += draw_r->step.y;
 		draw_r->side = 0;
 	}
-}
-
-void	trace_y_walls(t_var *data, t_draw_ray *draw_r)
-{
-	char	hit;
-
-	hit = '0';
-	draw_r->s_dist.x -= 0.5;
-	while (ft_strchr("03NSWE", hit))
-	{
-		trace_step(data, draw_r);
-		hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
-		if ((map_char(data, (int)draw_r->map.y - 1, (int)draw_r->map.x) && \
-											data->rays[draw_r->i].y < 0) \
-			|| \
-			map_char(data, (int)draw_r->map.y + 1, (int)draw_r->map.x) && \
-											data->rays[draw_r->i].y > 0)
-			break ;
-	}
-}
-
-void	trace_x_walls(t_var *data, t_draw_ray *draw_r)
-{
-	char	hit;
-
-	hit = '0';
-	draw_r->s_dist.y -= 0.5;
-	while (ft_strchr("03NSWE", hit))
-	{
-		trace_step(data, draw_r);
-		hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
-		if ((map_char(data, (int)draw_r->map.y, (int)draw_r->map.x - 1) && \
-											data->rays[draw_r->i].y < 0) || \
-			map_char(data, (int)draw_r->map.y, (int)draw_r->map.x + 1) && \
-											data->rays[draw_r->i].y > 0)
-			break ;
-	}
-}
-
-void	trace_door(t_var *data, t_draw_ray *draw_r)
-{
-	bool	door_axis;
-
-	if (map_char(data, draw_r->map.y + 1, draw_r->map.x) == '1' && \
-		map_char(data, draw_r->map.y - 1, draw_r->map.x) == '1')
-	{
-		door_axis = 1;
-		trace_y_walls(data, draw_r);
-	}
-	else if (map_char(data, draw_r->map.y, draw_r->map.x + 1) == '1' && \
-				map_char(data, draw_r->map.y, draw_r->map.x - 1) == '1')
-	{
-		door_axis = 0;
-		trace_x_walls(data, draw_r);
-	}
-	else
-		return ;
-	if (draw_r->side)
-		draw_r->s_dist.x -= draw_r->d_dist.x;
-	else
-		draw_r->s_dist.y -= draw_r->d_dist.y;
-	identify_door(data, draw_r, door_axis);
-}
-
-void	identify_door(t_var *data, t_draw_ray *draw_r, bool door_axis)
-{
-	if (draw_r->s_dist.x < draw_r->s_dist.y)
-		data->rays[draw_r->i].wall_dst = draw_r->s_dist.x;
-	else
-		data->rays[draw_r->i].wall_dst = draw_r->s_dist.y;
-	if (draw_r->side && !data->rays[draw_r->i].wall)
-	{
-		if (door_axis)
-			data->rays[draw_r->i].wall = data->textures[door];
-		else if (data->rays[draw_r->i].x >= 0)
-			data->rays[draw_r->i].wall = data->textures[south];
-		else
-			data->rays[draw_r->i].wall = data->textures[north];
-	}
-	else if (!data->rays[draw_r->i].wall)
-	{
-		if (!door_axis)
-			data->rays[draw_r->i].wall = data->textures[door];
-		else if (data->rays[draw_r->i].y >= 0)
-			data->rays[draw_r->i].wall = data->textures[east];
-		else
-			data->rays[draw_r->i].wall = data->textures[west];
-	}
-	identify_wall_fraction(data, draw_r);
 }
 
 int	check_door(int i, t_var *data)
