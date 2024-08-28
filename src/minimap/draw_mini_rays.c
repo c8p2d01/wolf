@@ -43,6 +43,7 @@ void	calc_distances(t_var *data, t_draw_ray *draw_r)
 void	hit_wall(t_var *data, t_draw_ray *draw_r)
 {
 	draw_r->side = 0;
+
 	while (ft_strchr("03NSWE", draw_r->hit))
 	{
 		if (draw_r->s_dist.x < draw_r->s_dist.y)
@@ -59,10 +60,6 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 		}
 		draw_r->hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
 	}
-	if (ft_strchr("2", draw_r->hit))
-		trace_door(data, draw_r);
-	if (ft_strchr("2", draw_r->hit))
-		return ;
 	if (draw_r->side)
 		draw_r->s_dist.x -= draw_r->d_dist.x;
 	else
@@ -75,20 +72,25 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 
 void	identify_wall(t_var *data, t_draw_ray *draw_r)
 {
+
 	if (draw_r->s_dist.x < draw_r->s_dist.y)
 		draw_r->ray->wall_dst = draw_r->s_dist.x;
 	else
 		draw_r->ray->wall_dst = draw_r->s_dist.y;
 	if (draw_r->side && !draw_r->ray->wall)
 	{
-		if (draw_r->ray->x >= 0)
+		if (draw_r->hit == '2')
+			draw_r->ray->wall = data->textures[door];
+		else if (draw_r->ray->x >= 0)
 			draw_r->ray->wall = data->textures[south];
 		else
 			draw_r->ray->wall = data->textures[north];
 	}
 	else if (!draw_r->ray->wall)
 	{
-		if (draw_r->ray->y >= 0)
+		if (draw_r->hit == '2')
+			draw_r->ray->wall = data->textures[door];
+		else if (draw_r->ray->y >= 0)
 			draw_r->ray->wall = data->textures[east];
 		else
 			draw_r->ray->wall = data->textures[west];
