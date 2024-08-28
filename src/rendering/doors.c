@@ -10,9 +10,15 @@ void	toggle_doors(mlx_key_data_t key, t_var *data)
 	char_y = (int)(data->player.y / data->config.zoom + data->direct.y);
 	c = map_char(data, char_y, char_x);
 	if (c == '2')
+	{
 		data->map[char_x][char_y] = '3';
+		redraw_minimap(data);
+	}
 	if (c == '3')
+	{
 		data->map[char_x][char_y] = '2';
+		redraw_minimap(data);
+	}
 	ft_memset(data->map_render_img->pixels, 0, \
 				data->map_render_img->width * \
 				data->map_render_img->height * sizeof(int));
