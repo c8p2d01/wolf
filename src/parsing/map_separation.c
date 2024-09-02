@@ -25,7 +25,7 @@ int	non_space_character(t_var *data, char **map)
 		while (map[x][y])
 		{
 			if (map[x][y] != ' ')
-				return (1);
+				return (printf("Map cannot be separated by spaces\n"), 1);
 			y++;
 		}
 		x++;
