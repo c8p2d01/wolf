@@ -37,6 +37,7 @@ typedef struct s_draw_ray
 	int			side;
 	int			color;
 	t_ray		*ray;
+	char		*spaces;
 	char		hit;
 }	t_draw_ray;
 
@@ -73,6 +74,7 @@ typedef struct s_var
 	int				map_height;
 
 	vec2d_t			player;
+	vec2d_t			p_player;
 	vec2d_t			direct;
 	vec2d_t			move;
 

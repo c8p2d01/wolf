@@ -10,7 +10,8 @@ void	put_slice(t_var *data, int i);
 void	render_view(t_var *data);
 // doors
 void	toggle_doors(mlx_key_data_t key, t_var *data);
-int	trace_door(t_var *data, t_draw_ray *draw_r);
+void	trace_door(t_var *data, t_draw_ray *draw_r);
+void	trace_door_side(t_var *data, t_draw_ray *draw_r);
 void	identify_door(t_var *data, t_draw_ray *draw_r, bool door_axis);
 int		check_door(int i, t_var *data);
 

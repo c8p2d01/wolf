@@ -44,12 +44,14 @@ double	max_step(t_var *data, double side)
 	temp.y = data->move.y;
 	mid.ray = &temp;
 	calc_distances(data, &mid);
+	mid.spaces = "03NSWE";
 	mid.hit = '0';
 	hit_wall(data, &mid);
 	identify_wall(data, &mid);
 	data->player.x = player_tmp.x;
 	data->player.y = player_tmp.y;
 	return (smallest(data, distances, side, temp.wall_dst));
+	// return(MOVEMENT_SPEED);
 }
 
 double	smallest(t_var *data, double *distances, double side, double wall_dist)

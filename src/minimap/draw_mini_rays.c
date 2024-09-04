@@ -12,6 +12,17 @@
 
 #include "../../inc/cub.h"
 
+void	calc_distances_door_offset(t_var *data, t_draw_ray *draw_r)
+{
+	// if (draw_r->i < 0)
+	// {
+	// 	if (data->player.y != data->p_player.y)
+	// 		draw_r->s_dist.y = 0.5;
+	// 	if (data->player.x != data->p_player.x)
+	// 		draw_r->s_dist.x = 0.5;
+	// }
+}
+
 void	calc_distances(t_var *data, t_draw_ray *draw_r)
 {
 	if (draw_r->ray->x == 0)
@@ -38,14 +49,16 @@ void	calc_distances(t_var *data, t_draw_ray *draw_r)
 	else
 		draw_r->s_dist.y = (draw_r->map.y + 1.0 - data->player.y / \
 										data->config.zoom) * draw_r->d_dist.y;
+	calc_distances_door_offset(data, draw_r);
 }
 
 void	hit_wall(t_var *data, t_draw_ray *draw_r)
 {
 	draw_r->side = 0;
 
-	while (ft_strchr("03NSWE", draw_r->hit))
+	while (ft_strchr(draw_r->spaces, draw_r->hit))
 	{
+redo:
 		if (draw_r->s_dist.x < draw_r->s_dist.y)
 		{
 			draw_r->s_dist.x += draw_r->d_dist.x;
@@ -60,6 +73,11 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 		}
 		draw_r->hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
 	}
+	// if (draw_r->hit == '2' && draw_r->i != -1 && draw_r->i != -42)
+	// {
+	// 	trace_door(data, draw_r);
+	// 	return ;
+	// }
 	if (draw_r->side)
 		draw_r->s_dist.x -= draw_r->d_dist.x;
 	else
@@ -68,6 +86,11 @@ void	hit_wall(t_var *data, t_draw_ray *draw_r)
 		draw_r->ray->wall_dst = draw_r->s_dist.x;
 	else
 		draw_r->ray->wall_dst = draw_r->s_dist.y;
+	// if (draw_r->i == -1 && draw_r->hit != '2')
+	// {
+	// 	trace_door_side(data, draw_r);
+	// 	return ;
+	// }
 }
 
 void	identify_wall(t_var *data, t_draw_ray *draw_r)
@@ -77,20 +100,22 @@ void	identify_wall(t_var *data, t_draw_ray *draw_r)
 		draw_r->ray->wall_dst = draw_r->s_dist.x;
 	else
 		draw_r->ray->wall_dst = draw_r->s_dist.y;
-	if (draw_r->side && !draw_r->ray->wall)
+	if (draw_r->i < 0)
 	{
-		if (draw_r->hit == '2')
-			draw_r->ray->wall = data->textures[door];
-		else if (draw_r->ray->x >= 0)
+		printf("");
+	}
+	if (draw_r->hit == '2')
+		draw_r->ray->wall = data->textures[door];
+	else if (draw_r->side && !draw_r->ray->wall)
+	{
+		if (draw_r->ray->x >= 0)
 			draw_r->ray->wall = data->textures[south];
 		else
 			draw_r->ray->wall = data->textures[north];
 	}
 	else if (!draw_r->ray->wall)
 	{
-		if (draw_r->hit == '2')
-			draw_r->ray->wall = data->textures[door];
-		else if (draw_r->ray->y >= 0)
+		if (draw_r->ray->y >= 0)
 			draw_r->ray->wall = data->textures[east];
 		else
 			draw_r->ray->wall = data->textures[west];
@@ -154,6 +179,7 @@ void	draw_fov_lines(t_var *data)
 		data->rays[draw_r.i] = ray_creator(data, draw_r.i);
 		draw_r.ray = &data->rays[draw_r.i];
 		calc_distances(data, &draw_r);
+		draw_r.spaces = "03NSWE";
 		draw_r.hit = '0';
 		hit_wall(data, &draw_r);
 		identify_wall(data, &draw_r);

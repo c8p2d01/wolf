@@ -40,6 +40,110 @@ void	trace_step(t_var *data, t_draw_ray *draw_r)
 	}
 }
 
+void	trace_y_walls(t_var *data, t_draw_ray *draw_r)
+{
+	char	hit;
+
+	hit = '0';
+	while (ft_strchr("03NSWE", hit))
+	{
+		trace_step(data, draw_r);
+		hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
+		if ((map_char(data, (int)draw_r->map.y - 1, (int)draw_r->map.x) && \
+											data->rays[draw_r->i].y < 0) \
+			|| \
+			map_char(data, (int)draw_r->map.y + 1, (int)draw_r->map.x) && \
+											data->rays[draw_r->i].y > 0)
+			break ;
+	}
+}
+
+void	trace_x_walls(t_var *data, t_draw_ray *draw_r)
+{
+	char	hit;
+
+	hit = '0';
+	draw_r->s_dist.y -= 0.5;
+	while (ft_strchr("03NSWE", hit))
+	{
+		trace_step(data, draw_r);
+		hit = map_char(data, (int)draw_r->map.y, (int)draw_r->map.x);
+		if ((map_char(data, (int)draw_r->map.y, (int)draw_r->map.x - 1) && \
+											data->rays[draw_r->i].y < 0) || \
+			map_char(data, (int)draw_r->map.y, (int)draw_r->map.x + 1) && \
+											data->rays[draw_r->i].y > 0)
+			break ;
+	}
+}
+
+void	trace_door(t_var *data, t_draw_ray *draw_r)
+{
+	int			tmp;
+	t_ray		temp;
+	t_ray		p_player;
+	double		distances[3];
+
+	p_player.x = data->player.x;
+	p_player.y = data->player.y;
+
+	if (map_char(data, draw_r->map.y + 1, draw_r->map.x) == '1' && \
+		map_char(data, draw_r->map.y - 1, draw_r->map.x) == '1')
+	{
+		if (data->direct.x > 0)
+			data->player.x = data->p_player.x - 0.5 * data->config.zoom;
+		else
+			data->player.x = data->p_player.x + 0.5 * data->config.zoom;
+	}
+
+	if (map_char(data, draw_r->map.y, draw_r->map.x + 1) == '1' && \
+		map_char(data, draw_r->map.y, draw_r->map.x - 1) == '1')
+	{
+		if (data->direct.y > 0)
+			data->player.y = data->p_player.y - 0.5 * data->config.zoom;
+		else
+			data->player.y = data->p_player.y + 0.5 * data->config.zoom;
+	}
+	draw_r->map.x = (int)((data->player.x / data->config.zoom));
+	draw_r->map.y = (int)((data->player.y / data->config.zoom));
+	// data->rays[draw_r->i] = ray_creator(data, draw_r->i);
+	// draw_r->ray = &data->rays[draw_r->i];
+	calc_distances(data, draw_r);
+	draw_r->spaces = "03NSWE";
+	draw_r->hit = '0';
+	tmp = draw_r->i;
+	draw_r->i = -1;
+	hit_wall(data, draw_r);
+	identify_wall(data, draw_r);
+	data->player.x = data->p_player.x;
+	data->player.y = data->p_player.y;
+	draw_r->i = tmp;
+}
+
+void	trace_door_side(t_var *data, t_draw_ray *draw_r)
+{
+	int			tmp;
+	t_ray		temp;
+	t_ray		p_player;
+	double		distances[3];
+
+	data->player.x = data->p_player.x;
+	data->player.y = data->p_player.y;
+	draw_r->map.x = (int)((data->player.x / data->config.zoom));
+	draw_r->map.y = (int)((data->player.y / data->config.zoom));
+	// data->rays[draw_r->i] = ray_creator(data, draw_r->i);
+	// draw_r->ray = &data->rays[draw_r->i];
+	calc_distances(data, draw_r);
+	draw_r->spaces = "023NSWE";
+	draw_r->hit = '0';
+	tmp = draw_r->i;
+	draw_r->i = -42;
+	hit_wall(data, draw_r);
+	identify_wall(data, draw_r);
+	data->player.x = data->p_player.x;
+	data->player.y = data->p_player.y;
+	draw_r->i = tmp;
+}
+
 int	check_door(int i, t_var *data)
 {
 	int	pos;

@@ -37,6 +37,8 @@ void	render_view(t_var *data)
 
 	ft_memset(data->main_render_img->pixels, 0, data->config.width * \
 											data->config.height * sizeof(int));
+	data->p_player.x = data->player.x;
+	data->p_player.y = data->player.y;
 	i = 0;
 	while (i < data->config.width)
 	{
