@@ -119,11 +119,11 @@ fclean:
 re: fclean all
 
 ree: re
-	./$(NAME) maps/smol/map.cub
+	./$(NAME) maps/map.cub
 
 e:
 	make
-	./$(NAME) maps/smol/map.cub
+	./$(NAME) maps/map.cub
 
 red:
 	echo $(RED)
