@@ -13,14 +13,15 @@ int32_t	file_read(char *file, t_list **text)
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-		{
 			ft_printf("File not found\n");
-		}
 		return (1);
 	}
 	read_line = get_next_line(fd);
 	if (map_horizontally_invalid(read_line, fd, text))
+	{
+		close(fd);
 		return (1);
+	}
 	close(fd);
 	return (0);
 }
@@ -34,9 +35,7 @@ int32_t	argument_count(int argc)
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-		{
 			ft_printf("Wrong number of arguments\n");
-		}
 		return (1);
 	}
 	return (0);
@@ -51,9 +50,7 @@ int32_t	file_name(char **file)
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-		{
 			ft_printf("Wrong number of arguments\n");
-		}
 		return (1);
 	}
 	if (ft_strlen(file[1]) < 4 || \
@@ -61,9 +58,7 @@ int32_t	file_name(char **file)
 	{
 		ft_printf("Error\n");
 		if (DEBUG == 1)
-		{
 			ft_printf("File name wrong\n");
-		}
 		return (1);
 	}
 	return (0);

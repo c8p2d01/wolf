@@ -85,7 +85,7 @@ int	map_horizontally_invalid(char *read_line, int fd, t_list **text)
 	{
 		temp = newline_space_check(read_line, fd, map_switch);
 		if (temp == 1)
-			return (1);
+			return (ft_lstclear(text, free), 1);
 		else if (temp == 2)
 			break ;
 		else if (temp == 3)

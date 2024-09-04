@@ -9,6 +9,8 @@ int32_t	construct_map(t_var *data, t_list *text, int map_start, int32_t i)
 		text = text->next;
 	update_map_width(data, text);
 	data->map_height = ft_lstsize(text) - map_start;
+	if (data->map_height <= 0 || data->map_width <= 0)
+		return (1);
 	data->map = ft_calloc(data->map_height + 1, sizeof(char *));
 	if (!data->map)
 		return (1);
@@ -49,7 +51,10 @@ int32_t	parse_values(t_list *text, t_var *data, int *map_start)
 			continue ;
 		}
 		if (ft_strchr("01", line[0]))
+		{
+			free(line);
 			break ;
+		}
 		if (check_variable(data, line))
 			return (free(line), 1);
 		text = text->next;
@@ -118,13 +123,11 @@ int32_t	set_variable(t_var *data, char **elmnts)
 		!ft_strncmp(elmnts[0], "C", 2))
 		{
 			if (color_unacceptable(data, elmnts))
-        return (1);
-		  else if (!ft_strncmp(elmnts[0], "F", 2))
-			  data->floor = calculate_color(elmnts[1]);
-      else
-			  data->ceiling = calculate_color(elmnts[1]);
-			//if (data->floor == -1)
-			//	return (free_2dstr(elmnts), 1);
+				return (1);
+			else if (!ft_strncmp(elmnts[0], "F", 2))
+				data->floor = calculate_color(elmnts[1]);
+			else
+				data->ceiling = calculate_color(elmnts[1]);
 		}
 		else
 			return (free_2dstr(elmnts), 1);

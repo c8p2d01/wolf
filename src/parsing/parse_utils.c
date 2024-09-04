@@ -62,7 +62,7 @@ int32_t	incomplete(t_var *data)
 	return (0);
 }
 
-int32_t	free_data(t_var *data)
+int32_t	free_half_data(t_var *data)
 {
 	free_2dstr(data->map);
 	if (data->path_north)
@@ -73,6 +73,20 @@ int32_t	free_data(t_var *data)
 		free(data->path_easth);
 	if (data->path_westh)
 		free(data->path_westh);
+	return (1);
+}
+
+int32_t	free_data(t_var *data)
+{
+	free_2dstr(data->map);
+	// if (data->path_north)
+	// 	free(data->path_north);
+	// if (data->path_south)
+	// 	free(data->path_south);
+	// if (data->path_easth)
+	// 	free(data->path_easth);
+	// if (data->path_westh)
+	// 	free(data->path_westh);
 	if (data->textures[north])
 		mlx_delete_texture(data->textures[north]);
 	if (data->textures[south])
@@ -153,6 +167,7 @@ int32_t	texture_init(char *file, mlx_texture_t **dest)
 		return (1);
 	if (!dest)
 		return (1);
+	free(file);
 	return (0);
 }
 
@@ -162,7 +177,7 @@ void	update_map_width(t_var *data, t_list *map_text)
 	char	*line;
 	t_list	*text;
 
-	if (!data || !line)
+	if (!data || !map_text)
 		return ;
 	text = map_text;
 	while (text)

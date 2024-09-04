@@ -192,7 +192,6 @@ void	press_hook(mlx_key_data_t key, void *param)
 	if (key.key == MLX_KEY_ESCAPE)
 	{
 		mlx_close_window(data->_mlx);
-		free_data(data);
 		return ;
 	}
 	else if (key.action && (key.key == MLX_KEY_LEFT \
@@ -302,7 +301,7 @@ int32_t	main(int argc, char **argv)
 	*proto_global() = &data;
 	if (parse_input(argc, argv, &data))
 	{
-		ft_printf("parsing issues\n");
+		ft_printf(R1"parsing issues\n"QUIT_COLOR);
 		exit (42);
 	}
 	print_data(&data);
@@ -313,6 +312,7 @@ int32_t	main(int argc, char **argv)
 	mlx_key_hook(data._mlx, &press_hook, &data);
 	mlx_cursor_hook(data._mlx, &cursor_hook, &data);
 	mlx_loop(data._mlx);
+	free_data(&data);
 	mlx_terminate(data._mlx);
 	return (EXIT_SUCCESS);
 }

@@ -34,6 +34,7 @@ int32_t	init_player(t_var *data, char pov);
 
 void	print_data(t_var *data);
 int32_t	incomplete(t_var *data);
+int32_t	free_half_data(t_var *data);
 int32_t	free_data(t_var *data);
 int32_t	texture_init(char *file, mlx_texture_t **dest);
 void	update_map_width(t_var *data, t_list *map_text);

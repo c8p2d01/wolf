@@ -1,17 +1,5 @@
 #include "../../inc/parsing.h"
 
-// void	fill(char **map, t_intvctr size, int x, int y)
-// {
-// 	if (x < 0 || x >= size.x || y < 0 || y >= size.y || map[x][y] == ' ')
-// 		return ;
-
-// 	map[x][y] = ' ';
-// 	fill(map, size, x - 1, y);
-// 	fill(map, size, x, y - 1);
-// 	fill(map, size, x + 1, y);
-// 	fill(map, size, x, y + 1);
-// }
-
 void	free_split(char **str)
 {
 	int	i;
@@ -37,7 +25,7 @@ int	non_space_character(t_var *data, char **map)
 		while (map[x][y])
 		{
 			if (map[x][y] != ' ')
-				return (1);
+				return (printf("Map cannot be separated by spaces\n"), 1);
 			y++;
 		}
 		x++;
@@ -58,11 +46,13 @@ int	check_space_separation(t_var *data)
 		return (1);
 	while (i < data->map_height)
 	{
+		if (!data->map[i])
+			break ;
 		map_cpy[i] = ft_strdup(data->map[i]);
 		i++;
 	}
 	i = 0;
-	while (map_cpy[0][i] != '1')
+	while (map_cpy[0][i] && map_cpy[0][i] != '1')
 		i++;
 	map_size.x = data->map_height;
 	map_size.y = data->map_width;
