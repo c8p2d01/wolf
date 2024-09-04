@@ -32,125 +32,6 @@
 	from there on iterate in steps
 */
 
-void	scroll_hook(double xdelta, double ydelta, void *param)
-{
-	t_var		*data;
-	static void	(*s[11])(double, double, t_var *) = {norm_setting, \
-	debug_setting, fov_setting, zoom_setting, style_setting, offset_setting, \
-	height_setting, width_setting, move_setting, turn_setting, \
-	turn_mouse_setting};
-
-	data = param;
-	if (data->settings == 1)
-	{
-		if (mlx_is_key_down(data->_mlx, MLX_KEY_LEFT_SHIFT))
-		{
-			data->config.setting += (int)xdelta;
-			i_limit(&data->config.setting, 0, N_SETTINGS);
-			print_setting(data);
-			return ;
-		}
-		s[data->config.setting](xdelta, ydelta, data);
-	}
-}
-
-bool	movement_keys(t_var *data)
-{
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_UP) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_W) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_A) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_DOWN) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_S) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_D) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_LEFT) || \
-		mlx_is_key_down(data->_mlx, MLX_KEY_RIGHT))
-		return (1);
-	return (0);
-}
-
-void	handle_movement(t_var *data)
-{
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_UP) \
-				|| mlx_is_key_down(data->_mlx, MLX_KEY_W))
-		straight(data, PRESS);
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_DOWN) \
-				|| mlx_is_key_down(data->_mlx, MLX_KEY_S))
-		straight(data, MINUS);
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_D))
-		strafe(data, PRESS);
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_A))
-		strafe(data, MINUS);
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_LEFT))
-		turn(data, LEFT);
-	if (mlx_is_key_down(data->_mlx, MLX_KEY_RIGHT))
-		turn(data, RIGHT);
-	apply_movement(data);
-	data->move.x = 0;
-	data->move.y = 0;
-}
-
-void	update_gifs(t_var *data)
-{
-	if (data->gif[north])
-		gif_next_frame(data->gif[north], data->textures[north]);
-	if (data->gif[south])
-		gif_next_frame(data->gif[south], data->textures[south]);
-	if (data->gif[west])
-		gif_next_frame(data->gif[west], data->textures[west]);
-	if (data->gif[east])
-		gif_next_frame(data->gif[east], data->textures[east]);
-	if (data->gif[door])
-		gif_next_frame(data->gif[door], data->textures[door]);
-}
-
-void	cursor_hook(double xpos, double ypos, void* param)
-{
-	t_var			*data;
-	mouse_mode_t	mouse;
-
-	data = (t_var *)param;
-	if (0 < xpos && xpos < WIDTH && 0 < ypos && ypos < HEIGHT && data->mouse == 1)
-	{
-		mlx_set_cursor_mode(data->_mlx, MLX_MOUSE_HIDDEN);
-		mlx_set_mouse_pos(data->_mlx, WIDTH / 2, HEIGHT / 2);
-		if (xpos < WIDTH / 2)
-		{
-			data->direct = rotate2d(&data->direct, data->config.turn_mouse_speed);
-			data->move = rotate2d(&data->move, data->config.turn_mouse_speed);
-		}
-		else if (xpos > WIDTH / 2)
-		{
-			data->direct = rotate2d(&data->direct, -data->config.turn_mouse_speed);
-			data->move = rotate2d(&data->move, -data->config.turn_mouse_speed);
-		}
-	}
-}
-
-void	hold_hook(void *param)
-{
-	t_var			*data;
-	struct timeval	now;
-	static long		last_frame;
-
-	data = param;
-	gettimeofday(&now, NULL);
-	if (now.tv_sec > data->time.tv_sec)
-	{
-		data->time.tv_sec = now.tv_sec;
-		last_frame = 0;
-	}
-	if ((now.tv_usec - last_frame) > 50000)
-	{
-		last_frame = now.tv_usec;
-		update_gifs(data);
-		render_view(data);
-		draw_fov_lines(data);
-		draw_player_triangle(data);
-	}
-	if (movement_keys(data))
-		handle_movement(data);
-}
-
 void	toggle_map(mlx_key_data_t key, t_var *data)
 {
 	if (data->config.map_opacity == 0)
@@ -191,6 +72,7 @@ void	press_hook(mlx_key_data_t key, void *param)
 	data = param;
 	if (key.key == MLX_KEY_ESCAPE)
 	{
+		data->shutdown = true;
 		mlx_close_window(data->_mlx);
 		return ;
 	}
@@ -208,79 +90,6 @@ void	press_hook(mlx_key_data_t key, void *param)
 		toggle_key_hook(key, data);
 }
 
-void	init_config(t_var *data)
-{
-	if (!data)
-		return ;
-	data->config.setting = 0;
-	data->config.fov = FOV;
-	i_limit(&data->config.fov, 1, 179);
-	data->config.width = WIDTH;
-	data->config.height = HEIGHT;
-	data->config.zoom = ZOOM;
-	data->config.color_offset = 0;
-	data->config.ray_style = 1;
-	data->config.map_opacity = MAP_OPACITY % 256;
-	data->config.movement_speed = MOVEMENT_SPEED;
-	data->config.turn_speed = TURN_SPEED;
-	data->config.turn_mouse_speed = TURN_MOUSE_SPEED;
-}
-
-void	init_game_bulk(t_var *data)
-{
-	if (!data)
-		return ;
-	data->path_north = NULL;
-	data->path_south = NULL;
-	data->path_westh = NULL;
-	data->path_easth = NULL;
-	data->path_door = NULL;
-	data->texture_north = NULL;
-	data->texture_south = NULL;
-	data->texture_westh = NULL;
-	data->texture_easth = NULL;
-	data->texture_door = NULL;
-	data->player.x = 0;
-	data->player.y = 0;
-	data->direct.x = 0;
-	data->direct.y = 0;
-	data->gif[north] = NULL;
-	data->gif[south] = NULL;
-	data->gif[west] = NULL;
-	data->gif[east] = NULL;
-	data->gif[door] = NULL;
-	gettimeofday(&data->time, NULL);
-}
-
-void	init(t_var *data)
-{
-	if (!data)
-		return ;
-	init_config(data);
-	init_game_bulk(data);
-	data->mouse = 0;
-	data->settings = 0;
-	data->rays = ft_calloc(data->config.width, sizeof(t_ray));
-	data->map_width = -1;
-	data->map_height = -1;
-	data->map = NULL;
-	data->ceiling = 42;
-	data->floor = 42;
-	data->_mlx = mlx_init(data->config.width, data->config.height, "MAP", true);
-	if (!data->_mlx)
-		exit (EXIT_FAILURE);
-	data->main_static_img = mlx_new_image(data->_mlx, data->config.width, \
-														data->config.height);
-	data->main_render_img = mlx_new_image(data->_mlx, data->config.width, \
-														data->config.height);
-	ft_memset(data->main_static_img->pixels, 0, data->config.width * \
-											data->config.height * sizeof(int));
-	ft_memset(data->main_render_img->pixels, 0, data->config.width * \
-											data->config.height * sizeof(int));
-	mlx_image_to_window(data->_mlx, data->main_static_img, 0, 0);
-	mlx_image_to_window(data->_mlx, data->main_render_img, 0, 0);
-}
-
 int	minimap(t_var *data)
 {
 	data->map_layout_img = mlx_new_image(data->_mlx, (data->map_width * \
@@ -293,10 +102,16 @@ int	minimap(t_var *data)
 	return (0);
 }
 
+void	lal(void)
+{
+	system("leaks cub3D");
+}
+
 int32_t	main(int argc, char **argv)
 {
 	t_var	data;
 
+	atexit(lal);
 	init(&data);
 	*proto_global() = &data;
 	if (parse_input(argc, argv, &data))
@@ -307,7 +122,7 @@ int32_t	main(int argc, char **argv)
 	print_data(&data);
 	minimap(&data);
 	floor_ceiling(&data);
-	mlx_loop_hook(data._mlx, &hold_hook, &data);
+	mlx_loop_hook(data._mlx, &loop_hook, &data);
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
 	mlx_cursor_hook(data._mlx, &cursor_hook, &data);

@@ -1,5 +1,31 @@
 #include "../../inc/movement.h"
 
+void	cursor_hook(double xpos, double ypos, void *param)
+{
+	t_var			*data;
+	mouse_mode_t	mouse;
+
+	data = (t_var *)param;
+	if (0 < xpos && xpos < WIDTH && 0 < ypos && ypos < HEIGHT && \
+															data->mouse == 1)
+	{
+		mlx_set_cursor_mode(data->_mlx, MLX_MOUSE_HIDDEN);
+		mlx_set_mouse_pos(data->_mlx, WIDTH / 2, HEIGHT / 2);
+		if (xpos < WIDTH / 2)
+		{
+			data->direct = rotate2d(&data->direct, \
+												data->config.turn_mouse_speed);
+			data->move = rotate2d(&data->move, data->config.turn_mouse_speed);
+		}
+		else if (xpos > WIDTH / 2)
+		{
+			data->direct = rotate2d(&data->direct, \
+												-data->config.turn_mouse_speed);
+			data->move = rotate2d(&data->move, -data->config.turn_mouse_speed);
+		}
+	}
+}
+
 void	mouse_action(t_var *data)
 {
 	if (data->mouse == 0)

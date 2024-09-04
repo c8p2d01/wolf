@@ -13,8 +13,9 @@ DEFINES = -D DEBUG=1
 # Source Files:
 SRCFILES:=\
 			main.c \
-			raycaster.c \
 			utils.c \
+			hook_functions.c \
+			initialisation.c \
 			\
 			minimap/map_plane.c \
 			minimap/draw_triangle.c \
@@ -37,6 +38,7 @@ SRCFILES:=\
 			rendering/floor_ceiling.c \
 			rendering/slicer.c \
 			rendering/doors.c \
+			rendering/raycaster.c \
 			\
 			settings/print_settings.c \
 			settings/settings_1.c \
@@ -119,11 +121,11 @@ fclean:
 re: fclean all
 
 ree: re
-	./$(NAME) maps/map.cub
+	./$(NAME) maps/subject.cub
 
 e:
 	make
-	./$(NAME) maps/map.cub
+	./$(NAME) maps/subject.cub
 
 red:
 	echo $(RED)

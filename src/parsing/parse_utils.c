@@ -4,10 +4,6 @@ void	print_data(t_var *data)
 {
 	int	i;
 
-	// ft_printf("NO %s\t%p\n", data->path_north, data->texture_north);
-	// ft_printf("SO %s\t%p\n", data->path_south, data->texture_south);
-	// ft_printf("WE %s\t%p\n", data->path_westh, data->texture_westh);
-	// ft_printf("EA %s\t%p\n", data->path_easth, data->texture_easth);
 	printf("Ceiling\t%i\t\e[48;2;%i;%i;%im      \e[0m\n", \
 					data->ceiling, (data->ceiling >> 24) % 256, \
 					(data->ceiling >> 16) % 256, (data->ceiling >> 8) % 256);
@@ -34,8 +30,8 @@ bool	checks(t_var *data)
 		texture_init(data->path_westh, &data->textures[west]) || \
 		data->path_easth == NULL || \
 		texture_init(data->path_easth, &data->textures[east]) || \
-		data->path_door == NULL || \
-		texture_init(data->path_door, &data->textures[door]) || \
+		data->has_door && (data->path_door == NULL || \
+		texture_init(data->path_door, &data->textures[door])) || \
 		data->player.x == 0 || \
 		data->player.y == 0 || \
 		(data->direct.x == 0 && \
@@ -78,15 +74,6 @@ int32_t	free_half_data(t_var *data)
 
 int32_t	free_data(t_var *data)
 {
-	free_2dstr(data->map);
-	// if (data->path_north)
-	// 	free(data->path_north);
-	// if (data->path_south)
-	// 	free(data->path_south);
-	// if (data->path_easth)
-	// 	free(data->path_easth);
-	// if (data->path_westh)
-	// 	free(data->path_westh);
 	if (data->textures[north])
 		mlx_delete_texture(data->textures[north]);
 	if (data->textures[south])
@@ -97,6 +84,7 @@ int32_t	free_data(t_var *data)
 		mlx_delete_texture(data->textures[west]);
 	if (data->textures[door])
 		mlx_delete_texture(data->textures[door]);
+	ft_lstclear(&data->text, free);
 	return (1);
 }
 

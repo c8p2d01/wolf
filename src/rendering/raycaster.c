@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/cub.h"
+#include "../../inc/cub.h"
 
 /**
  * @brief create a ray in relation to POV and window width

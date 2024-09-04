@@ -46,6 +46,7 @@ typedef struct s_config
 	float	movement_speed;
 	float	turn_speed;
 	float	turn_mouse_speed;
+	int		framespeed;
 }	t_config;
 
 #endif

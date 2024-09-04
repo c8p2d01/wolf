@@ -24,17 +24,17 @@ typedef enum key_state
 	MINUS	= 2,
 }	t_key_state;
 
+void	cursor_hook(double xpos, double ypos, void *param);
+
 // move
 void	straight(t_var *data, t_key_state action);
 void	strafe(t_var *data, t_key_state action);
 void	turn(t_var *data, int direction);
 void	apply_movement(t_var *data);
-void	display_movement(t_var *data);
 
 // wall_collision
 double	wall_collision(t_var *data);
 double	max_step(t_var *data, double side);
-double	trace_movement(t_var *data);
 
 // mouse
 void	enable_file(t_var *data);

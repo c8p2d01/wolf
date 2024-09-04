@@ -12,6 +12,28 @@
 
 #include "../../inc/cub.h"
 
+void	scroll_hook(double xdelta, double ydelta, void *param)
+{
+	t_var		*data;
+	static void	(*s[11])(double, double, t_var *) = {norm_setting, \
+	debug_setting, fov_setting, zoom_setting, style_setting, offset_setting, \
+	height_setting, width_setting, move_setting, turn_setting, \
+	turn_mouse_setting};
+
+	data = param;
+	if (data->settings == 1)
+	{
+		if (mlx_is_key_down(data->_mlx, MLX_KEY_LEFT_SHIFT))
+		{
+			data->config.setting += (int)xdelta;
+			i_limit(&data->config.setting, 0, N_SETTINGS);
+			print_setting(data);
+			return ;
+		}
+		s[data->config.setting](xdelta, ydelta, data);
+	}
+}
+
 int	ray_color(t_var *data, int raynum, uint8_t opacity)
 {
 	double	fraction;

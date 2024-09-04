@@ -22,16 +22,6 @@ double	deg_2_rad(float degree)
 	return (degree * (PI / 180));
 }
 
-bool	close_enough(double a, double b, double closeness)
-{
-	double	c;
-
-	c = a - b;
-	if (fabs(c) - (1 / closeness) < 0)
-		return (true);
-	return (false);
-}
-
 char	map_char(t_var *data, int y, int x)
 {
 	if (0 > x || x >= data->map_height || \
@@ -47,4 +37,11 @@ t_var	**proto_global(void)
 	static t_var	*data;
 
 	return (&data);
+}
+
+void	cleanup(t_var *data)
+{
+	free_data(data);
+	mlx_close_window(data->_mlx);
+	exit(1);
 }

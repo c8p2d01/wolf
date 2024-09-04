@@ -25,5 +25,6 @@ int32_t	parse_input(int argc, char **argv, t_var *data)
 		return (ft_lstclear(&text, free), 1);
 	if (incomplete(data))
 		return (ft_lstclear(&text, free), 1);
+	data->text = text;
 	return (0);
 }

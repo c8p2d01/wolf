@@ -3,6 +3,8 @@
 
 # include "cub.h"
 
+int32_t	parse_input(int argc, char **argv, t_var *data);
+
 // file processing
 
 int32_t	argument_count(int argc);
@@ -40,11 +42,11 @@ int32_t	texture_init(char *file, mlx_texture_t **dest);
 void	update_map_width(t_var *data, t_list *map_text);
 
 // map separation
-int	check_space_separation(t_var *data);
+int		check_space_separation(t_var *data);
 void	fill_iter(char **map, t_intvctr size, int startX, int startY);
 
 // map line validation
-int	map_horizontally_invalid(char *read_line, int fd, t_list **text);
+int		map_horizontally_invalid(char *read_line, int fd, t_list **text);
 
 int32_t	gif_init(char *file, mlx_texture_t **dest);
 

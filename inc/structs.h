@@ -45,7 +45,9 @@ typedef struct s_var
 	mlx_t			*_mlx;
 
 	t_config		config;
+	bool			shutdown;
 
+	t_list			*text;
 	mlx_image_t		*map_layout_img;
 	mlx_image_t		*map_render_img;
 	mlx_image_t		*main_static_img;
@@ -59,11 +61,7 @@ typedef struct s_var
 
 	mlx_texture_t	*textures[5];
 	gd_GIF			*gif[5];
-	mlx_texture_t	*texture_north;
-	mlx_texture_t	*texture_south;
-	mlx_texture_t	*texture_westh;
-	mlx_texture_t	*texture_easth;
-	mlx_texture_t	*texture_door;
+	bool			has_door;
 
 	int32_t			floor;
 	int32_t			ceiling;
