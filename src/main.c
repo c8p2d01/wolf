@@ -293,6 +293,20 @@ int	minimap(t_var *data)
 	return (0);
 }
 
+void	resize_hook(int width, int height, void* param)
+{
+	t_var	*data;
+
+	data = (t_var *)param;
+	printf("width = %i\n", width);
+	printf("height = %i\n", height);
+	data->rays = ft_realloc(data->rays, 0, width * sizeof(t_ray));
+	data->config.height = height;
+	data->config.width = width;
+	width_setting( 0, 0, data);
+	height_setting( 0, 0, data);
+}
+
 int32_t	main(int argc, char **argv)
 {
 	t_var	data;
@@ -311,6 +325,7 @@ int32_t	main(int argc, char **argv)
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
 	mlx_cursor_hook(data._mlx, &cursor_hook, &data);
+	mlx_resize_hook(data._mlx, &resize_hook, &data);
 	mlx_loop(data._mlx);
 	free_data(&data);
 	mlx_terminate(data._mlx);
