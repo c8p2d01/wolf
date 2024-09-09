@@ -14,10 +14,10 @@ void	draw_fov_lines(t_var *data);
 
 // draw_triangle
 
-int		set_ds_vectors(vec2d_t *d, vec2d_t *s, vec2d_t *zeroth, vec2d_t *first);
-void	update_e2_y(double *err, vec2d_t *d, vec2d_t *s, vec2d_t *zeroth);
-void	update_e2_x(double *err, vec2d_t *d, vec2d_t *s, vec2d_t *zeroth);
-void	draw_line(mlx_image_t *img, vec2d_t zeroth, vec2d_t first, int color);
+int		set_ds_vectors(t_vec2d *d, t_vec2d *s, t_vec2d *zeroth, t_vec2d *first);
+void	update_e2_y(double *err, t_vec2d *d, t_vec2d *s, t_vec2d *zeroth);
+void	update_e2_x(double *err, t_vec2d *d, t_vec2d *s, t_vec2d *zeroth);
+void	draw_line(mlx_image_t *img, t_vec2d zeroth, t_vec2d first, int color);
 void	draw_player_triangle(t_var *data);
 
 // map_plane

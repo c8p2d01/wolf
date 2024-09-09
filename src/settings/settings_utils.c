@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minimap.c                                          :+:      :+:    :+:   */
+/*   settings_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:13:12 by tsimitop          #+#    #+#             */
-/*   Updated: 2024/07/23 20:16:06 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:57:20 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	ray_color(t_var *data, int raynum, uint8_t opacity)
 	fraction = (float)raynum / (data->config.width) + \
 													data->config.color_offset;
 	if (data->config.ray_style == 0)
-		return (createMultiGradient(\
+		return (create_multi_gradient(\
 			fmod(fraction, 1), \
 			7, \
 			0, 255, 255, 0, 0, 255, 255, 0, 255, \
@@ -58,14 +58,14 @@ int	ray_color(t_var *data, int raynum, uint8_t opacity)
 		else if (data->rays[raynum].wall == data->textures[west])
 			return (create_rgba(42, 255, 42, opacity));
 	}
-	return (createGradientColor(fmod(fraction, 1), 0, 0, 0, \
-			255, 255, 255) << 8 | opacity);
+	return (create_gradient_color(fmod(fraction, 1), new_color(0, 0, 0), \
+			new_color(255, 255, 255)) << 8 | opacity);
 }
 
 void	debug_fov(t_var *data)
 {
-	vec2d_t	begin;
-	vec2d_t	end;
+	t_vec2d	begin;
+	t_vec2d	end;
 
 	begin.x = data->rays[0].x;
 	begin.y = data->rays[0].y;

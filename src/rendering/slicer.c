@@ -2,7 +2,7 @@
 
 void	put_slice(t_var *data, int i)
 {
-	vec2d_t	temp;
+	t_vec2d	temp;
 	double	actual_dist;
 	double	angle;
 

@@ -30,10 +30,10 @@ typedef struct s_intvctr
 typedef struct s_draw_ray
 {
 	int			i;
-	vec2d_t		s_dist;
-	vec2d_t		d_dist;
-	vec2d_t		step;
-	vec2d_t		map;
+	t_vec2d		s_dist;
+	t_vec2d		d_dist;
+	t_vec2d		step;
+	t_vec2d		map;
 	int			side;
 	int			color;
 	t_ray		*ray;
@@ -70,9 +70,9 @@ typedef struct s_var
 	int				map_width;
 	int				map_height;
 
-	vec2d_t			player;
-	vec2d_t			direct;
-	vec2d_t			move;
+	t_vec2d			player;
+	t_vec2d			direct;
+	t_vec2d			move;
 
 	t_ray			*rays;
 

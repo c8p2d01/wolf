@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minimap.c                                          :+:      :+:    :+:   */
+/*   draw_triangle.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:13:12 by tsimitop          #+#    #+#             */
-/*   Updated: 2024/07/23 20:16:06 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:54:58 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/cub.h"
 
-int	set_ds_vectors(vec2d_t *d, vec2d_t *s, vec2d_t *zeroth, vec2d_t *first)
+int	set_ds_vectors(t_vec2d *d, t_vec2d *s, t_vec2d *zeroth, t_vec2d *first)
 {
 	double	err;
 
@@ -31,22 +31,22 @@ int	set_ds_vectors(vec2d_t *d, vec2d_t *s, vec2d_t *zeroth, vec2d_t *first)
 	return (err);
 }
 
-void	update_e2_y(double *err, vec2d_t *d, vec2d_t *s, vec2d_t *zeroth)
+void	update_e2_y(double *err, t_vec2d *d, t_vec2d *s, t_vec2d *zeroth)
 {
 	*err -= d->y;
 	zeroth->x += (int)s->x;
 }
 
-void	update_e2_x(double *err, vec2d_t *d, vec2d_t *s, vec2d_t *zeroth)
+void	update_e2_x(double *err, t_vec2d *d, t_vec2d *s, t_vec2d *zeroth)
 {
 	*err += d->x;
 	zeroth->y += (int)s->y;
 }
 
-void	draw_line(mlx_image_t *img, vec2d_t zeroth, vec2d_t first, int color)
+void	draw_line(mlx_image_t *img, t_vec2d zeroth, t_vec2d first, int color)
 {
-	vec2d_t	d;
-	vec2d_t	s;
+	t_vec2d	d;
+	t_vec2d	s;
 	double	err;
 	double	e2;
 
@@ -74,9 +74,9 @@ void	draw_player_triangle(t_var *data)
 {
 	double	p[2];
 	double	rad;
-	vec2d_t	back_left;
-	vec2d_t	back_right;
-	vec2d_t	front;
+	t_vec2d	back_left;
+	t_vec2d	back_right;
+	t_vec2d	front;
 
 	front.x = data->player.x + data->direct.x * (data->config.zoom / 4);
 	front.y = data->player.y + data->direct.y * (data->config.zoom / 4);

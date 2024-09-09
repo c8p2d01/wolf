@@ -3,7 +3,7 @@
 double	wall_collision(t_var *data)
 {
 // <<<<<<< HEAD
-	vec2d_t	step;
+	t_vec2d	step;
 
 	step.x = (int)((data->player.x + data->move.x) / \
 															data->config.zoom);

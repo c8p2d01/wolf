@@ -45,7 +45,7 @@ void	turn(t_var *data, int direction)
 void	apply_movement(t_var *data)
 {
 	double	max;
-	vec2d_t	step;
+	t_vec2d	step;
 
 	normalise2d(&data->move);
 	max = wall_collision(data);

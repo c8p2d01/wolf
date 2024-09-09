@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minimap.c                                          :+:      :+:    :+:   */
+/*   draw_mini_rays.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:13:12 by tsimitop          #+#    #+#             */
-/*   Updated: 2024/07/23 20:16:06 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:54:58 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	identify_wall(t_var *data, t_draw_ray *draw_r)
 
 void	identify_wall_fraction(t_var *data, t_draw_ray *draw_r)
 {
-	vec2d_t	wall;
+	t_vec2d	wall;
 
 	wall.x = data->player.x + (draw_r->ray->x * \
 		draw_r->ray->wall_dst * data->config.zoom);
@@ -128,7 +128,7 @@ void	identify_wall_fraction(t_var *data, t_draw_ray *draw_r)
 
 void	draw_ray(t_var *data, t_draw_ray *draw_r)
 {
-	vec2d_t	wall;
+	t_vec2d	wall;
 
 	wall.x = (uint32_t)data->player.x + (draw_r->ray->x * \
 		draw_r->ray->wall_dst * data->config.zoom);

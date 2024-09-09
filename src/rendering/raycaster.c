@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/11 01:47:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/05 07:20:10 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:54:58 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 t_ray	ray_creator(t_var *data, int num)
 {
 	t_ray	ray;
-	vec2d_t	orth;
+	t_vec2d	orth;
 
 	ray.number = num;
 	normalise2d(&data->direct);

@@ -37,7 +37,7 @@ int32_t	map_checking_x(char **map)
 		i[1] = 0;
 		while (i[0] >= 0 && subs[i[1]])
 		{
-			trimm = ft_strNOTtrim(subs[i[1]], "1");
+			trimm = ft_str_not_trim(subs[i[1]], "1");
 			if (ft_strlen(subs[i[1]]) != ft_strlen(trimm))
 				i[0] = -42;
 			free(trimm);
