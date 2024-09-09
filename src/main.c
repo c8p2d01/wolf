@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/07/23 19:09:59 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/09 11:53:03 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,20 @@ void	lal(void)
 	system("leaks cub3D");
 }
 
+void	resize_hook(int width, int height, void* param)
+{
+	t_var	*data;
+
+	data = (t_var *)param;
+	printf("width = %i\n", width);
+	printf("height = %i\n", height);
+	data->rays = ft_realloc(data->rays, 0, width * sizeof(t_ray));
+	data->config.height = height;
+	data->config.width = width;
+	width_setting( 0, 0, data);
+	height_setting( 0, 0, data);
+}
+
 int32_t	main(int argc, char **argv)
 {
 	t_var	data;
@@ -126,6 +140,7 @@ int32_t	main(int argc, char **argv)
 	mlx_scroll_hook(data._mlx, &scroll_hook, &data);
 	mlx_key_hook(data._mlx, &press_hook, &data);
 	mlx_cursor_hook(data._mlx, &cursor_hook, &data);
+	mlx_resize_hook(data._mlx, &resize_hook, &data);
 	mlx_loop(data._mlx);
 	free_data(&data);
 	mlx_terminate(data._mlx);

@@ -6,16 +6,6 @@ typedef struct s_stack
 	int			top;
 }	t_stack;
 
-void	init_stack(t_stack *stack)
-{
-	stack->top = -1;
-}
-
-int	is_empty(t_stack *stack)
-{
-	return (stack->top == -1);
-}
-
 void	push(t_stack *stack, int x, int y)
 {
 	if (stack->top < WIDTH * HEIGHT)
@@ -40,16 +30,16 @@ t_intvctr	pop(t_stack *stack)
 	return (node);
 }
 
-void	fill_iter(char **map, t_intvctr size, int startX, int startY)
+void	fill_iter(char **map, t_intvctr size, int start_x, int start_y)
 {
 	t_stack		stack;
 	t_intvctr	node;
 	int			x;
 	int			y;
 
-	init_stack(&stack);
-	push(&stack, startX, startY);
-	while (!is_empty(&stack))
+	stack.top = -1;
+	push(&stack, start_x, start_y);
+	while (stack.top != -1)
 	{
 		node = pop(&stack);
 		x = node.x;
