@@ -87,6 +87,8 @@ int32_t	free_data(t_var *data)
 	if (data->rays)
 		free(data->rays);
 	ft_lstclear(&data->text, free);
+	if (data->map)
+		free(data->map);
 	return (1);
 }
 
