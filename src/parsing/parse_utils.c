@@ -143,6 +143,8 @@ int32_t	texture_init(char *file, mlx_texture_t **dest)
 		ft_printf("Error\n");
 		if (DEBUG == 1)
 			ft_printf("File not found\n");
+		if (file)
+			free(file);
 		return (1);
 	}
 	close(fd);
