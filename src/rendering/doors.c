@@ -44,7 +44,6 @@ int	check_door(int i, t_var *data)
 {
 	int	pos;
 
-	// data->has_door = true;
 	if (ft_strchr(data->map[i], '2'))
 	{
 		data->has_door = true;

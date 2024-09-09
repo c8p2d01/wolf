@@ -84,6 +84,8 @@ int32_t	free_data(t_var *data)
 		mlx_delete_texture(data->textures[west]);
 	if (data->textures[door])
 		mlx_delete_texture(data->textures[door]);
+	if (data->rays)
+		free(data->rays);
 	ft_lstclear(&data->text, free);
 	return (1);
 }
