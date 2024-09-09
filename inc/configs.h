@@ -17,12 +17,12 @@
 # define FPS 30
 # define FOV 75
 # define RENDER 8
-# define WIDTH 1100
-# define HEIGHT 600
-# define ZOOM 20
+# define WIDTH 1200
+# define HEIGHT 900
+# define ZOOM 10
 # define MOVEMENT_SPEED 1
-# define TURN_SPEED 3 //		in degree per frame
-# define TURN_MOUSE_SPEED 3
+# define TURN_SPEED 2 //		in degree per frame
+# define TURN_MOUSE_SPEED 2
 # define MAP_OPACITY 200
 # define WALL_DISTANCE 0.08
 
