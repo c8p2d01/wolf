@@ -31,6 +31,7 @@ SRCFILES:=\
 			parsing/map_variables.c \
 			parsing/map_variables_ext.c \
 			parsing/parse_utils.c \
+			parsing/parse_utils2.c \
 			parsing/parsing.c \
 			\
 			movement/mouse.c \
@@ -45,6 +46,7 @@ SRCFILES:=\
 			settings/print_settings.c \
 			settings/settings_1.c \
 			settings/settings_2.c \
+			settings/settings_3.c \
 			settings/settings_utils.c \
 			\
 			gifdecoder/gif_basics.c \

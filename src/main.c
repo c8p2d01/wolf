@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:36:03 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 18:42:57 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	resize_hook(int width, int height, void *param)
 // 	system("leaks cub3D");
 // }
 
-	atexit(lal);
+// atexit(lal);
 int32_t	main(int argc, char **argv)
 {
 	t_var	data;

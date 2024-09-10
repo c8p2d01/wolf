@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movement.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/10 18:38:12 by tsimitop          #+#    #+#             */
+/*   Updated: 2024/09/10 18:39:26 by tsimitop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MOVEMENT_H
 # define MOVEMENT_H
 
@@ -27,16 +39,19 @@ typedef enum key_state
 void	cursor_hook(double xpos, double ypos, void *param);
 
 // move
+
 void	straight(t_var *data, t_key_state action);
 void	strafe(t_var *data, t_key_state action);
 void	turn(t_var *data, int direction);
 void	apply_movement(t_var *data);
 
 // wall_collision
+
 double	wall_collision(t_var *data);
 double	max_step(t_var *data, double side);
 
 // mouse
+
 void	enable_file(t_var *data);
 void	disable_file(t_var *data);
 void	mouse_action(t_var *data);

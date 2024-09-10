@@ -13,7 +13,7 @@
 #ifndef GIF_STRUCTS_H
 # define GIF_STRUCTS_H
 
-#include "../ft_libft/inc/libft.h"
+# include "../ft_libft/inc/libft.h"
 # include <stdlib.h>
 # include <sys/types.h>
 
@@ -37,23 +37,35 @@ typedef struct s_entry {
 }	t_entry;
 
 typedef struct s_table {
-	int		bulk;
-	int		nentries;
-	t_entry	*entries;
+	int			bulk;
+	int			nentries;
+	t_entry		*entries;
 }	t_table;
 
 typedef struct s_reading_vars {
-	uint8_t sub_len, shift, byte;
-	int init_key_size, key_size, table_is_full;
-	int frm_off, frm_size, str_len, i, p, x, y;
-	uint16_t key, clear, stop;
-	int ret;
-	t_table *table;
-	t_entry entry;
-	off_t start, end;
+	uint8_t		sub_len;
+	uint8_t		shift;
+	uint8_t		byte;
+	int			init_key_size;
+	int			key_size;
+	int			table_is_full;
+	int			frm_off;
+	int			frm_size;
+	int			str_len;
+	int			i;
+	int			p;
+	int			x;
+	int			y;
+	uint16_t	key;
+	uint16_t	lear;
+	uint16_t	stop;
+	int			ret;
+	t_table		*table;
+	t_entry		entry;
+	off_t		start;
+	off_t		end;
 }	t_reading_vars;
 
-struct t_gd_gif;
 typedef struct s_gd_gif {
 	uint8_t			sigver[3];
 	int				fd;
@@ -89,7 +101,7 @@ typedef struct s_gd_gif {
 			);
 }	t_gd_gif;
 
-typedef struct	s_gif_plaintext_vars {
+typedef struct s_gif_plaintext_vars {
 	uint16_t	tx;
 	uint16_t	ty;
 	uint16_t	tw;
@@ -101,32 +113,29 @@ typedef struct	s_gif_plaintext_vars {
 	off_t		sub_block;
 }	t_gif_plaintext_vars;
 
-typedef struct	s_gif_read_vars {
-	uint8_t sub_len;
-	uint8_t shift;
-	uint8_t byte;
-	int init_key_size;
-	int key_size;
-	int table_is_full;
-	int frm_off;
-	int frm_size;
-	int str_len;
-	int i;
-	int p;
-	int x;
-	int y;
-	uint16_t key;
-	uint16_t clear;
-	uint16_t stop;
-	int ret;
-	t_table *table;
-	t_entry entry;
-	off_t start;
-	off_t end;
-	uint8_t	*temp[2];
+typedef struct s_gif_read_vars {
+	uint8_t		sub_len;
+	uint8_t		shift;
+	uint8_t		byte;
+	int			init_key_size;
+	int			key_size;
+	int			table_is_full;
+	int			frm_off;
+	int			frm_size;
+	int			str_len;
+	int			i;
+	int			p;
+	int			x;
+	int			y;
+	uint16_t	key;
+	uint16_t	clear;
+	uint16_t	stop;
+	int			ret;
+	t_table		*table;
+	t_entry		entry;
+	off_t		start;
+	off_t		end;
+	uint8_t		*temp[2];
 }	t_gif_read_vars;
-
-
-
 
 #endif

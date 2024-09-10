@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/10 18:40:37 by tsimitop          #+#    #+#             */
+/*   Updated: 2024/09/10 18:40:44 by tsimitop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSING_H
 # define PARSING_H
 
@@ -42,10 +54,12 @@ int32_t	texture_init(char *file, mlx_texture_t **dest);
 void	update_map_width(t_var *data, t_list *map_text);
 
 // map separation
+
 int		check_space_separation(t_var *data);
 void	fill_iter(char **map, t_intvctr size, int startX, int startY);
 
 // map line validation
+
 int		map_horizontally_invalid(char *read_line, int fd, t_list **text);
 
 int32_t	gif_init(char *file, mlx_texture_t **dest);

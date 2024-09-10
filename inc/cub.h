@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:34:43 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:34:44 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 18:42:32 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 
 # include "../ft_libft/inc/libft.h"
 
-// # include "../src/gifdec/gifdec.h"
 # include "gifdec.h"
 # include "gif_structs.h"
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   configs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 18:34:39 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:34:42 by cdahlhof         ###   ########.fr       */
+/*   Created: 2024/09/10 18:37:30 by tsimitop          #+#    #+#             */
+/*   Updated: 2024/09/10 18:42:21 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define HEIGHT 900
 # define ZOOM 10
 # define MOVEMENT_SPEED 1
-# define TURN_SPEED 2 //		in degree per frame
+# define TURN_SPEED 2
 # define TURN_MOUSE_SPEED 2
 # define MAP_OPACITY 200
 # define WALL_DISTANCE 0.08

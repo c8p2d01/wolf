@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gifdec.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 03:48:37 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 17:31:00 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 18:41:05 by tsimitop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void		gd_render_frame(t_gd_gif *gif, uint8_t *buffer);
 int			gd_is_bgcolor(t_gd_gif *gif, uint8_t color[3]);
 void		gd_rewind(t_gd_gif *gif);
 void		gd_close_gif(t_gd_gif *gif);
-
 
 void		render_frame_rect(t_gd_gif *gif, uint8_t *buffer);
 void		dispose(t_gd_gif *gif);
