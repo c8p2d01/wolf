@@ -75,7 +75,10 @@ void	init(t_var *data)
 	data->floor = 42;
 	data->_mlx = mlx_init(data->config.width, data->config.height, "MAP", true);
 	if (!data->_mlx)
-		exit (EXIT_FAILURE);
+	{
+		free_data(data); 
+		exit(EXIT_FAILURE);
+	}
 	data->main_static_img = mlx_new_image(data->_mlx, data->config.width, \
 														data->config.height);
 	data->main_render_img = mlx_new_image(data->_mlx, data->config.width, \

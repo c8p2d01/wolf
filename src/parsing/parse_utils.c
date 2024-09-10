@@ -84,7 +84,11 @@ int32_t	free_data(t_var *data)
 		mlx_delete_texture(data->textures[west]);
 	if (data->textures[door])
 		mlx_delete_texture(data->textures[door]);
+	if (data->rays)
+		free(data->rays);
 	ft_lstclear(&data->text, free);
+	if (data->map)
+		free(data->map);
 	return (1);
 }
 
@@ -143,6 +147,8 @@ int32_t	texture_init(char *file, mlx_texture_t **dest)
 		ft_printf("Error\n");
 		if (DEBUG == 1)
 			ft_printf("File not found\n");
+		if (file)
+			free(file);
 		return (1);
 	}
 	close(fd);

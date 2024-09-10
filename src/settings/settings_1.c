@@ -18,7 +18,7 @@ void	turn_setting(double xdelta, double ydelta, t_var *data)
 
 	printf("\e[3;1H\n\n");
 	temp = data->config.turn_speed + ydelta;
-	if (temp > 0 && temp <= 5)
+	if (temp > 0 && temp <= 3)
 	{
 		printf("turn speed = %f\n", temp);
 		data->config.turn_speed += ydelta;
@@ -31,7 +31,7 @@ void	turn_mouse_setting(double xdelta, double ydelta, t_var *data)
 
 	printf("\e[3;1H\n\n");
 	temp = data->config.turn_mouse_speed + ydelta;
-	if (temp > 0 && temp <= 5)
+	if (temp > 0 && temp <= 3)
 	{
 		printf("mouse turn speed = %f\n", temp);
 		data->config.turn_mouse_speed += ydelta;

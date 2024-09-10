@@ -44,24 +44,28 @@ t_intvctr	pop(t_stack *stack)
 
 void	fill_iter(char **map, t_intvctr size, int start_x, int start_y)
 {
-	t_stack		stack;
+	t_stack		*stack;
 	t_intvctr	node;
 	int			x;
 	int			y;
 
-	stack.top = -1;
-	push(&stack, start_x, start_y);
-	while (stack.top != -1)
+	stack = ft_calloc(1, sizeof(t_stack));
+	if (!stack)
+		return ;
+	stack->top = -1;
+	push(stack, start_x, start_y);
+	while (stack->top != -1)
 	{
-		node = pop(&stack);
+		node = pop(stack);
 		x = node.x;
 		y = node.y;
 		if (x < 0 || x >= size.x || y < 0 || y >= size.y || map[x][y] == ' ')
 			continue ;
 		map[x][y] = ' ';
-		push(&stack, x, y - 1);
-		push(&stack, x - 1, y);
-		push(&stack, x, y + 1);
-		push(&stack, x + 1, y);
+		push(stack, x, y - 1);
+		push(stack, x - 1, y);
+		push(stack, x, y + 1);
+		push(stack, x + 1, y);
 	}
+	free(stack);
 }
