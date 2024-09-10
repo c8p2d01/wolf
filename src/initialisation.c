@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:05:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 17:48:36 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 19:14:47 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_config(t_var *data)
 	data->config.zoom = ZOOM;
 	data->config.color_offset = 0;
 	data->config.ray_style = 1;
-	data->config.map_opacity = MAP_OPACITY % 256;
+	data->config.map_opacity = 0;
 	data->config.movement_speed = MOVEMENT_SPEED;
 	data->config.turn_speed = TURN_SPEED;
 	data->config.turn_mouse_speed = TURN_MOUSE_SPEED;
