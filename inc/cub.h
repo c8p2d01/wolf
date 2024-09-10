@@ -14,11 +14,14 @@
 
 # include "../MLX42/include/MLX42/MLX42.h"
 
-# include "../src/gifdec/gifdec.h"
-
 # include "../ft_libft/inc/libft.h"
 
+// # include "../src/gifdec/gifdec.h"
+# include "gifdec.h"
+# include "gif_structs.h"
+
 # include "configs.h"
+
 # include "structs.h"
 # include "minimap.h"
 # include "settings.h"

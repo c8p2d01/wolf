@@ -17,7 +17,8 @@ void	put_slice(t_var *data, int i)
 	draw_line_b(data, (data->config.height / actual_dist), i);
 }
 
-void	gif_next_frame(gd_GIF *gif, mlx_texture_t *tex)
+// void	gif_next_frame(gd_GIF *gif, mlx_texture_t *tex)
+void	gif_next_frame(t_gd_gif *gif, mlx_texture_t *tex)
 {
 	int	ret;
 
