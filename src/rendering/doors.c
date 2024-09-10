@@ -12,12 +12,14 @@ void	toggle_doors(mlx_key_data_t key, t_var *data)
 	if (c == '2')
 	{
 		data->map[char_x][char_y] = '3';
-		redraw_minimap(data);
+		if (data->config.map_opacity)
+			redraw_minimap(data);
 	}
 	if (c == '3')
 	{
 		data->map[char_x][char_y] = '2';
-		redraw_minimap(data);
+		if (data->config.map_opacity)
+			redraw_minimap(data);
 	}
 	ft_memset(data->map_render_img->pixels, 0, \
 				data->map_render_img->width * \
