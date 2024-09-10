@@ -29,6 +29,7 @@ SRCFILES:=\
 			parsing/map_separation.c \
 			parsing/map_line_validation.c \
 			parsing/map_variables.c \
+			parsing/map_variables_ext.c \
 			parsing/parse_utils.c \
 			parsing/parsing.c \
 			\

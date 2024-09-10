@@ -14,7 +14,7 @@ int32_t	file_read(char *file, t_list **text);
 // map variables
 
 int32_t	construct_map(t_var *data, t_list *text, int map_start, int32_t i);
-int32_t	parse_values(t_list *text, t_var *data, int *map_start);
+int32_t	parse_values(t_list *text, t_var *data, int *map_start, char *line);
 int32_t	check_variable(t_var *data, char *line);
 int32_t	set_variable(t_var *data, char **elmnts);
 int32_t	calculate_color(char *rgb);

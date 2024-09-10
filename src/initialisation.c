@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:05:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 17:05:54 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:48:36 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	init_game_bulk(t_var *data)
 	gettimeofday(&data->time, NULL);
 }
 
-void	init(t_var *data)
+static void	init0(t_var *data)
 {
 	if (!data)
 		return ;
@@ -73,10 +73,17 @@ void	init(t_var *data)
 	data->map = NULL;
 	data->ceiling = 42;
 	data->floor = 42;
+}
+
+void	init(t_var *data)
+{
+	if (!data)
+		return ;
+	init0(data);
 	data->_mlx = mlx_init(data->config.width, data->config.height, "MAP", true);
 	if (!data->_mlx)
 	{
-		free_data(data); 
+		free_data(data);
 		exit(EXIT_FAILURE);
 	}
 	data->main_static_img = mlx_new_image(data->_mlx, data->config.width, \

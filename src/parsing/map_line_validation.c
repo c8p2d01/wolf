@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:42:18 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 17:42:20 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:49:52 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,10 @@ int	check_if_only_space(char *str)
 	int	i;
 
 	i = 0;
-	while(str[i] != '\n')
+	while (str[i] != '\n')
 	{
 		if (str[i] != ' ')
 		{
-
 			return (0);
 		}
 		i++;
@@ -36,11 +35,10 @@ int	check_if_only_newline(char *str)
 	int	i;
 
 	i = 0;
-	while(str[i] != '\0')
+	while (str[i] != '\0')
 	{
 		if (str[i] != '\n')
 		{
-
 			return (0);
 		}
 		i++;
@@ -89,9 +87,10 @@ int	newline_space_check(char *read_line, int fd, int map_switch)
 int	map_horizontally_invalid(char *read_line, int fd, t_list **text)
 {
 	char	*line;
-	int		map_switch = 0;
+	int		map_switch;
 	int		temp;
 
+	map_switch = 0;
 	while (read_line)
 	{
 		temp = newline_space_check(read_line, fd, map_switch);
