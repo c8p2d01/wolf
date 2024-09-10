@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:50:07 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:21:00 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 18:25:48 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	color_unacceptable(t_var *data, char **elmnts)
 	return (0);
 }
 
-int	lal(t_var *data, char **elmnts)
+int	color_identification(t_var *data, char **elmnts)
 {
 	if (color_unacceptable(data, elmnts))
 		return (1);
@@ -60,7 +60,7 @@ int32_t	set_variable(t_var *data, char **elmnts)
 		else if (!ft_strncmp(elmnts[0], "F", 2) || \
 		!ft_strncmp(elmnts[0], "C", 2))
 		{
-			if (lal(data, elmnts))
+			if (color_identification(data, elmnts))
 				return (1);
 		}
 		else
