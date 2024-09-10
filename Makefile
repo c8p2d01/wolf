@@ -19,6 +19,7 @@ SRCFILES:=\
 			\
 			minimap/map_plane.c \
 			minimap/draw_triangle.c \
+			minimap/ray_marcher.c \
 			minimap/draw_mini_rays.c \
 			\
 			parsing/player.c\
@@ -45,7 +46,12 @@ SRCFILES:=\
 			settings/settings_2.c \
 			settings/settings_utils.c \
 			\
-			gifdecoder/gifdec.c \
+			gifdecoder/gif_basics.c \
+			gifdecoder/open_gif.c \
+			gifdecoder/gif_read_image.c \
+			gifdecoder/gif_read_opt.c \
+			gifdecoder/gif_table.c \
+			gifdecoder/gif_frame.c \
 			gifdecoder/utils.c \
 
 

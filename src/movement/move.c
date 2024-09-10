@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   move.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/10 17:37:53 by cdahlhof          #+#    #+#             */
+/*   Updated: 2024/09/10 17:38:04 by cdahlhof         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/movement.h"
 
 void	straight(t_var *data, t_key_state action)
@@ -75,4 +87,3 @@ void	apply_movement(t_var *data)
 // 	data->player.x += data->move.x * step_len;
 // 	data->player.y += data->move.y * step_len;
 // }
-

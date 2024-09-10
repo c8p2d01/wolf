@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/09 11:53:03 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:32:55 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,6 @@
 	-> find a vectorlength for the neares horizontal and neares vertical and
 	from there on iterate in steps
 */
-
-void	toggle_map(mlx_key_data_t key, t_var *data)
-{
-	if (data->config.map_opacity == 0)
-		redraw_minimap(data);
-	else
-	{
-		data->config.map_opacity = 0;
-		ft_memset(data->map_render_img->pixels, 0, \
-			data->map_render_img->width * \
-			data->map_render_img->height * sizeof(int));
-		ft_memset(data->map_layout_img->pixels, 0, \
-			data->map_layout_img->width * \
-			data->map_layout_img->height * sizeof(int));
-	}
-}
 
 void	toggle_key_hook(mlx_key_data_t key, t_var *data)
 {
@@ -102,12 +86,12 @@ int	minimap(t_var *data)
 	return (0);
 }
 
-void	lal(void)
-{
-	system("leaks cub3D");
-}
+// void	lal(void)
+// {
+// 	system("leaks cub3D");
+// }
 
-void	resize_hook(int width, int height, void* param)
+void	resize_hook(int width, int height, void *param)
 {
 	t_var	*data;
 
@@ -117,15 +101,15 @@ void	resize_hook(int width, int height, void* param)
 	data->rays = ft_realloc(data->rays, 0, width * sizeof(t_ray));
 	data->config.height = height;
 	data->config.width = width;
-	width_setting( 0, 0, data);
-	height_setting( 0, 0, data);
+	width_setting(0, 0, data);
+	height_setting(0, 0, data);
 }
+	// atexit(lal);
 
 int32_t	main(int argc, char **argv)
 {
 	t_var	data;
 
-	atexit(lal);
 	init(&data);
 	*proto_global() = &data;
 	if (parse_input(argc, argv, &data))

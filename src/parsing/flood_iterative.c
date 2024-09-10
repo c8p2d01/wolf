@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   flood_iterative.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/10 17:42:10 by cdahlhof          #+#    #+#             */
+/*   Updated: 2024/09/10 17:42:12 by cdahlhof         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/parsing.h"
 
 typedef struct s_stack
@@ -45,7 +57,7 @@ void	fill_iter(char **map, t_intvctr size, int start_x, int start_y)
 		x = node.x;
 		y = node.y;
 		if (x < 0 || x >= size.x || y < 0 || y >= size.y || map[x][y] == ' ')
-			continue;
+			continue ;
 		map[x][y] = ' ';
 		push(&stack, x, y - 1);
 		push(&stack, x - 1, y);

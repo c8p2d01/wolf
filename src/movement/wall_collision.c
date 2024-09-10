@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wall_collision.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/10 17:38:06 by cdahlhof          #+#    #+#             */
+/*   Updated: 2024/09/10 17:41:25 by cdahlhof         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/movement.h"
 
 double	wall_collision(t_var *data)
 {
-// <<<<<<< HEAD
 	t_vec2d	step;
 
 	step.x = (int)((data->player.x + data->move.x) / \
@@ -22,7 +33,7 @@ double	wall_collision(t_var *data)
 	return (max_step(data, 0));
 }
 
-double	smallest(t_var *data, double *distances, double side,double wall_dist);
+double	smallest(t_var *data, double *distances, double side, double wall_dist);
 
 double	max_step(t_var *data, double side)
 {

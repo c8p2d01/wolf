@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minimap.c                                          :+:      :+:    :+:   */
+/*   map_plane.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:13:12 by tsimitop          #+#    #+#             */
-/*   Updated: 2024/07/23 20:16:06 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/09/10 17:06:43 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,18 @@ void	redraw_minimap(t_var *data)
 	draw_fov_lines(data);
 }
 
-void	prot_put_pixel(mlx_image_t *img, uint32_t x, uint32_t y, int color)
+void	toggle_map(mlx_key_data_t key, t_var *data)
 {
-	if (x < img->width && y < img->height && x >= 0 && y >= 0)
-		mlx_put_pixel(img, x, y, color);
+	if (data->config.map_opacity == 0)
+		redraw_minimap(data);
+	else
+	{
+		data->config.map_opacity = 0;
+		ft_memset(data->map_render_img->pixels, 0, \
+			data->map_render_img->width * \
+			data->map_render_img->height * sizeof(int));
+		ft_memset(data->map_layout_img->pixels, 0, \
+			data->map_layout_img->width * \
+			data->map_layout_img->height * sizeof(int));
+	}
 }
