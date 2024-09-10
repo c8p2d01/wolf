@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:23:30 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 18:36:03 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,6 @@ int	minimap(t_var *data)
 	return (0);
 }
 
-void	lal(void)
-{
-	system("leaks cub3D");
-}
-
 void	resize_hook(int width, int height, void *param)
 {
 	t_var	*data;
@@ -105,11 +100,16 @@ void	resize_hook(int width, int height, void *param)
 	height_setting(0, 0, data);
 }
 
+// void	lal(void)
+// {
+// 	system("leaks cub3D");
+// }
+
+	atexit(lal);
 int32_t	main(int argc, char **argv)
 {
 	t_var	data;
 
-	atexit(lal);
 	init(&data);
 	*proto_global() = &data;
 	if (parse_input(argc, argv, &data))
