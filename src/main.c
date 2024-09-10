@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsimitop <tsimitop@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/04 16:31:46 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:42:57 by tsimitop         ###   ########.fr       */
+/*   Updated: 2024/09/10 19:21:05 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,6 @@ int32_t	main(int argc, char **argv)
 		ft_printf(R1"parsing issues\n"QUIT_COLOR);
 		exit (42);
 	}
-	print_data(&data);
 	minimap(&data);
 	floor_ceiling(&data);
 	mlx_loop_hook(data._mlx, &loop_hook, &data);

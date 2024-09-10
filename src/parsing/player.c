@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:34:28 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:34:37 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 19:21:50 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int32_t	extract_player(t_var *data)
 int32_t	init_player(t_var *data, char pov)
 {
 	data->direct.x = 0;
-	printf("facing %c \n", pov);
 	if (pov == 'N')
 		data->direct.x = -1.01;
 	else if (pov == 'S')
