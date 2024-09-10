@@ -1,6 +1,5 @@
-./ft_libft/**/**/**
+./ft_libft/*
 ./MLX42/*
-./build/**/*
+./build/*
 cub3d
 .vscode
-*.o
