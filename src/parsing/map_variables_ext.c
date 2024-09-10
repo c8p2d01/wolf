@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:50:07 by cdahlhof          #+#    #+#             */
-/*   Updated: 2024/09/10 18:25:48 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2024/09/10 18:27:27 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,8 @@ int32_t	calculate_color(char *rgb)
 	}
 	else
 	{
-		color = (ft_atoi(values[0]) % 256) << 24 | \
-			(ft_atoi(values[1]) % 256) << 16 | \
-			(ft_atoi(values[2]) % 256) << 8 | \
-								255;
+		color = (ft_atoi(values[0]) % 256) << 24 |(ft_atoi(values[1]) % 256) \
+								<< 16 | (ft_atoi(values[2]) % 256) << 8 | 255;
 	}
 	free_2dstr(values);
 	return (color);

@@ -60,7 +60,6 @@ typedef struct s_var
 	char			*path_door;
 
 	mlx_texture_t	*textures[5];
-	// gd_GIF			*gif[5];
 	t_gd_gif		*gif[5];
 	bool			has_door;
 

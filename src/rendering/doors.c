@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   doors.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/10 18:30:49 by cdahlhof          #+#    #+#             */
+/*   Updated: 2024/09/10 18:31:23 by cdahlhof         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/rendering.h"
 
 void	toggle_doors(mlx_key_data_t key, t_var *data)
@@ -56,8 +68,9 @@ int	check_door(int i, t_var *data)
 		data->has_door = true;
 		pos = ft_strchr(data->map[i], '3') - data->map[i];
 	}
-	if (data->has_door == true && ((data->map[i][pos + 1] == '1' && data->map[i][pos - 1] == '1') || \
-		(data->map[i + 1][pos] == '1' && data->map[i - 1][pos] == '1')))
+	if (data->has_door == true && ((data->map[i][pos + 1] == '1' && \
+		data->map[i][pos - 1] == '1') || (data->map[i + 1][pos] == '1' \
+		&& data->map[i - 1][pos] == '1')))
 	{
 		return (0);
 	}
